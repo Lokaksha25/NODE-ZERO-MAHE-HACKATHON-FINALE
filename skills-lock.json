@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "brainstorming": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "8df9b47092524833138b58682d03f2e153a242e550d1693657afdbee0cc9cdb0"
+    },
+    "code-review": {
+      "source": "coderabbitai/skills",
+      "sourceType": "github",
+      "computedHash": "a73a8b85ccc0898d759f204a4d90c97d65341b6c972b36037bb96cf828074e93"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "sourceType": "github",
+      "computedHash": "063a0e6448123cd359ad0044cc46b0e490cc7964d45ef4bb9fd842bd2ffbca67"
+    },
+    "grill-me": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "computedHash": "784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "computedHash": "873c67922d80775a9fdf596db7964b579f0408c30ec6e3d11989f6055bbec89f"
+    },
+    "writing-plans": {
+      "source": "obra/superpowers",
+      "sourceType": "github",
+      "computedHash": "bfaed11054ad8021c66860244e2d2e0d1eca483ae9f5fbfcb956e99c61f5c3d7"
+    }
+  }
+}

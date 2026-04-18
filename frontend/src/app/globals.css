@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: "IBM Plex Sans", sans-serif;
+  background: #111823;
+  color: #f5f6f8;
+}
+
+body {
+  background-image: radial-gradient(circle at 50% 0%, rgba(255, 138, 61, 0.08), transparent 50%);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Sora", sans-serif;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 138, 61, 0.28);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 138, 61, 0);
+  }
+}
+
+.animate-rise {
+  animation: rise 460ms ease forwards;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2.4s ease infinite;
+}
+
+.segment-weak {
+  color: #e14c4c;
+}
+
+.segment-moderate {
+  color: #e3a008;
+}
+
+.segment-strong {
+  color: #2d965d;
+}
