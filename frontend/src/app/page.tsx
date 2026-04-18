@@ -333,7 +333,7 @@ export default function Home() {
   const destinationLabel = job?.destination_label ?? destinationCity;
 
   return (
-    <main className="relative min-h-[100dvh] w-screen overflow-x-hidden bg-[var(--surface)] text-[var(--text-primary)]">
+    <main className="relative h-[100dvh] w-screen overflow-hidden bg-[var(--surface)] text-[var(--text-primary)]">
       <MapView
         routes={routes}
         selectedRouteId={mapActiveRouteId}
@@ -343,9 +343,9 @@ export default function Home() {
         theme={theme}
       />
 
-      <section className="pointer-events-none relative z-10 flex min-h-[100dvh] flex-col overflow-y-auto px-4 pb-4 pt-4 sm:px-8 sm:pb-7 sm:pt-7">
-        <div className="pointer-events-auto flex items-start justify-between gap-3">
-          <div className="floating-card flex w-full max-w-[760px] flex-wrap items-center gap-3 rounded-2xl px-4 py-3 sm:px-6 sm:py-4">
+      <section className="pointer-events-none relative z-10 flex h-full flex-col px-4 pb-4 pt-4 sm:px-8 sm:pb-6 sm:pt-6">
+        <div className="flex items-start justify-between gap-3">
+          <div className="pointer-events-auto floating-card flex w-full max-w-[760px] flex-wrap items-center gap-3 rounded-2xl px-4 py-3 sm:px-6 sm:py-4">
             <div className="min-w-[170px] flex-1">
               <p className="text-sm text-[var(--text-muted)]">Origin</p>
               <input
@@ -388,9 +388,17 @@ export default function Home() {
             </div>
           </div>
 
+          <button
+            type="button"
+            disabled={loadingRoutes || loadingPlayback || !selectedRoute}
+            onClick={() => runPlayback(playbackDecision)}
+            className="pointer-events-auto rounded-xl border border-black bg-black px-4 py-2 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white dark:bg-white dark:text-black"
+          >
+            {loadingPlayback ? "Analyzing..." : "Analyze"}
+          </button>
         </div>
 
-        <div className="pointer-events-auto mt-4 flex gap-3">
+        <div className="pointer-events-auto mt-3 flex flex-wrap gap-2">
           <button
             type="button"
             disabled={buildingCorridor}
@@ -427,8 +435,8 @@ export default function Home() {
           </div>
         ) : null}
 
-        <div className="pointer-events-auto mt-5 flex-1">
-          <div onWheelCapture={(event) => event.stopPropagation()}>
+        <div className="mt-4 grid flex-1 grid-cols-1 gap-3 lg:grid-cols-[300px_minmax(0,1fr)]">
+          <div className="pointer-events-auto min-h-0" onWheelCapture={(event) => event.stopPropagation()}>
             <ControlPanel
               operator={operator}
               operatorLabels={operatorLabels}
@@ -449,80 +457,26 @@ export default function Home() {
               theme={theme}
             />
           </div>
-        </div>
-
-        <div className="pointer-events-auto mt-auto grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_470px]">
-          <div>
-            <div className="hide-scrollbar overflow-x-auto pb-2">
-              <div className="flex min-w-max gap-3">
-                {routes.map((route) => {
-                  const spark = routeSparkline(route);
-                  const selected = route.route_id === selectedRouteId;
-
-                  return (
-                    <button
-                      type="button"
-                      key={route.route_id}
-                      onClick={() => setSelectedRouteId(route.route_id)}
-                      className={`floating-card min-w-[250px] rounded-2xl p-4 text-left transition ${
-                        selected ? "border-2 border-black dark:border-white" : "border border-[var(--border)]"
-                      }`}
-                    >
-                      <div className="mb-1 flex items-center justify-between">
-                        <p className="text-base font-extrabold leading-tight tracking-tight">{route.label}</p>
-                        {route.is_recommended ? (
-                          <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-300">
-                            Recommended
-                          </span>
-                        ) : null}
-                      </div>
-
-                      <p className="text-sm text-[var(--text-muted)]">Score: <span className="text-[var(--text-primary)]">{route.connectivity_score}</span></p>
-                      <p className="mb-2 text-sm text-[var(--text-muted)]">ETA: <span className="text-[var(--text-primary)]">{route.eta_minutes} min</span></p>
-
-                      <div className="overflow-hidden rounded-full border border-black/10 bg-black/5 dark:border-white/20 dark:bg-white/10">
-                        <div className="flex h-2 w-full">
-                          <div className="bg-[#2d965d]" style={{ width: `${spark.strong}%` }} />
-                          <div className="bg-[#e3a008]" style={{ width: `${spark.moderate}%` }} />
-                          <div className="bg-[#e14c4c]" style={{ width: `${spark.weak}%` }} />
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              disabled={loadingRoutes || loadingPlayback || !selectedRoute}
-              onClick={() => runPlayback(playbackDecision)}
-              className="mt-3 w-full rounded-xl bg-black px-4 py-3 text-4xl font-extrabold leading-none tracking-tight text-white shadow-lg transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black"
-            >
-              Analyze
-            </button>
-          </div>
-
-          <div className="space-y-3">
-            <section className="floating-card rounded-2xl px-5 py-5">
-              <h2 className="text-[38px] font-extrabold leading-none tracking-tight">Selected Route Insight</h2>
+          <div className="pointer-events-auto min-h-0 space-y-3">
+            <section className="floating-card rounded-2xl px-4 py-4">
+              <h2 className="text-2xl font-extrabold leading-none tracking-tight">Selected Route Insight</h2>
               {selectedRoute ? (
-                <div className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+                <div className="mt-3 grid grid-cols-2 gap-2 text-sm xl:grid-cols-4">
                   <div>
                     <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">ETA</p>
-                    <p className="text-3xl font-bold">{selectedRoute.eta_minutes} min</p>
+                    <p className="text-2xl font-bold">{selectedRoute.eta_minutes} min</p>
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Distance</p>
-                    <p className="text-3xl font-bold">{selectedRoute.distance_km} km</p>
+                    <p className="text-2xl font-bold">{selectedRoute.distance_km} km</p>
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Connectivity</p>
-                    <p className="text-3xl font-bold">{selectedRoute.connectivity_score}</p>
+                    <p className="text-2xl font-bold">{selectedRoute.connectivity_score}</p>
                   </div>
                   <div>
                     <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Longest Weak Stretch</p>
-                    <p className="text-3xl font-bold">{selectedRoute.longest_weak_stretch_m} m</p>
+                    <p className="text-2xl font-bold">{selectedRoute.longest_weak_stretch_m} m</p>
                   </div>
                 </div>
               ) : (
@@ -531,7 +485,7 @@ export default function Home() {
             </section>
 
             {playback ? (
-              <div className="max-h-[280px] overflow-auto rounded-2xl">
+              <div className="max-h-[min(34vh,280px)] overflow-auto rounded-2xl">
                 <Timeline playback={playback} activeStep={activeStep} />
               </div>
             ) : null}
