@@ -1,0 +1,54 @@
+[
+  {
+    "radio": "LTE",
+    "mcc": 405,
+    "mnc": 86,
+    "area_code": 14022,
+    "cell_id": 9238143,
+    "lon": 77.6022,
+    "lat": 12.9344,
+    "range_m": 680,
+    "samples": 8,
+    "updated_ts": "2025-11-08T10:40:00Z",
+    "operator_label": "jio"
+  },
+  {
+    "radio": "LTE",
+    "mcc": 404,
+    "mnc": 49,
+    "area_code": 18301,
+    "cell_id": 4739019,
+    "lon": 77.523,
+    "lat": 12.82,
+    "range_m": 520,
+    "samples": 7,
+    "updated_ts": "2025-10-26T09:22:00Z",
+    "operator_label": "airtel"
+  },
+  {
+    "radio": "UMTS",
+    "mcc": 405,
+    "mnc": 87,
+    "area_code": 12009,
+    "cell_id": 216701,
+    "lon": 76.9884,
+    "lat": 12.621,
+    "range_m": 940,
+    "samples": 4,
+    "updated_ts": "2025-09-17T13:51:00Z",
+    "operator_label": "jio"
+  },
+  {
+    "radio": "GSM",
+    "mcc": 404,
+    "mnc": 10,
+    "area_code": 14300,
+    "cell_id": 89218,
+    "lon": 76.7451,
+    "lat": 12.4482,
+    "range_m": 1020,
+    "samples": 3,
+    "updated_ts": "2025-08-03T06:12:00Z",
+    "operator_label": "airtel"
+  }
+]

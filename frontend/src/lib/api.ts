@@ -1,4 +1,5 @@
 import {
+  DataSourceStatus,
   PlaybackResponse,
   RankingMode,
   RoutesResponse,
@@ -23,6 +24,12 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 
   return response.json() as Promise<T>;
+}
+
+export async function fetchDataSourceStatus(): Promise<DataSourceStatus> {
+  return request<DataSourceStatus>("/data-source", {
+    method: "GET",
+  });
 }
 
 export async function fetchRoutes(payload: {

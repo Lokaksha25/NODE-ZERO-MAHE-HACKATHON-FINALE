@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import maplibregl, { Map } from "maplibre-gl";
+import * as turf from "@turf/turf";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { useEffect, useMemo } from "react";
+import { CircleMarker, MapContainer, Marker, Pane, Polyline, TileLayer, Tooltip, useMap } from "react-leaflet";
 
 import { Route } from "@/types/api";
 
@@ -11,189 +14,144 @@ const ROUTE_COLORS: Record<string, string> = {
   strong: "#2d965d",
 };
 
-type SegmentClass = "weak" | "moderate" | "strong";
-
 interface MapViewProps {
   routes: Route[];
   selectedRouteId: string;
   playbackSegmentIndex: number;
 }
 
-function scoreToColor(classification: SegmentClass): string {
+function classifyColor(classification: "weak" | "moderate" | "strong") {
   return ROUTE_COLORS[classification] ?? "#7d8aa6";
 }
 
-function toLineFeatures(route: Route) {
-  return route.segments.map((segment) => ({
-    type: "Feature",
-    properties: {
-      routeId: route.route_id,
-      segmentIndex: segment.index,
-      classification: segment.classification,
-      color: scoreToColor(segment.classification),
-      highlighted: route.route_id,
-    },
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [segment.start.lon, segment.start.lat],
-        [segment.end.lon, segment.end.lat],
-      ],
-    },
-  }));
+function PlaybackIcon() {
+  return L.divIcon({
+    className: "",
+    html: '<div style="width:14px;height:14px;border-radius:9999px;background:#ff8a3d;border:2px solid #ffffff;box-shadow:0 0 0 6px rgba(255,138,61,0.25)"></div>',
+    iconSize: [14, 14],
+    iconAnchor: [7, 7],
+  });
 }
 
-export function MapView({
-  routes,
-  selectedRouteId,
-  playbackSegmentIndex,
-}: MapViewProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<Map | null>(null);
+function MapViewport({ selectedRoute }: { selectedRoute: Route | null }) {
+  const map = useMap();
 
   useEffect(() => {
-    if (!containerRef.current || mapRef.current) {
+    if (!selectedRoute || selectedRoute.geometry.length < 2) {
       return;
     }
 
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: {
-        version: 8,
-        sources: {
-          osm: {
-            type: "raster",
-            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-            tileSize: 256,
-            attribution: "© OpenStreetMap contributors",
-          },
-        },
-        layers: [
-          {
-            id: "osm",
-            type: "raster",
-            source: "osm",
-          },
-        ],
-      },
-      center: [77.2, 12.7],
-      zoom: 8,
-    });
+    const bounds = L.latLngBounds(
+      selectedRoute.geometry.map((coord) => [coord.lat, coord.lon] as [number, number]),
+    );
+    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
+  }, [map, selectedRoute]);
 
-    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
+  return null;
+}
 
-    map.on("load", () => {
-      map.addSource("routes", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [],
-        },
-      });
+export function MapView({ routes, selectedRouteId, playbackSegmentIndex }: MapViewProps) {
+  const selectedRoute = useMemo(
+    () => routes.find((route) => route.route_id === selectedRouteId) ?? routes[0] ?? null,
+    [routes, selectedRouteId],
+  );
 
-      map.addLayer({
-        id: "route-lines",
-        type: "line",
-        source: "routes",
-        paint: {
-          "line-color": ["get", "color"],
-          "line-width": [
-            "case",
-            ["==", ["get", "routeId"], selectedRouteId],
-            6,
-            4,
-          ],
-          "line-opacity": [
-            "case",
-            ["==", ["get", "routeId"], selectedRouteId],
-            0.95,
-            0.35,
-          ],
-        },
-      });
+  const activeSegment = useMemo(() => {
+    if (!selectedRoute) {
+      return null;
+    }
+    return selectedRoute.segments.find((segment) => segment.index === playbackSegmentIndex) ?? null;
+  }, [selectedRoute, playbackSegmentIndex]);
 
-      map.addSource("playback", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [],
-        },
-      });
-
-      map.addLayer({
-        id: "playback-point",
-        type: "circle",
-        source: "playback",
-        paint: {
-          "circle-radius": 8,
-          "circle-color": "#ff8a3d",
-          "circle-stroke-color": "#ffffff",
-          "circle-stroke-width": 2,
-        },
-      });
-    });
-
-    mapRef.current = map;
-
-    return () => {
-      map.remove();
-      mapRef.current = null;
-    };
-  }, [selectedRouteId]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !map.getSource("routes")) {
-      return;
+  const distanceFromOriginKm = useMemo(() => {
+    if (!selectedRoute || !activeSegment) {
+      return null;
     }
 
-    const features = routes.flatMap(toLineFeatures);
-    const source = map.getSource("routes") as maplibregl.GeoJSONSource;
-    source.setData({
-      type: "FeatureCollection",
-      features,
-    });
+    const origin = selectedRoute.geometry[0];
+    const current = { lon: activeSegment.end.lon, lat: activeSegment.end.lat };
 
-    const selectedRoute = routes.find((route) => route.route_id === selectedRouteId) ?? routes[0];
-    if (selectedRoute) {
-      const bounds = new maplibregl.LngLatBounds();
-      selectedRoute.geometry.forEach((point) => bounds.extend([point.lon, point.lat]));
-      if (!bounds.isEmpty()) {
-        map.fitBounds(bounds, { padding: 60, duration: 500, maxZoom: 11.5 });
-      }
-    }
-  }, [routes, selectedRouteId]);
+    return turf.distance(
+      turf.point([origin.lon, origin.lat]),
+      turf.point([current.lon, current.lat]),
+      { units: "kilometers" },
+    );
+  }, [selectedRoute, activeSegment]);
 
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !map.getSource("playback")) {
-      return;
-    }
+  const playbackIcon = useMemo(() => PlaybackIcon(), []);
 
-    const selectedRoute = routes.find((route) => route.route_id === selectedRouteId);
-    const activeSegment = selectedRoute?.segments.find((segment) => segment.index === playbackSegmentIndex);
+  return (
+    <div className="overflow-hidden rounded-2xl border border-dusk-400/35 shadow-glass">
+      <MapContainer
+        center={[12.7, 77.2]}
+        zoom={8}
+        scrollWheelZoom
+        className="h-[56vh] min-h-[420px] w-full"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-    if (!activeSegment) {
-      const source = map.getSource("playback") as maplibregl.GeoJSONSource;
-      source.setData({ type: "FeatureCollection", features: [] });
-      return;
-    }
+        <Pane name="routes" style={{ zIndex: 400 }}>
+          {routes.map((route) => {
+            const faded = route.route_id !== selectedRouteId;
+            return route.segments.map((segment) => (
+              <Polyline
+                key={`${route.route_id}-${segment.index}`}
+                positions={[
+                  [segment.start.lat, segment.start.lon],
+                  [segment.end.lat, segment.end.lon],
+                ]}
+                pathOptions={{
+                  color: classifyColor(segment.classification),
+                  weight: faded ? 3 : 6,
+                  opacity: faded ? 0.35 : 0.92,
+                }}
+              />
+            ));
+          })}
+        </Pane>
 
-    const source = map.getSource("playback") as maplibregl.GeoJSONSource;
-    source.setData({
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [activeSegment.end.lon, activeSegment.end.lat],
-          },
-          properties: {},
-        },
-      ],
-    });
-  }, [playbackSegmentIndex, routes, selectedRouteId]);
+        <Pane name="endpoints" style={{ zIndex: 500 }}>
+          {selectedRoute && selectedRoute.geometry.length > 1 ? (
+            <>
+              <CircleMarker
+                center={[selectedRoute.geometry[0].lat, selectedRoute.geometry[0].lon]}
+                radius={8}
+                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#2d965d", fillOpacity: 1 }}
+              >
+                <Tooltip direction="top" offset={[0, -6]} permanent>
+                  Start
+                </Tooltip>
+              </CircleMarker>
+              <CircleMarker
+                center={[
+                  selectedRoute.geometry[selectedRoute.geometry.length - 1].lat,
+                  selectedRoute.geometry[selectedRoute.geometry.length - 1].lon,
+                ]}
+                radius={8}
+                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#e14c4c", fillOpacity: 1 }}
+              >
+                <Tooltip direction="top" offset={[0, -6]} permanent>
+                  Destination
+                </Tooltip>
+              </CircleMarker>
+            </>
+          ) : null}
 
-  return <div ref={containerRef} className="h-[56vh] min-h-[420px] w-full rounded-2xl border border-dusk-400/35 shadow-glass" />;
+          {activeSegment ? (
+            <Marker position={[activeSegment.end.lat, activeSegment.end.lon]} icon={playbackIcon}>
+              <Tooltip direction="top" offset={[0, -8]}>
+                Segment {activeSegment.index}
+                {distanceFromOriginKm ? ` • ${distanceFromOriginKm.toFixed(1)} km from start` : ""}
+              </Tooltip>
+            </Marker>
+          ) : null}
+        </Pane>
+
+        <MapViewport selectedRoute={selectedRoute} />
+      </MapContainer>
+    </div>
+  );
 }

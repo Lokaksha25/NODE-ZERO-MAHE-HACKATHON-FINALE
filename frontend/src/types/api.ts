@@ -50,6 +50,15 @@ export interface RoutesResponse {
   routes: Route[];
 }
 
+export interface DataSourceStatus {
+  source_mode: "cached" | "fallback";
+  source_name: string;
+  cache_exists: boolean;
+  route_count: number;
+  tower_count: number;
+  generated_at: number;
+}
+
 export type NotificationPriority = "urgent" | "semi-urgent" | "non-urgent";
 export type NotificationState = "queued" | "deferred" | "released" | "delivered";
 

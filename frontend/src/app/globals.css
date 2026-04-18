@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
-@import "maplibre-gl/dist/maplibre-gl.css";
 
 @tailwind base;
 @tailwind components;

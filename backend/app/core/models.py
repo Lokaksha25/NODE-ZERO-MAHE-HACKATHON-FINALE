@@ -83,6 +83,15 @@ class RoutesResponse(BaseModel):
     routes: list[RouteResponse]
 
 
+class DataSourceStatus(BaseModel):
+    source_mode: Literal["cached", "fallback"]
+    source_name: str
+    cache_exists: bool
+    route_count: int
+    tower_count: int
+    generated_at: int
+
+
 class NotificationEvent(BaseModel):
     id: str
     title: str

@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from app.core.config import SEGMENT_LENGTH_METERS, WEAK_THRESHOLD, resolve_mode_weights
 from app.core.models import (
     Coordinate,
+    Operator,
     RankingMode,
     RouteResponse,
     SegmentResponse,
@@ -63,7 +64,7 @@ def _normalize_inverse(values: list[int]) -> list[float]:
 
 def rank_routes(
     templates: list[RouteTemplate],
-    operator: str,
+    operator: Operator,
     mode: RankingMode,
     blend: float,
     safety_mode: bool,
@@ -74,7 +75,7 @@ def rank_routes(
     preliminary: list[dict[str, float | RouteTemplate | list[float] | list[SegmentResponse] | list[WeakZoneResponse]]] = []
 
     for template, eta_score in zip(templates, eta_scores):
-        segment_scores = [segment.scores[operator] for segment in template.segments]  # type: ignore[index]
+        segment_scores = [segment.scores[operator] for segment in template.segments]
         segments = [
             SegmentResponse(
                 index=idx,

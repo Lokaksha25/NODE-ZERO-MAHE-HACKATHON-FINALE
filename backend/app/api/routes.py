@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 
 from app.core.config import SEGMENT_LENGTH_METERS, WARNING_LOOKAHEAD_METERS
 from app.core.models import (
+    DataSourceStatus,
     Operator,
     PlaybackRequest,
     PlaybackResponse,
@@ -18,7 +19,7 @@ from app.core.notification_engine import (
     snapshot_pending,
 )
 from app.core.scoring import rank_routes
-from app.data.demo_routes import get_demo_routes
+from app.data.demo_routes import get_data_source_status, get_demo_routes
 
 router = APIRouter(prefix="/api", tags=["connectivity-demo"])
 
@@ -26,6 +27,11 @@ router = APIRouter(prefix="/api", tags=["connectivity-demo"])
 @router.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@router.get("/data-source", response_model=DataSourceStatus)
+def data_source_status() -> DataSourceStatus:
+    return DataSourceStatus(**get_data_source_status())
 
 
 @router.post("/routes", response_model=RoutesResponse)
