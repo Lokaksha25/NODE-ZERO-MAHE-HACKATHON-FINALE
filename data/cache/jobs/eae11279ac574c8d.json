@@ -1,0 +1,18 @@
+{
+  "job_id": "eae11279ac574c8d",
+  "corridor_id": "fdf5d8b97c857112",
+  "source_city": "Bengaluru",
+  "destination_city": "Mysore",
+  "status": "ready",
+  "stage": "Completed",
+  "progress_pct": 100,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": null,
+  "tower_count": 350,
+  "route_count": 1,
+  "created_at": 1776512022,
+  "completed_at": 1776512068,
+  "source_label": "Bengaluru, Bangalore North, Bengaluru Urban, Karnataka, India",
+  "destination_label": "Mysuru, Mysuru taluk, Mysuru District, Karnataka, 570001, India"
+}

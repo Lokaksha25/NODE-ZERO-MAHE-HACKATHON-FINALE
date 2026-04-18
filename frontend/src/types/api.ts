@@ -1,4 +1,4 @@
-export type Operator = "jio" | "airtel";
+export type Operator = "all" | "jio" | "airtel";
 export type RankingMode = "fastest" | "most_connected";
 
 export type SegmentClass = "weak" | "moderate" | "strong";
@@ -46,6 +46,7 @@ export interface RoutesResponse {
   mode: RankingMode;
   safety_mode: boolean;
   eta_connectivity_blend: number;
+  corridor_id: string | null;
   recommended_route_id: string;
   routes: Route[];
 }
@@ -54,10 +55,44 @@ export interface DataSourceStatus {
   source_mode: "cached" | "fallback";
   source_name: string;
   corridor: string;
+  corridor_id: string | null;
   cache_exists: boolean;
   route_count: number;
   tower_count: number;
   generated_at: number;
+  degraded: boolean;
+  degraded_reason: string | null;
+  operator_labels: Record<"jio" | "airtel", string> | null;
+  operator_note: string | null;
+}
+
+export type CorridorJobStatus =
+  | "queued"
+  | "geocoding"
+  | "routing"
+  | "tower_fetch"
+  | "scoring"
+  | "ready"
+  | "ready_degraded"
+  | "failed";
+
+export interface CorridorJobResponse {
+  job_id: string;
+  corridor_id: string;
+  source_city: string;
+  destination_city: string;
+  status: CorridorJobStatus;
+  stage: string;
+  progress_pct: number;
+  degraded: boolean;
+  degraded_reason: string | null;
+  error: string | null;
+  source_label: string | null;
+  destination_label: string | null;
+  tower_count: number;
+  route_count: number;
+  created_at: number;
+  completed_at: number | null;
 }
 
 export type NotificationPriority = "urgent" | "semi-urgent" | "non-urgent";

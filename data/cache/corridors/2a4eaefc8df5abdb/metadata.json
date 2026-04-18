@@ -1,0 +1,18 @@
+{
+  "corridor_id": "2a4eaefc8df5abdb",
+  "source_city": "Bakersfield",
+  "destination_city": "Ridgecrest",
+  "source_label": "Bakersfield, Kern County, California, United States",
+  "destination_label": "Ridgecrest, Kern County, California, 93555, United States",
+  "generated_at": 1776505876,
+  "expires_at": 1776592276,
+  "degraded": false,
+  "degraded_reason": null,
+  "route_count": 1,
+  "tower_count": 33370,
+  "operator_labels": {
+    "jio": "AT&T (CoverageMap)",
+    "airtel": "Verizon (CoverageMap)"
+  },
+  "operator_note": "Operator buckets are mapped from top CoverageMap providers for this U.S. corridor. Approx API lookups used: 12."
+}

@@ -1,0 +1,14 @@
+{
+  "job_id": "83ed1e1cf0b4066d",
+  "corridor_id": "b1872090c3a4c2e7",
+  "source_city": "Williamsport",
+  "destination_city": "Rockford",
+  "status": "ready",
+  "stage": "Cache hit",
+  "progress_pct": 100,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": null,
+  "created_at": 1776505444,
+  "completed_at": 1776505444
+}

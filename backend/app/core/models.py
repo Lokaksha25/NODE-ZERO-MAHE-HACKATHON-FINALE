@@ -7,6 +7,7 @@ from pydantic import BaseModel, Field
 
 
 class Operator(str, Enum):
+    all = "all"
     jio = "jio"
     airtel = "airtel"
 
@@ -34,6 +35,7 @@ class RouteRequest(BaseModel):
     mode: RankingMode = RankingMode.fastest
     eta_connectivity_blend: float = Field(default=0.5, ge=0.0, le=1.0)
     safety_mode: bool = False
+    corridor_id: str | None = None
 
 
 class Coordinate(BaseModel):
@@ -79,6 +81,7 @@ class RoutesResponse(BaseModel):
     mode: RankingMode
     safety_mode: bool
     eta_connectivity_blend: float
+    corridor_id: str | None = None
     recommended_route_id: str
     routes: list[RouteResponse]
 
@@ -87,10 +90,49 @@ class DataSourceStatus(BaseModel):
     source_mode: Literal["cached", "fallback"]
     source_name: str
     corridor: str
+    corridor_id: str | None = None
     cache_exists: bool
     route_count: int
     tower_count: int
     generated_at: int
+    degraded: bool = False
+    degraded_reason: str | None = None
+    operator_labels: dict[str, str] | None = None
+    operator_note: str | None = None
+
+
+class CorridorJobRequest(BaseModel):
+    source_city: str
+    destination_city: str
+    force_refresh: bool = False
+
+
+class CorridorJobResponse(BaseModel):
+    job_id: str
+    corridor_id: str
+    source_city: str
+    destination_city: str
+    status: Literal[
+        "queued",
+        "geocoding",
+        "routing",
+        "tower_fetch",
+        "scoring",
+        "ready",
+        "ready_degraded",
+        "failed",
+    ]
+    stage: str
+    progress_pct: int = Field(ge=0, le=100)
+    degraded: bool = False
+    degraded_reason: str | None = None
+    error: str | None = None
+    source_label: str | None = None
+    destination_label: str | None = None
+    tower_count: int = 0
+    route_count: int = 0
+    created_at: int
+    completed_at: int | None = None
 
 
 class NotificationEvent(BaseModel):
@@ -109,6 +151,7 @@ class PlaybackRequest(BaseModel):
     eta_connectivity_blend: float = Field(default=0.5, ge=0.0, le=1.0)
     safety_mode: bool = False
     decision_at_warning: Literal["continue", "switch"] = "continue"
+    corridor_id: str | None = None
 
 
 class WeakZoneWarning(BaseModel):

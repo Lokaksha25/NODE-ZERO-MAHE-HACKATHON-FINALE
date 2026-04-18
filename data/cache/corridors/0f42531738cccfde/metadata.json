@@ -1,0 +1,13 @@
+{
+  "corridor_id": "0f42531738cccfde",
+  "source_city": "Bergen",
+  "destination_city": "Drammen",
+  "source_label": "Bergen, Vestland, Norge",
+  "destination_label": "Drammen, Buskerud, Norge",
+  "generated_at": 1776494615,
+  "expires_at": 1776581015,
+  "degraded": false,
+  "degraded_reason": null,
+  "route_count": 2,
+  "tower_count": 301
+}

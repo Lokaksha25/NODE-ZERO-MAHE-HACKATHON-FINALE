@@ -1,0 +1,14 @@
+{
+  "job_id": "baae47f17be9f2a1",
+  "corridor_id": "fdf5d8b97c857112",
+  "source_city": "Bengaluru",
+  "destination_city": "Mysore",
+  "status": "ready",
+  "stage": "Cache hit",
+  "progress_pct": 100,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": null,
+  "created_at": 1776508247,
+  "completed_at": 1776508247
+}

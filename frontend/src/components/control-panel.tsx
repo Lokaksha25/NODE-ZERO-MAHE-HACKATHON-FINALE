@@ -3,7 +3,7 @@
 import { RankingMode, Route } from "@/types/api";
 
 interface ControlPanelProps {
-  operator: "jio" | "airtel";
+  operator: "all" | "jio" | "airtel";
   operatorLabels: Record<"jio" | "airtel", string>;
   operatorNote?: string;
   mode: RankingMode;
@@ -12,7 +12,7 @@ interface ControlPanelProps {
   routes: Route[];
   selectedRouteId: string;
   loading: boolean;
-  onOperatorChange: (operator: "jio" | "airtel") => void;
+  onOperatorChange: (operator: "all" | "jio" | "airtel") => void;
   onModeChange: (mode: RankingMode) => void;
   onBlendChange: (value: number) => void;
   onSafetyModeChange: (value: boolean) => void;
@@ -52,7 +52,18 @@ export function ControlPanel({
         <div>
           <p className="mb-2 text-xs uppercase tracking-wide text-dusk-200">Operator</p>
           {operatorNote ? <p className="mb-2 text-xs text-dusk-200">{operatorNote}</p> : null}
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              className={`rounded-xl border px-3 py-2 text-sm font-medium transition ${
+                operator === "all"
+                  ? "border-ember bg-ember/20 text-ember"
+                  : "border-dusk-400/45 bg-dusk-700/50 text-dusk-100 hover:border-dusk-200"
+              }`}
+              onClick={() => onOperatorChange("all")}
+            >
+              All Networks
+            </button>
             <button
               type="button"
               className={`rounded-xl border px-3 py-2 text-sm font-medium transition ${

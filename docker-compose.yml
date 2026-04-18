@@ -3,8 +3,12 @@ services:
     build:
       context: ./backend
     container_name: node-zero-backend
+    environment:
+      OPENCELLID_API_KEY: ${OPENCELLID_API_KEY}
+      COVERAGE_MAP: ${COVERAGE_MAP}
+      COVERAGE_PROVIDER: ${COVERAGE_PROVIDER:-auto}
     volumes:
-      - ./data:/app/data:ro
+      - ./data:/app/data
     ports:
       - "8000:8000"
     restart: unless-stopped

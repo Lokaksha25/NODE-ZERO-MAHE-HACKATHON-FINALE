@@ -1,0 +1,16 @@
+{
+  "job_id": "6e104fc57f6a8ef6",
+  "corridor_id": "d44e18bb0c982166",
+  "source_city": "Williamsport",
+  "destination_city": "Chicago",
+  "status": "failed",
+  "stage": "Failed",
+  "progress_pct": 100,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": "HTTP Error 429: Too many requests",
+  "tower_count": 0,
+  "route_count": 0,
+  "created_at": 1776503738,
+  "completed_at": 1776503741
+}

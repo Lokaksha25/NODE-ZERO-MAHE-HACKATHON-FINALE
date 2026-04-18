@@ -42,12 +42,103 @@ def _resolve_cache_path() -> Path:
 _CACHE_PATH = _resolve_cache_path()
 
 
-def _read_cache_payload() -> dict | None:
-    if not _CACHE_PATH.exists():
+def _resolve_towers_cache_path(corridor_id: str | None = None) -> Path:
+    here = Path(__file__).resolve()
+
+    if corridor_id:
+        candidates = [
+            here.parents[2]
+            / "data"
+            / "cache"
+            / "corridors"
+            / corridor_id
+            / "opencellid_towers.json",
+            here.parents[3]
+            / "data"
+            / "cache"
+            / "corridors"
+            / corridor_id
+            / "opencellid_towers.json",
+            Path("/app/data/cache/corridors") / corridor_id / "opencellid_towers.json",
+        ]
+    else:
+        candidates = [
+            here.parents[2] / "data" / "cache" / "opencellid_towers.json",
+            here.parents[3] / "data" / "cache" / "opencellid_towers.json",
+            Path("/app/data/cache/opencellid_towers.json"),
+        ]
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
+def _infer_operator_profile(
+    corridor_id: str | None,
+) -> tuple[dict[str, str] | None, str | None]:
+    towers_path = _resolve_towers_cache_path(corridor_id=corridor_id)
+    if not towers_path.exists():
+        return None, None
+
+    try:
+        payload = json.loads(towers_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None, None
+
+    counts: dict[tuple[int, int], int] = {}
+    for tower in payload.get("towers", []):
+        try:
+            key = (int(tower.get("mcc", 0)), int(tower.get("mnc", 0)))
+        except (TypeError, ValueError):
+            continue
+        counts[key] = counts.get(key, 0) + 1
+
+    ranked = sorted(counts.items(), key=lambda item: item[1], reverse=True)
+    if not ranked:
+        return None, None
+
+    first = ranked[0][0]
+    second = ranked[1][0] if len(ranked) > 1 else ranked[0][0]
+
+    labels = {
+        "jio": f"MCC {first[0]} MNC {first[1]}",
+        "airtel": f"MCC {second[0]} MNC {second[1]}",
+    }
+    note = f"Auto-mapped operator buckets for MCC {first[0]} using dominant MNCs in this corridor."
+    return labels, note
+
+
+def _resolve_dynamic_cache_path(corridor_id: str) -> Path:
+    here = Path(__file__).resolve()
+    candidates = [
+        here.parents[2]
+        / "data"
+        / "cache"
+        / "corridors"
+        / corridor_id
+        / "corridor_routes_scored.json",
+        here.parents[3]
+        / "data"
+        / "cache"
+        / "corridors"
+        / corridor_id
+        / "corridor_routes_scored.json",
+        Path("/app/data/cache/corridors") / corridor_id / "corridor_routes_scored.json",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
+def _read_cache_payload(corridor_id: str | None = None) -> dict | None:
+    path = _resolve_dynamic_cache_path(corridor_id) if corridor_id else _CACHE_PATH
+    if not path.exists():
         return None
 
     try:
-        return json.loads(_CACHE_PATH.read_text(encoding="utf-8"))
+        return json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return None
 
@@ -118,6 +209,7 @@ def _build_segments(
                 end_lon=points[idx + 1][0],
                 end_lat=points[idx + 1][1],
                 scores={
+                    Operator.all: round((jio_scores[idx] + airtel_scores[idx]) / 2, 2),
                     Operator.jio: jio_scores[idx],
                     Operator.airtel: airtel_scores[idx],
                 },
@@ -175,15 +267,19 @@ def _fallback_routes() -> list[RouteTemplate]:
 
 
 def _parse_operator_score(raw_scores: dict[str, float], operator: Operator) -> float:
-    value = raw_scores.get(operator.value, 0.0)
+    value = raw_scores.get(operator.value)
+    if value is None and operator == Operator.all:
+        value = raw_scores.get("jio", 0.0)
+    if value is None:
+        value = 0.0
     try:
         return float(value)
     except (TypeError, ValueError):
         return 0.0
 
 
-def _load_cached_routes() -> list[RouteTemplate]:
-    payload = _read_cache_payload()
+def _load_cached_routes(corridor_id: str | None = None) -> list[RouteTemplate]:
+    payload = _read_cache_payload(corridor_id=corridor_id)
     if not payload:
         return []
 
@@ -204,6 +300,7 @@ def _load_cached_routes() -> list[RouteTemplate]:
                     end_lon=float(segment["end_lon"]),
                     end_lat=float(segment["end_lat"]),
                     scores={
+                        Operator.all: _parse_operator_score(raw_scores, Operator.all),
                         Operator.jio: _parse_operator_score(raw_scores, Operator.jio),
                         Operator.airtel: _parse_operator_score(
                             raw_scores, Operator.airtel
@@ -235,15 +332,17 @@ def _load_cached_routes() -> list[RouteTemplate]:
     return parsed
 
 
-def get_demo_routes() -> list[RouteTemplate]:
-    cached = _load_cached_routes()
+def get_demo_routes(corridor_id: str | None = None) -> list[RouteTemplate]:
+    cached = _load_cached_routes(corridor_id=corridor_id)
     if cached:
         return cached
     return _fallback_routes()
 
 
-def get_data_source_status() -> dict[str, int | str | bool]:
-    payload = _read_cache_payload()
+def get_data_source_status(
+    corridor_id: str | None = None,
+) -> dict[str, int | str | bool | None]:
+    payload = _read_cache_payload(corridor_id=corridor_id)
     if not payload:
         fallback = _fallback_routes()
         return {
@@ -261,6 +360,16 @@ def get_data_source_status() -> dict[str, int | str | bool]:
     corridor_tower_count = (
         int(corridor_summary.get("row_count", 0)) if corridor_summary else 0
     )
+    degraded = bool(payload.get("degraded", False))
+    degraded_reason = payload.get("degraded_reason")
+    operator_labels = payload.get("operator_labels")
+    operator_note = payload.get("operator_note")
+    if operator_labels is None:
+        inferred_labels, inferred_note = _infer_operator_profile(
+            corridor_id=corridor_id
+        )
+        operator_labels = inferred_labels
+        operator_note = inferred_note
 
     if int(payload.get("tower_count", 0)) < 50:
         fallback = _fallback_routes()
@@ -268,10 +377,15 @@ def get_data_source_status() -> dict[str, int | str | bool]:
             "source_mode": "fallback",
             "source_name": "synthetic-demo",
             "corridor": corridor,
+            "corridor_id": corridor_id,
             "cache_exists": False,
             "route_count": len(fallback),
             "tower_count": corridor_tower_count or int(payload.get("tower_count", 0)),
             "generated_at": int(payload.get("generated_at", 0)),
+            "degraded": degraded,
+            "degraded_reason": degraded_reason,
+            "operator_labels": operator_labels,
+            "operator_note": operator_note,
         }
 
     routes = payload.get("routes", [])
@@ -279,8 +393,13 @@ def get_data_source_status() -> dict[str, int | str | bool]:
         "source_mode": "cached",
         "source_name": str(payload.get("source", "osrm+opencellid")),
         "corridor": corridor,
+        "corridor_id": corridor_id,
         "cache_exists": True,
         "route_count": int(payload.get("route_count", len(routes))),
         "tower_count": corridor_tower_count or int(payload.get("tower_count", 0)),
         "generated_at": int(payload.get("generated_at", 0)),
+        "degraded": degraded,
+        "degraded_reason": degraded_reason,
+        "operator_labels": operator_labels,
+        "operator_note": operator_note,
     }

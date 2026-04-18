@@ -1,0 +1,16 @@
+{
+  "job_id": "23514fda13f962fc",
+  "corridor_id": "d11b3f3f0ec11800",
+  "source_city": "San Jose",
+  "destination_city": "Los Angeles",
+  "status": "scoring",
+  "stage": "Scoring routes",
+  "progress_pct": 85,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": null,
+  "tower_count": 0,
+  "route_count": 0,
+  "created_at": 1776512166,
+  "completed_at": null
+}

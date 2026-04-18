@@ -5,8 +5,16 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ControlPanel } from "@/components/control-panel";
 import { Timeline } from "@/components/timeline";
-import { fetchDataSourceStatus, fetchPlayback, fetchRoutes } from "@/lib/api";
 import {
+  createCorridorJob,
+  fetchCorridorJob,
+  fetchDataSourceStatus,
+  fetchDataSourceStatusByCorridor,
+  fetchPlayback,
+  fetchRoutes,
+} from "@/lib/api";
+import {
+  CorridorJobResponse,
   DataSourceStatus,
   Operator,
   PlaybackResponse,
@@ -32,7 +40,13 @@ function formatCorridorName(corridor: string | undefined) {
 }
 
 export default function Home() {
-  const [operator, setOperator] = useState<Operator>("jio");
+  const [sourceCity, setSourceCity] = useState<string>("Oslo");
+  const [destinationCity, setDestinationCity] = useState<string>("Drammen");
+  const [activeCorridorId, setActiveCorridorId] = useState<string | null>(null);
+  const [job, setJob] = useState<CorridorJobResponse | null>(null);
+  const [buildingCorridor, setBuildingCorridor] = useState<boolean>(false);
+
+  const [operator, setOperator] = useState<Operator>("all");
   const [mode, setMode] = useState<RankingMode>("fastest");
   const [blend, setBlend] = useState<number>(0.5);
   const [safetyMode, setSafetyMode] = useState<boolean>(false);
@@ -52,7 +66,11 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true;
 
-    fetchDataSourceStatus()
+    const load = activeCorridorId
+      ? fetchDataSourceStatusByCorridor(activeCorridorId)
+      : fetchDataSourceStatus();
+
+    load
       .then((status) => {
         if (!isMounted) {
           return;
@@ -69,7 +87,7 @@ export default function Home() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [activeCorridorId]);
 
   useEffect(() => {
     let isMounted = true;
@@ -82,6 +100,7 @@ export default function Home() {
       mode,
       eta_connectivity_blend: blend,
       safety_mode: safetyMode,
+      corridor_id: activeCorridorId ?? undefined,
     })
       .then((data) => {
         if (!isMounted) {
@@ -115,7 +134,7 @@ export default function Home() {
     return () => {
       isMounted = false;
     };
-  }, [operator, mode, blend, safetyMode]);
+  }, [operator, mode, blend, safetyMode, activeCorridorId]);
 
   useEffect(() => {
     if (!playback || playback.steps.length === 0) {
@@ -141,13 +160,11 @@ export default function Home() {
 
   const routes = routesResponse?.routes ?? [];
   const corridorName = formatCorridorName(dataSource?.corridor);
-  const usesNorwayAliases = dataSource?.corridor === "oslo-drammen";
-  const operatorLabels = usesNorwayAliases
-    ? { jio: "Telenor-like", airtel: "Telia-like" }
-    : { jio: "Jio", airtel: "Airtel" };
-  const operatorNote = usesNorwayAliases
-    ? "This Oslo cache remaps local Norway operator groups into the legacy jio/airtel demo slots."
-    : undefined;
+  const operatorLabels = dataSource?.operator_labels ?? {
+    jio: "Jio",
+    airtel: "Airtel",
+  };
+  const operatorNote = dataSource?.operator_note ?? undefined;
 
   const selectedRoute = useMemo<Route | null>(() => {
     if (!routes.length) {
@@ -178,6 +195,7 @@ export default function Home() {
         eta_connectivity_blend: blend,
         safety_mode: safetyMode,
         decision_at_warning: decision,
+        corridor_id: activeCorridorId ?? undefined,
       });
       setPlayback(response);
       setPlaybackIndex(-1);
@@ -191,14 +209,120 @@ export default function Home() {
     }
   }
 
+  async function onBuildCorridor() {
+    if (!sourceCity.trim() || !destinationCity.trim()) {
+      setError("Please enter both source and destination cities.");
+      return;
+    }
+
+    setError("");
+    setBuildingCorridor(true);
+
+    try {
+      const created = await createCorridorJob({
+        source_city: sourceCity.trim(),
+        destination_city: destinationCity.trim(),
+        force_refresh: false,
+      });
+      setJob(created);
+
+      if (created.status === "ready" || created.status === "ready_degraded") {
+        setActiveCorridorId(created.corridor_id);
+        setBuildingCorridor(false);
+        return;
+      }
+
+      const timer = window.setInterval(async () => {
+        try {
+          const latest = await fetchCorridorJob(created.job_id);
+          setJob(latest);
+
+          if (latest.status === "failed") {
+            window.clearInterval(timer);
+            setBuildingCorridor(false);
+            setError(latest.error ?? "Corridor build failed.");
+            return;
+          }
+
+          if (latest.status === "ready" || latest.status === "ready_degraded") {
+            window.clearInterval(timer);
+            setBuildingCorridor(false);
+            setActiveCorridorId(latest.corridor_id);
+            return;
+          }
+        } catch (pollError) {
+          window.clearInterval(timer);
+          setBuildingCorridor(false);
+          setError(String(pollError));
+        }
+      }, 2000);
+    } catch (buildError) {
+      setBuildingCorridor(false);
+      setError(String(buildError));
+    }
+  }
+
+  async function onRefreshCorridor() {
+    if (!sourceCity.trim() || !destinationCity.trim()) {
+      setError("Please enter both source and destination cities.");
+      return;
+    }
+
+    setError("");
+    setBuildingCorridor(true);
+
+    try {
+      const created = await createCorridorJob({
+        source_city: sourceCity.trim(),
+        destination_city: destinationCity.trim(),
+        force_refresh: true,
+      });
+      setJob(created);
+
+      if (created.status === "ready" || created.status === "ready_degraded") {
+        setActiveCorridorId(created.corridor_id);
+        setBuildingCorridor(false);
+        return;
+      }
+
+      const timer = window.setInterval(async () => {
+        try {
+          const latest = await fetchCorridorJob(created.job_id);
+          setJob(latest);
+
+          if (latest.status === "failed") {
+            window.clearInterval(timer);
+            setBuildingCorridor(false);
+            setError(latest.error ?? "Corridor refresh failed.");
+            return;
+          }
+
+          if (latest.status === "ready" || latest.status === "ready_degraded") {
+            window.clearInterval(timer);
+            setBuildingCorridor(false);
+            setActiveCorridorId(latest.corridor_id);
+            return;
+          }
+        } catch (pollError) {
+          window.clearInterval(timer);
+          setBuildingCorridor(false);
+          setError(String(pollError));
+        }
+      }, 2000);
+    } catch (buildError) {
+      setBuildingCorridor(false);
+      setError(String(buildError));
+    }
+  }
+
   return (
     <main className="min-h-screen bg-mesh-atmos p-4 text-dusk-50 sm:p-6">
       <div className="mx-auto flex max-w-[1400px] flex-col gap-4">
         <header className="animate-rise rounded-2xl border border-dusk-300/35 bg-dusk-800/70 p-5 backdrop-blur-lg">
           <h1 className="text-2xl font-bold sm:text-3xl">Node Zero Corridor Intelligence</h1>
           <p className="mt-2 max-w-4xl text-sm text-dusk-100">
-            Carrier-specific coverage estimation for {corridorName} with deterministic route scoring,
-            weak-zone warnings, and geo-deferred notification playback.
+            Multi-network coverage estimation for {corridorName} with deterministic route scoring,
+            weak-zone warnings, geo-deferred notification playback, and explainable segment quality.
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-xs">
             <span className="rounded-full border border-moss/60 bg-moss/15 px-2 py-1">Strong coverage</span>
@@ -218,12 +342,61 @@ export default function Home() {
           </div>
         </header>
 
+        <section className="rounded-2xl border border-dusk-400/35 bg-dusk-800/75 p-4 backdrop-blur-lg">
+          <h2 className="mb-3 text-base font-semibold">Dynamic Corridor Builder</h2>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_1fr_auto_auto]">
+            <input
+              type="text"
+              value={sourceCity}
+              onChange={(event) => setSourceCity(event.target.value)}
+              placeholder="Source city (e.g. Oslo)"
+              className="rounded-xl border border-dusk-400/45 bg-dusk-700/55 px-3 py-2 text-sm outline-none ring-0 focus:border-moss"
+            />
+            <input
+              type="text"
+              value={destinationCity}
+              onChange={(event) => setDestinationCity(event.target.value)}
+              placeholder="Destination city (e.g. Drammen)"
+              className="rounded-xl border border-dusk-400/45 bg-dusk-700/55 px-3 py-2 text-sm outline-none ring-0 focus:border-moss"
+            />
+            <button
+              type="button"
+              onClick={onBuildCorridor}
+              disabled={buildingCorridor}
+              className="rounded-xl border border-moss/70 bg-moss/20 px-4 py-2 text-sm font-semibold text-moss transition hover:bg-moss/30 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {buildingCorridor ? "Building..." : "Build Corridor"}
+            </button>
+            <button
+              type="button"
+              onClick={onRefreshCorridor}
+              disabled={buildingCorridor}
+              className="rounded-xl border border-amber/70 bg-amber/15 px-4 py-2 text-sm font-semibold text-amber transition hover:bg-amber/25 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {buildingCorridor ? "Refreshing..." : "Refresh Data"}
+            </button>
+          </div>
+
+          {job ? (
+            <div className="mt-3 rounded-xl border border-dusk-400/45 bg-dusk-700/35 p-3 text-xs text-dusk-100">
+              Job {job.job_id} | Stage: {job.stage} | Progress: {job.progress_pct}% | Status: {job.status}
+              {job.degraded && job.degraded_reason ? ` | Warning: ${job.degraded_reason}` : ""}
+            </div>
+          ) : null}
+        </section>
+
         {dataSource ? (
           <section className="rounded-xl border border-dusk-400/45 bg-dusk-800/55 p-3 text-xs text-dusk-100">
             Source: {dataSource.source_name} | Corridor: {corridorName} | Routes: {dataSource.route_count} | Towers: {dataSource.tower_count}
             {dataSource.generated_at > 0
               ? ` | Generated: ${new Date(dataSource.generated_at * 1000).toLocaleString()}`
               : " | Generated: n/a"}
+            {dataSource.generated_at > 0
+              ? ` | Cache age: ${Math.max(0, Math.floor((Date.now() / 1000 - dataSource.generated_at) / 60))} min`
+              : ""}
+            {dataSource.degraded && dataSource.degraded_reason
+              ? ` | Low confidence: ${dataSource.degraded_reason}`
+              : ""}
           </section>
         ) : null}
 
@@ -283,6 +456,12 @@ export default function Home() {
               ) : (
                 <p className="mt-3 text-sm text-dusk-100">Loading route intelligence...</p>
               )}
+              {selectedRoute ? (
+                <div className="mt-3 rounded-xl border border-dusk-400/35 bg-dusk-700/30 p-3 text-xs text-dusk-100">
+                  Why this route color: weak &lt; 45, moderate 45-64.99, strong &gt;= 65.
+                  Current mode uses <span className="font-semibold">{operator === "all" ? "All Networks" : operatorLabels[operator]}</span> scoring.
+                </div>
+              ) : null}
             </section>
 
             <Timeline playback={playback} activeStep={activeStep} />
