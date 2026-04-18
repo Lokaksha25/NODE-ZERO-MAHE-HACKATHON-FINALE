@@ -18,6 +18,9 @@ interface MapViewProps {
   routes: Route[];
   selectedRouteId: string;
   playbackSegmentIndex: number;
+  startLabel: string;
+  endLabel: string;
+  theme: "light" | "dark";
 }
 
 function classifyColor(classification: "weak" | "moderate" | "strong") {
@@ -50,7 +53,14 @@ function MapViewport({ selectedRoute }: { selectedRoute: Route | null }) {
   return null;
 }
 
-export function MapView({ routes, selectedRouteId, playbackSegmentIndex }: MapViewProps) {
+export function MapView({
+  routes,
+  selectedRouteId,
+  playbackSegmentIndex,
+  startLabel,
+  endLabel,
+  theme,
+}: MapViewProps) {
   const selectedRoute = useMemo(
     () => routes.find((route) => route.route_id === selectedRouteId) ?? routes[0] ?? null,
     [routes, selectedRouteId],
@@ -81,16 +91,20 @@ export function MapView({ routes, selectedRouteId, playbackSegmentIndex }: MapVi
   const playbackIcon = useMemo(() => PlaybackIcon(), []);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-dusk-400/35 shadow-glass">
+    <div className="absolute inset-0 z-0 overflow-hidden">
       <MapContainer
         center={[12.7, 77.2]}
         zoom={8}
-        scrollWheelZoom
-        className="h-[56vh] min-h-[420px] w-full"
+        scrollWheelZoom={false}
+        className="h-full w-full"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url={
+            theme === "light"
+              ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+              : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          }
         />
 
         <Pane name="routes" style={{ zIndex: 400 }}>
@@ -106,7 +120,8 @@ export function MapView({ routes, selectedRouteId, playbackSegmentIndex }: MapVi
                 pathOptions={{
                   color: classifyColor(segment.classification),
                   weight: faded ? 3 : 6,
-                  opacity: faded ? 0.35 : 0.92,
+                  opacity: faded ? 0.3 : 0.96,
+                  lineCap: "round",
                 }}
               />
             ));
@@ -119,10 +134,10 @@ export function MapView({ routes, selectedRouteId, playbackSegmentIndex }: MapVi
               <CircleMarker
                 center={[selectedRoute.geometry[0].lat, selectedRoute.geometry[0].lon]}
                 radius={8}
-                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#2d965d", fillOpacity: 1 }}
+                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#6ba6d8", fillOpacity: 1 }}
               >
                 <Tooltip direction="top" offset={[0, -6]} permanent>
-                  Start
+                  {startLabel}
                 </Tooltip>
               </CircleMarker>
               <CircleMarker
@@ -131,10 +146,10 @@ export function MapView({ routes, selectedRouteId, playbackSegmentIndex }: MapVi
                   selectedRoute.geometry[selectedRoute.geometry.length - 1].lon,
                 ]}
                 radius={8}
-                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#e14c4c", fillOpacity: 1 }}
+                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#111111", fillOpacity: 1 }}
               >
                 <Tooltip direction="top" offset={[0, -6]} permanent>
-                  Destination
+                  {endLabel}
                 </Tooltip>
               </CircleMarker>
             </>

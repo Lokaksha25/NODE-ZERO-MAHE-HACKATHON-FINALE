@@ -39,17 +39,46 @@ function formatCorridorName(corridor: string | undefined) {
     .join(" ");
 }
 
+function routeSparkline(route: Route) {
+  const total = Math.max(route.segments.length, 1);
+  let weak = 0;
+  let moderate = 0;
+  let strong = 0;
+
+  route.segments.forEach((segment) => {
+    if (segment.classification === "weak") {
+      weak += 1;
+      return;
+    }
+    if (segment.classification === "moderate") {
+      moderate += 1;
+      return;
+    }
+    strong += 1;
+  });
+
+  return {
+    weak: (weak / total) * 100,
+    moderate: (moderate / total) * 100,
+    strong: (strong / total) * 100,
+  };
+}
+
 export default function Home() {
   const [sourceCity, setSourceCity] = useState<string>("Oslo");
   const [destinationCity, setDestinationCity] = useState<string>("Drammen");
+  const [sourceTouched, setSourceTouched] = useState<boolean>(false);
+  const [destinationTouched, setDestinationTouched] = useState<boolean>(false);
   const [activeCorridorId, setActiveCorridorId] = useState<string | null>(null);
   const [job, setJob] = useState<CorridorJobResponse | null>(null);
   const [buildingCorridor, setBuildingCorridor] = useState<boolean>(false);
 
-  const [operator, setOperator] = useState<Operator>("all");
+  const [operator, setOperator] = useState<Operator>("jio");
   const [mode, setMode] = useState<RankingMode>("fastest");
   const [blend, setBlend] = useState<number>(0.5);
   const [safetyMode, setSafetyMode] = useState<boolean>(false);
+  const [playbackDecision, setPlaybackDecision] = useState<"continue" | "switch">("continue");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
   const [routesResponse, setRoutesResponse] = useState<RoutesResponse | null>(null);
   const [dataSource, setDataSource] = useState<DataSourceStatus | null>(null);
@@ -62,6 +91,23 @@ export default function Home() {
 
   const [error, setError] = useState<string>("");
   const lastRankingKeyRef = useRef<string>("");
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem("corridor-theme");
+    if (stored === "light" || stored === "dark") {
+      setTheme(stored);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    window.localStorage.setItem("corridor-theme", theme);
+  }, [theme]);
 
   useEffect(() => {
     let isMounted = true;
@@ -88,6 +134,24 @@ export default function Home() {
       isMounted = false;
     };
   }, [activeCorridorId]);
+
+  useEffect(() => {
+    if (!dataSource?.corridor || sourceTouched || destinationTouched) {
+      return;
+    }
+
+    const parts = dataSource.corridor
+      .split("-")
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    if (parts.length >= 2) {
+      const from = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+      const to = parts[parts.length - 1].charAt(0).toUpperCase() + parts[parts.length - 1].slice(1);
+      setSourceCity(from);
+      setDestinationCity(to);
+    }
+  }, [dataSource?.corridor, sourceTouched, destinationTouched]);
 
   useEffect(() => {
     let isMounted = true;
@@ -209,7 +273,33 @@ export default function Home() {
     }
   }
 
-  async function onBuildCorridor() {
+  async function pollCorridor(jobId: string) {
+    const timer = window.setInterval(async () => {
+      try {
+        const latest = await fetchCorridorJob(jobId);
+        setJob(latest);
+
+        if (latest.status === "failed") {
+          window.clearInterval(timer);
+          setBuildingCorridor(false);
+          setError(latest.error ?? "Corridor task failed.");
+          return;
+        }
+
+        if (latest.status === "ready" || latest.status === "ready_degraded") {
+          window.clearInterval(timer);
+          setBuildingCorridor(false);
+          setActiveCorridorId(latest.corridor_id);
+        }
+      } catch (pollError) {
+        window.clearInterval(timer);
+        setBuildingCorridor(false);
+        setError(String(pollError));
+      }
+    }, 2000);
+  }
+
+  async function onBuildCorridor(forceRefresh: boolean) {
     if (!sourceCity.trim() || !destinationCity.trim()) {
       setError("Please enter both source and destination cities.");
       return;
@@ -222,7 +312,7 @@ export default function Home() {
       const created = await createCorridorJob({
         source_city: sourceCity.trim(),
         destination_city: destinationCity.trim(),
-        force_refresh: false,
+        force_refresh: forceRefresh,
       });
       setJob(created);
 
@@ -232,242 +322,222 @@ export default function Home() {
         return;
       }
 
-      const timer = window.setInterval(async () => {
-        try {
-          const latest = await fetchCorridorJob(created.job_id);
-          setJob(latest);
-
-          if (latest.status === "failed") {
-            window.clearInterval(timer);
-            setBuildingCorridor(false);
-            setError(latest.error ?? "Corridor build failed.");
-            return;
-          }
-
-          if (latest.status === "ready" || latest.status === "ready_degraded") {
-            window.clearInterval(timer);
-            setBuildingCorridor(false);
-            setActiveCorridorId(latest.corridor_id);
-            return;
-          }
-        } catch (pollError) {
-          window.clearInterval(timer);
-          setBuildingCorridor(false);
-          setError(String(pollError));
-        }
-      }, 2000);
+      await pollCorridor(created.job_id);
     } catch (buildError) {
       setBuildingCorridor(false);
       setError(String(buildError));
     }
   }
 
-  async function onRefreshCorridor() {
-    if (!sourceCity.trim() || !destinationCity.trim()) {
-      setError("Please enter both source and destination cities.");
-      return;
-    }
-
-    setError("");
-    setBuildingCorridor(true);
-
-    try {
-      const created = await createCorridorJob({
-        source_city: sourceCity.trim(),
-        destination_city: destinationCity.trim(),
-        force_refresh: true,
-      });
-      setJob(created);
-
-      if (created.status === "ready" || created.status === "ready_degraded") {
-        setActiveCorridorId(created.corridor_id);
-        setBuildingCorridor(false);
-        return;
-      }
-
-      const timer = window.setInterval(async () => {
-        try {
-          const latest = await fetchCorridorJob(created.job_id);
-          setJob(latest);
-
-          if (latest.status === "failed") {
-            window.clearInterval(timer);
-            setBuildingCorridor(false);
-            setError(latest.error ?? "Corridor refresh failed.");
-            return;
-          }
-
-          if (latest.status === "ready" || latest.status === "ready_degraded") {
-            window.clearInterval(timer);
-            setBuildingCorridor(false);
-            setActiveCorridorId(latest.corridor_id);
-            return;
-          }
-        } catch (pollError) {
-          window.clearInterval(timer);
-          setBuildingCorridor(false);
-          setError(String(pollError));
-        }
-      }, 2000);
-    } catch (buildError) {
-      setBuildingCorridor(false);
-      setError(String(buildError));
-    }
-  }
+  const sourceLabel = job?.source_label ?? sourceCity;
+  const destinationLabel = job?.destination_label ?? destinationCity;
 
   return (
-    <main className="min-h-screen bg-mesh-atmos p-4 text-dusk-50 sm:p-6">
-      <div className="mx-auto flex max-w-[1400px] flex-col gap-4">
-        <header className="animate-rise rounded-2xl border border-dusk-300/35 bg-dusk-800/70 p-5 backdrop-blur-lg">
-          <h1 className="text-2xl font-bold sm:text-3xl">Node Zero Corridor Intelligence</h1>
-          <p className="mt-2 max-w-4xl text-sm text-dusk-100">
-            Multi-network coverage estimation for {corridorName} with deterministic route scoring,
-            weak-zone warnings, geo-deferred notification playback, and explainable segment quality.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-full border border-moss/60 bg-moss/15 px-2 py-1">Strong coverage</span>
-            <span className="rounded-full border border-amber/60 bg-amber/15 px-2 py-1">Moderate coverage</span>
-            <span className="rounded-full border border-coral/60 bg-coral/15 px-2 py-1">Weak coverage</span>
-            {dataSource ? (
-              <span
-                className={`rounded-full border px-2 py-1 ${
-                  dataSource.source_mode === "cached"
-                    ? "border-moss/60 bg-moss/15 text-moss"
-                    : "border-amber/60 bg-amber/15 text-amber"
-                }`}
+    <main className="relative min-h-[100dvh] w-screen overflow-x-hidden bg-[var(--surface)] text-[var(--text-primary)]">
+      <MapView
+        routes={routes}
+        selectedRouteId={mapActiveRouteId}
+        playbackSegmentIndex={playbackSegmentIndex}
+        startLabel={sourceLabel}
+        endLabel={destinationLabel}
+        theme={theme}
+      />
+
+      <section className="pointer-events-none relative z-10 flex min-h-[100dvh] flex-col overflow-y-auto px-4 pb-4 pt-4 sm:px-8 sm:pb-7 sm:pt-7">
+        <div className="pointer-events-auto flex items-start justify-between gap-3">
+          <div className="floating-card flex w-full max-w-[760px] flex-wrap items-center gap-3 rounded-2xl px-4 py-3 sm:px-6 sm:py-4">
+            <div className="min-w-[170px] flex-1">
+              <p className="text-sm text-[var(--text-muted)]">Origin</p>
+              <input
+                value={sourceCity}
+                onChange={(event) => {
+                  setSourceTouched(true);
+                  setSourceCity(event.target.value);
+                }}
+                className="w-full bg-transparent text-2xl font-extrabold leading-none tracking-tight outline-none sm:text-3xl"
+              />
+            </div>
+
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-elevated)] text-xl font-bold">
+              -&gt;
+            </div>
+
+            <div className="min-w-[170px] flex-1">
+              <p className="text-sm text-[var(--text-muted)]">Destination</p>
+              <input
+                value={destinationCity}
+                onChange={(event) => {
+                  setDestinationTouched(true);
+                  setDestinationCity(event.target.value);
+                }}
+                className="w-full bg-transparent text-2xl font-extrabold leading-none tracking-tight outline-none sm:text-3xl"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-base font-medium">{theme === "light" ? "Light" : "Dark"}</span>
+              <button
+                type="button"
+                onClick={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
+                className={`theme-toggle ${theme === "dark" ? "is-dark" : ""}`}
+                aria-label="Toggle theme"
+                aria-pressed={theme === "dark"}
               >
-                Data: {dataSource.source_mode === "cached" ? "Cached OSRM+OpenCellID" : "Fallback Synthetic"}
-              </span>
-            ) : null}
-          </div>
-        </header>
-
-        <section className="rounded-2xl border border-dusk-400/35 bg-dusk-800/75 p-4 backdrop-blur-lg">
-          <h2 className="mb-3 text-base font-semibold">Dynamic Corridor Builder</h2>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_1fr_auto_auto]">
-            <input
-              type="text"
-              value={sourceCity}
-              onChange={(event) => setSourceCity(event.target.value)}
-              placeholder="Source city (e.g. Oslo)"
-              className="rounded-xl border border-dusk-400/45 bg-dusk-700/55 px-3 py-2 text-sm outline-none ring-0 focus:border-moss"
-            />
-            <input
-              type="text"
-              value={destinationCity}
-              onChange={(event) => setDestinationCity(event.target.value)}
-              placeholder="Destination city (e.g. Drammen)"
-              className="rounded-xl border border-dusk-400/45 bg-dusk-700/55 px-3 py-2 text-sm outline-none ring-0 focus:border-moss"
-            />
-            <button
-              type="button"
-              onClick={onBuildCorridor}
-              disabled={buildingCorridor}
-              className="rounded-xl border border-moss/70 bg-moss/20 px-4 py-2 text-sm font-semibold text-moss transition hover:bg-moss/30 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {buildingCorridor ? "Building..." : "Build Corridor"}
-            </button>
-            <button
-              type="button"
-              onClick={onRefreshCorridor}
-              disabled={buildingCorridor}
-              className="rounded-xl border border-amber/70 bg-amber/15 px-4 py-2 text-sm font-semibold text-amber transition hover:bg-amber/25 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {buildingCorridor ? "Refreshing..." : "Refresh Data"}
-            </button>
+                <span className="theme-toggle-knob" />
+              </button>
+            </div>
           </div>
 
-          {job ? (
-            <div className="mt-3 rounded-xl border border-dusk-400/45 bg-dusk-700/35 p-3 text-xs text-dusk-100">
-              Job {job.job_id} | Stage: {job.stage} | Progress: {job.progress_pct}% | Status: {job.status}
-              {job.degraded && job.degraded_reason ? ` | Warning: ${job.degraded_reason}` : ""}
+        </div>
+
+        <div className="pointer-events-auto mt-4 flex gap-3">
+          <button
+            type="button"
+            disabled={buildingCorridor}
+            onClick={() => onBuildCorridor(false)}
+            className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {buildingCorridor ? "Building..." : "Build Corridor"}
+          </button>
+          <button
+            type="button"
+            disabled={buildingCorridor}
+            onClick={() => onBuildCorridor(true)}
+            className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {buildingCorridor ? "Refreshing..." : "Refresh Data"}
+          </button>
+          {dataSource ? (
+            <div className="hidden items-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-xs text-[var(--text-muted)] lg:flex">
+              {corridorName} | {dataSource.source_mode === "cached" ? "Cached OSRM+OpenCellID" : "Fallback Synthetic"}
             </div>
           ) : null}
-        </section>
+        </div>
 
-        {dataSource ? (
-          <section className="rounded-xl border border-dusk-400/45 bg-dusk-800/55 p-3 text-xs text-dusk-100">
-            Source: {dataSource.source_name} | Corridor: {corridorName} | Routes: {dataSource.route_count} | Towers: {dataSource.tower_count}
-            {dataSource.generated_at > 0
-              ? ` | Generated: ${new Date(dataSource.generated_at * 1000).toLocaleString()}`
-              : " | Generated: n/a"}
-            {dataSource.generated_at > 0
-              ? ` | Cache age: ${Math.max(0, Math.floor((Date.now() / 1000 - dataSource.generated_at) / 60))} min`
-              : ""}
-            {dataSource.degraded && dataSource.degraded_reason
-              ? ` | Low confidence: ${dataSource.degraded_reason}`
-              : ""}
-          </section>
+        {job ? (
+          <div className="pointer-events-auto mt-2 inline-flex rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-xs text-[var(--text-muted)]">
+            Job {job.job_id} | {job.stage} | {job.progress_pct}% | {job.status}
+            {job.degraded && job.degraded_reason ? ` | ${job.degraded_reason}` : ""}
+          </div>
         ) : null}
 
         {error ? (
-          <section className="rounded-xl border border-coral/60 bg-coral/10 p-3 text-sm text-coral">
+          <div className="pointer-events-auto mt-2 inline-flex rounded-xl border border-red-500/60 bg-red-500/10 px-3 py-2 text-xs text-red-600 dark:text-red-300">
             {error}
-          </section>
+          </div>
         ) : null}
 
-        <section className="grid grid-cols-1 gap-4 xl:grid-cols-[340px_minmax(0,1fr)]">
-          <ControlPanel
-            operator={operator}
-            operatorLabels={operatorLabels}
-            operatorNote={operatorNote}
-            mode={mode}
-            blend={blend}
-            safetyMode={safetyMode}
-            routes={routes}
-            selectedRouteId={selectedRouteId}
-            loading={loadingRoutes || loadingPlayback}
-            onOperatorChange={setOperator}
-            onModeChange={setMode}
-            onBlendChange={setBlend}
-            onSafetyModeChange={setSafetyMode}
-            onSelectRoute={setSelectedRouteId}
-            onRunPlayback={runPlayback}
-          />
-
-          <div className="flex flex-col gap-4">
-            <MapView
+        <div className="pointer-events-auto mt-5 flex-1">
+          <div onWheelCapture={(event) => event.stopPropagation()}>
+            <ControlPanel
+              operator={operator}
+              operatorLabels={operatorLabels}
+              operatorNote={operatorNote}
+              mode={mode}
+              blend={blend}
+              safetyMode={safetyMode}
+              playbackDecision={playbackDecision}
               routes={routes}
-              selectedRouteId={mapActiveRouteId}
-              playbackSegmentIndex={playbackSegmentIndex}
+              selectedRouteId={selectedRouteId}
+              loading={loadingRoutes || loadingPlayback}
+              onOperatorChange={setOperator}
+              onModeChange={setMode}
+              onBlendChange={setBlend}
+              onSafetyModeChange={setSafetyMode}
+              onPlaybackDecisionChange={setPlaybackDecision}
+              onSelectRoute={setSelectedRouteId}
+              theme={theme}
             />
+          </div>
+        </div>
 
-            <section className="rounded-2xl border border-dusk-400/30 bg-dusk-800/75 p-5 backdrop-blur-lg">
-              <h2 className="text-lg font-semibold">Selected Route Insight</h2>
+        <div className="pointer-events-auto mt-auto grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_470px]">
+          <div>
+            <div className="hide-scrollbar overflow-x-auto pb-2">
+              <div className="flex min-w-max gap-3">
+                {routes.map((route) => {
+                  const spark = routeSparkline(route);
+                  const selected = route.route_id === selectedRouteId;
+
+                  return (
+                    <button
+                      type="button"
+                      key={route.route_id}
+                      onClick={() => setSelectedRouteId(route.route_id)}
+                      className={`floating-card min-w-[250px] rounded-2xl p-4 text-left transition ${
+                        selected ? "border-2 border-black dark:border-white" : "border border-[var(--border)]"
+                      }`}
+                    >
+                      <div className="mb-1 flex items-center justify-between">
+                        <p className="text-base font-extrabold leading-tight tracking-tight">{route.label}</p>
+                        {route.is_recommended ? (
+                          <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-600 dark:text-emerald-300">
+                            Recommended
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <p className="text-sm text-[var(--text-muted)]">Score: <span className="text-[var(--text-primary)]">{route.connectivity_score}</span></p>
+                      <p className="mb-2 text-sm text-[var(--text-muted)]">ETA: <span className="text-[var(--text-primary)]">{route.eta_minutes} min</span></p>
+
+                      <div className="overflow-hidden rounded-full border border-black/10 bg-black/5 dark:border-white/20 dark:bg-white/10">
+                        <div className="flex h-2 w-full">
+                          <div className="bg-[#2d965d]" style={{ width: `${spark.strong}%` }} />
+                          <div className="bg-[#e3a008]" style={{ width: `${spark.moderate}%` }} />
+                          <div className="bg-[#e14c4c]" style={{ width: `${spark.weak}%` }} />
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <button
+              type="button"
+              disabled={loadingRoutes || loadingPlayback || !selectedRoute}
+              onClick={() => runPlayback(playbackDecision)}
+              className="mt-3 w-full rounded-xl bg-black px-4 py-3 text-4xl font-extrabold leading-none tracking-tight text-white shadow-lg transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black"
+            >
+              Analyze
+            </button>
+          </div>
+
+          <div className="space-y-3">
+            <section className="floating-card rounded-2xl px-5 py-5">
+              <h2 className="text-[38px] font-extrabold leading-none tracking-tight">Selected Route Insight</h2>
               {selectedRoute ? (
-                <div className="mt-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-                  <div className="rounded-xl border border-dusk-400/35 bg-dusk-700/35 p-3">
-                    <p className="text-xs uppercase tracking-wide text-dusk-200">ETA</p>
-                    <p className="font-semibold text-dusk-50">{selectedRoute.eta_minutes} min</p>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">ETA</p>
+                    <p className="text-3xl font-bold">{selectedRoute.eta_minutes} min</p>
                   </div>
-                  <div className="rounded-xl border border-dusk-400/35 bg-dusk-700/35 p-3">
-                    <p className="text-xs uppercase tracking-wide text-dusk-200">Distance</p>
-                    <p className="font-semibold text-dusk-50">{selectedRoute.distance_km} km</p>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Distance</p>
+                    <p className="text-3xl font-bold">{selectedRoute.distance_km} km</p>
                   </div>
-                  <div className="rounded-xl border border-dusk-400/35 bg-dusk-700/35 p-3">
-                    <p className="text-xs uppercase tracking-wide text-dusk-200">Connectivity</p>
-                    <p className="font-semibold text-dusk-50">{selectedRoute.connectivity_score}</p>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Connectivity</p>
+                    <p className="text-3xl font-bold">{selectedRoute.connectivity_score}</p>
                   </div>
-                  <div className="rounded-xl border border-dusk-400/35 bg-dusk-700/35 p-3">
-                    <p className="text-xs uppercase tracking-wide text-dusk-200">Longest Weak Stretch</p>
-                    <p className="font-semibold text-dusk-50">{selectedRoute.longest_weak_stretch_m} m</p>
+                  <div>
+                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Longest Weak Stretch</p>
+                    <p className="text-3xl font-bold">{selectedRoute.longest_weak_stretch_m} m</p>
                   </div>
                 </div>
               ) : (
-                <p className="mt-3 text-sm text-dusk-100">Loading route intelligence...</p>
+                <p className="mt-3 text-sm text-[var(--text-muted)]">Loading route intelligence...</p>
               )}
-              {selectedRoute ? (
-                <div className="mt-3 rounded-xl border border-dusk-400/35 bg-dusk-700/30 p-3 text-xs text-dusk-100">
-                  Why this route color: weak &lt; 45, moderate 45-64.99, strong &gt;= 65.
-                  Current mode uses <span className="font-semibold">{operator === "all" ? "All Networks" : operatorLabels[operator]}</span> scoring.
-                </div>
-              ) : null}
             </section>
 
-            <Timeline playback={playback} activeStep={activeStep} />
+            {playback ? (
+              <div className="max-h-[280px] overflow-auto rounded-2xl">
+                <Timeline playback={playback} activeStep={activeStep} />
+              </div>
+            ) : null}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </main>
   );
 }

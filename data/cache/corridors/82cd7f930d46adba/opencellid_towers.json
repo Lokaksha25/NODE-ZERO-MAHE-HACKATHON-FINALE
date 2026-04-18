@@ -1,0 +1,15 @@
+{
+  "source": "opencellid-dynamic",
+  "corridor": "Bengaluru-Mysuru",
+  "corridor_id": "82cd7f930d46adba",
+  "generated_at": 1776519493,
+  "tower_count": 0,
+  "operator_labels": {
+    "jio": "Operator A",
+    "airtel": "Operator B"
+  },
+  "operator_note": "No tower data available yet; using generic operator labels.",
+  "degraded": true,
+  "degraded_reason": "Too few towers returned (0). Connectivity confidence is low.",
+  "towers": []
+}
