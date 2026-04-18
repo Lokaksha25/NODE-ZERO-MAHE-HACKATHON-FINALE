@@ -3,6 +3,8 @@ services:
     build:
       context: ./backend
     container_name: node-zero-backend
+    volumes:
+      - ./data:/app/data:ro
     ports:
       - "8000:8000"
     restart: unless-stopped

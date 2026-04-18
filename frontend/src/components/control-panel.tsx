@@ -4,6 +4,8 @@ import { RankingMode, Route } from "@/types/api";
 
 interface ControlPanelProps {
   operator: "jio" | "airtel";
+  operatorLabels: Record<"jio" | "airtel", string>;
+  operatorNote?: string;
   mode: RankingMode;
   blend: number;
   safetyMode: boolean;
@@ -20,6 +22,8 @@ interface ControlPanelProps {
 
 export function ControlPanel({
   operator,
+  operatorLabels,
+  operatorNote,
   mode,
   blend,
   safetyMode,
@@ -47,6 +51,7 @@ export function ControlPanel({
       <div className="flex flex-col gap-4">
         <div>
           <p className="mb-2 text-xs uppercase tracking-wide text-dusk-200">Operator</p>
+          {operatorNote ? <p className="mb-2 text-xs text-dusk-200">{operatorNote}</p> : null}
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
@@ -57,7 +62,7 @@ export function ControlPanel({
               }`}
               onClick={() => onOperatorChange("jio")}
             >
-              Jio
+              {operatorLabels.jio}
             </button>
             <button
               type="button"
@@ -68,7 +73,7 @@ export function ControlPanel({
               }`}
               onClick={() => onOperatorChange("airtel")}
             >
-              Airtel
+              {operatorLabels.airtel}
             </button>
           </div>
         </div>

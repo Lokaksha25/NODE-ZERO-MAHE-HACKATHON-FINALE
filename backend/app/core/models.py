@@ -86,6 +86,7 @@ class RoutesResponse(BaseModel):
 class DataSourceStatus(BaseModel):
     source_mode: Literal["cached", "fallback"]
     source_name: str
+    corridor: str
     cache_exists: bool
     route_count: int
     tower_count: int

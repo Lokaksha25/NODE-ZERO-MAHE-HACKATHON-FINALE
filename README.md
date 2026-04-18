@@ -50,6 +50,8 @@ This writes:
 - `data/cache/corridor_routes_scored.json`
 - `data/cache/opencellid_towers.json`
 
+The backend container mounts `./data` into `/app/data` as read-only, so cached files are automatically visible to the API.
+
 2. Build and run everything:
 
 ```bash
@@ -107,6 +109,7 @@ Base URL: `http://localhost:8000/api`
 ### Data Source Status
 - `GET /data-source`
 - Returns whether backend is using cached OSRM+OpenCellID data or fallback synthetic templates.
+- If this shows `fallback`, ensure cache files exist in `data/cache/` and restart Compose so the mount is active.
 
 ### Rank Routes
 - `POST /routes`

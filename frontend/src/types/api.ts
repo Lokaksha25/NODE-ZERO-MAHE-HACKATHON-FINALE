@@ -53,6 +53,7 @@ export interface RoutesResponse {
 export interface DataSourceStatus {
   source_mode: "cached" | "fallback";
   source_name: string;
+  corridor: string;
   cache_exists: boolean;
   route_count: number;
   tower_count: number;

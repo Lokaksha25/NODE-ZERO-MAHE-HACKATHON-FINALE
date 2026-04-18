@@ -26,7 +26,20 @@ class RouteTemplate:
     segments: list[SegmentTemplate]
 
 
-_CACHE_PATH = Path(__file__).resolve().parents[3] / "data" / "cache" / "corridor_routes_scored.json"
+def _resolve_cache_path() -> Path:
+    here = Path(__file__).resolve()
+    candidates = [
+        here.parents[2] / "data" / "cache" / "corridor_routes_scored.json",
+        here.parents[3] / "data" / "cache" / "corridor_routes_scored.json",
+        Path("/app/data/cache/corridor_routes_scored.json"),
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return candidates[0]
+
+
+_CACHE_PATH = _resolve_cache_path()
 
 
 def _read_cache_payload() -> dict | None:
@@ -35,6 +48,41 @@ def _read_cache_payload() -> dict | None:
 
     try:
         return json.loads(_CACHE_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+
+
+def _resolve_corridor_summary_path(corridor: str | None) -> Path | None:
+    if not corridor:
+        return None
+
+    here = Path(__file__).resolve()
+    candidates = [
+        here.parents[2]
+        / "data"
+        / "cache"
+        / "corridor_csv"
+        / f"{corridor}-242-summary.json",
+        here.parents[3]
+        / "data"
+        / "cache"
+        / "corridor_csv"
+        / f"{corridor}-242-summary.json",
+        Path("/app/data/cache/corridor_csv") / f"{corridor}-242-summary.json",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def _read_corridor_summary(corridor: str | None) -> dict | None:
+    summary_path = _resolve_corridor_summary_path(corridor)
+    if not summary_path:
+        return None
+
+    try:
+        return json.loads(summary_path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return None
 
@@ -138,6 +186,10 @@ def _load_cached_routes() -> list[RouteTemplate]:
     payload = _read_cache_payload()
     if not payload:
         return []
+
+    if int(payload.get("tower_count", 0)) < 50:
+        return []
+
     routes = payload.get("routes", [])
     parsed: list[RouteTemplate] = []
 
@@ -153,7 +205,9 @@ def _load_cached_routes() -> list[RouteTemplate]:
                     end_lat=float(segment["end_lat"]),
                     scores={
                         Operator.jio: _parse_operator_score(raw_scores, Operator.jio),
-                        Operator.airtel: _parse_operator_score(raw_scores, Operator.airtel),
+                        Operator.airtel: _parse_operator_score(
+                            raw_scores, Operator.airtel
+                        ),
                     },
                 )
             )
@@ -195,18 +249,38 @@ def get_data_source_status() -> dict[str, int | str | bool]:
         return {
             "source_mode": "fallback",
             "source_name": "synthetic-demo",
+            "corridor": "bengaluru-mysuru-fallback",
             "cache_exists": False,
             "route_count": len(fallback),
             "tower_count": 0,
             "generated_at": 0,
         }
 
+    corridor = str(payload.get("corridor", "unknown-corridor"))
+    corridor_summary = _read_corridor_summary(corridor)
+    corridor_tower_count = (
+        int(corridor_summary.get("row_count", 0)) if corridor_summary else 0
+    )
+
+    if int(payload.get("tower_count", 0)) < 50:
+        fallback = _fallback_routes()
+        return {
+            "source_mode": "fallback",
+            "source_name": "synthetic-demo",
+            "corridor": corridor,
+            "cache_exists": False,
+            "route_count": len(fallback),
+            "tower_count": corridor_tower_count or int(payload.get("tower_count", 0)),
+            "generated_at": int(payload.get("generated_at", 0)),
+        }
+
     routes = payload.get("routes", [])
     return {
         "source_mode": "cached",
         "source_name": str(payload.get("source", "osrm+opencellid")),
+        "corridor": corridor,
         "cache_exists": True,
         "route_count": int(payload.get("route_count", len(routes))),
-        "tower_count": int(payload.get("tower_count", 0)),
+        "tower_count": corridor_tower_count or int(payload.get("tower_count", 0)),
         "generated_at": int(payload.get("generated_at", 0)),
     }

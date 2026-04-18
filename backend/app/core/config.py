@@ -29,11 +29,6 @@ def resolve_mode_weights(
 ) -> ModeWeights:
     clamped_blend = max(0.0, min(1.0, blend))
 
-    if mode == "fastest":
-        clamped_blend = min(clamped_blend, 0.45)
-    elif mode == "most_connected":
-        clamped_blend = max(clamped_blend, 0.55)
-
     eta_weight = 1.0 - clamped_blend
     connectivity_weight = clamped_blend
     weak_penalty_weight = 0.8
@@ -47,4 +42,6 @@ def resolve_mode_weights(
     if total == 0:
         return ModeWeights(0.5, 0.5, weak_penalty_weight)
 
-    return ModeWeights(eta_weight / total, connectivity_weight / total, weak_penalty_weight)
+    return ModeWeights(
+        eta_weight / total, connectivity_weight / total, weak_penalty_weight
+    )

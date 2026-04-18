@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { ControlPanel } from "@/components/control-panel";
 import { Timeline } from "@/components/timeline";
@@ -20,6 +20,17 @@ const MapView = dynamic(
   { ssr: false },
 );
 
+function formatCorridorName(corridor: string | undefined) {
+  if (!corridor) {
+    return "Unknown corridor";
+  }
+
+  return corridor
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
 export default function Home() {
   const [operator, setOperator] = useState<Operator>("jio");
   const [mode, setMode] = useState<RankingMode>("fastest");
@@ -36,6 +47,7 @@ export default function Home() {
   const [loadingPlayback, setLoadingPlayback] = useState<boolean>(false);
 
   const [error, setError] = useState<string>("");
+  const lastRankingKeyRef = useRef<string>("");
 
   useEffect(() => {
     let isMounted = true;
@@ -61,6 +73,7 @@ export default function Home() {
 
   useEffect(() => {
     let isMounted = true;
+    const rankingKey = `${operator}:${mode}:${blend}:${safetyMode}`;
     setLoadingRoutes(true);
     setError("");
 
@@ -76,8 +89,16 @@ export default function Home() {
         }
         setRoutesResponse(data);
         const fallback = data.recommended_route_id;
-        const exists = data.routes.some((route) => route.route_id === selectedRouteId);
-        setSelectedRouteId(exists ? selectedRouteId : fallback);
+        const rankingChanged = lastRankingKeyRef.current !== rankingKey;
+        lastRankingKeyRef.current = rankingKey;
+
+        setSelectedRouteId((current) => {
+          const exists = data.routes.some((route) => route.route_id === current);
+          if (!exists || rankingChanged) {
+            return fallback;
+          }
+          return current;
+        });
       })
       .catch((err) => {
         if (!isMounted) {
@@ -94,7 +115,7 @@ export default function Home() {
     return () => {
       isMounted = false;
     };
-  }, [operator, mode, blend, safetyMode, selectedRouteId]);
+  }, [operator, mode, blend, safetyMode]);
 
   useEffect(() => {
     if (!playback || playback.steps.length === 0) {
@@ -119,6 +140,14 @@ export default function Home() {
   }, [playback]);
 
   const routes = routesResponse?.routes ?? [];
+  const corridorName = formatCorridorName(dataSource?.corridor);
+  const usesNorwayAliases = dataSource?.corridor === "oslo-drammen";
+  const operatorLabels = usesNorwayAliases
+    ? { jio: "Telenor-like", airtel: "Telia-like" }
+    : { jio: "Jio", airtel: "Airtel" };
+  const operatorNote = usesNorwayAliases
+    ? "This Oslo cache remaps local Norway operator groups into the legacy jio/airtel demo slots."
+    : undefined;
 
   const selectedRoute = useMemo<Route | null>(() => {
     if (!routes.length) {
@@ -168,7 +197,7 @@ export default function Home() {
         <header className="animate-rise rounded-2xl border border-dusk-300/35 bg-dusk-800/70 p-5 backdrop-blur-lg">
           <h1 className="text-2xl font-bold sm:text-3xl">Node Zero Corridor Intelligence</h1>
           <p className="mt-2 max-w-4xl text-sm text-dusk-100">
-            Carrier-specific coverage estimation for Bengaluru to Mysuru with deterministic route scoring,
+            Carrier-specific coverage estimation for {corridorName} with deterministic route scoring,
             weak-zone warnings, and geo-deferred notification playback.
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-xs">
@@ -191,7 +220,7 @@ export default function Home() {
 
         {dataSource ? (
           <section className="rounded-xl border border-dusk-400/45 bg-dusk-800/55 p-3 text-xs text-dusk-100">
-            Source: {dataSource.source_name} | Routes: {dataSource.route_count} | Towers: {dataSource.tower_count}
+            Source: {dataSource.source_name} | Corridor: {corridorName} | Routes: {dataSource.route_count} | Towers: {dataSource.tower_count}
             {dataSource.generated_at > 0
               ? ` | Generated: ${new Date(dataSource.generated_at * 1000).toLocaleString()}`
               : " | Generated: n/a"}
@@ -207,6 +236,8 @@ export default function Home() {
         <section className="grid grid-cols-1 gap-4 xl:grid-cols-[340px_minmax(0,1fr)]">
           <ControlPanel
             operator={operator}
+            operatorLabels={operatorLabels}
+            operatorNote={operatorNote}
             mode={mode}
             blend={blend}
             safetyMode={safetyMode}

@@ -1,0 +1,27 @@
+{
+  "corridor": "oslo-drammen",
+  "source_csv": "242.csv",
+  "route_bounds": {
+    "min_lon": 10.205096,
+    "max_lon": 10.753742,
+    "min_lat": 59.740487,
+    "max_lat": 59.978838
+  },
+  "row_count": 1397,
+  "by_mnc": {
+    "1": 755,
+    "14": 34,
+    "2": 608
+  },
+  "by_radio": {
+    "GSM": 109,
+    "LTE": 1116,
+    "UMTS": 172
+  },
+  "outputs": [
+    "data/cache/corridor_csv/oslo-drammen-242.csv",
+    "data/cache/corridor_csv/oslo-drammen-242-1.csv",
+    "data/cache/corridor_csv/oslo-drammen-242-14.csv",
+    "data/cache/corridor_csv/oslo-drammen-242-2.csv"
+  ]
+}
