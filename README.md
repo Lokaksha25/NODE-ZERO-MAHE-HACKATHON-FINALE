@@ -17,7 +17,7 @@
 
 ## 🎬 Demo
 
-https://github.com/user-attachments/assets/demo.mp4
+https://drive.google.com/drive/u/0/folders/1H95VTC135hdGBsdZ4Evd_rn1fbeJgIba?q=sharedwith:public%20parent:1H95VTC135hdGBsdZ4Evd_rn1fbeJgIba
 
 > **Note**: If the video doesn't load above, download `demo.mp4` from the repository root or watch it locally.
 
