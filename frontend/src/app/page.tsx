@@ -29,44 +29,16 @@ const MapView = dynamic(
 );
 
 function formatCorridorName(corridor: string | undefined) {
-  if (!corridor) {
-    return "Unknown corridor";
-  }
-
+  if (!corridor) return "Unknown corridor";
   return corridor
     .split("-")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 }
 
-function routeSparkline(route: Route) {
-  const total = Math.max(route.segments.length, 1);
-  let weak = 0;
-  let moderate = 0;
-  let strong = 0;
-
-  route.segments.forEach((segment) => {
-    if (segment.classification === "weak") {
-      weak += 1;
-      return;
-    }
-    if (segment.classification === "moderate") {
-      moderate += 1;
-      return;
-    }
-    strong += 1;
-  });
-
-  return {
-    weak: (weak / total) * 100,
-    moderate: (moderate / total) * 100,
-    strong: (strong / total) * 100,
-  };
-}
-
 export default function Home() {
-  const [sourceCity, setSourceCity] = useState<string>("Oslo");
-  const [destinationCity, setDestinationCity] = useState<string>("Drammen");
+  const [sourceCity, setSourceCity] = useState<string>("");
+  const [destinationCity, setDestinationCity] = useState<string>("");
   const [sourceTouched, setSourceTouched] = useState<boolean>(false);
   const [destinationTouched, setDestinationTouched] = useState<boolean>(false);
   const [activeCorridorId, setActiveCorridorId] = useState<string | null>(null);
@@ -75,7 +47,11 @@ export default function Home() {
 
   const [operator, setOperator] = useState<Operator>("jio");
   const [mode, setMode] = useState<RankingMode>("fastest");
-  const [blend, setBlend] = useState<number>(0.5);
+  const [blend, setBlend] = useState<number>(0.15);
+  function handleModeChange(newMode: RankingMode) {
+    setMode(newMode);
+    setBlend(newMode === "fastest" ? 0.15 : 0.85);
+  }
   const [safetyMode, setSafetyMode] = useState<boolean>(false);
   const [playbackDecision, setPlaybackDecision] = useState<"continue" | "switch">("continue");
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -94,9 +70,7 @@ export default function Home() {
 
   useEffect(() => {
     const stored = window.localStorage.getItem("corridor-theme");
-    if (stored === "light" || stored === "dark") {
-      setTheme(stored);
-    }
+    if (stored === "light" || stored === "dark") setTheme(stored);
   }, []);
 
   useEffect(() => {
@@ -110,131 +84,72 @@ export default function Home() {
   }, [theme]);
 
   useEffect(() => {
+    if (!activeCorridorId) return;
     let isMounted = true;
-
-    const load = activeCorridorId
-      ? fetchDataSourceStatusByCorridor(activeCorridorId)
-      : fetchDataSourceStatus();
+    const load = fetchDataSourceStatusByCorridor(activeCorridorId);
 
     load
-      .then((status) => {
-        if (!isMounted) {
-          return;
-        }
-        setDataSource(status);
-      })
-      .catch(() => {
-        if (!isMounted) {
-          return;
-        }
-        setDataSource(null);
-      });
+      .then((status) => { if (isMounted) setDataSource(status); })
+      .catch(() => { if (isMounted) setDataSource(null); });
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [activeCorridorId]);
 
   useEffect(() => {
-    if (!dataSource?.corridor || sourceTouched || destinationTouched) {
-      return;
-    }
-
-    const parts = dataSource.corridor
-      .split("-")
-      .map((part) => part.trim())
-      .filter(Boolean);
-
+    if (!dataSource?.corridor || sourceTouched || destinationTouched) return;
+    const parts = dataSource.corridor.split("-").map((p) => p.trim()).filter(Boolean);
     if (parts.length >= 2) {
-      const from = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-      const to = parts[parts.length - 1].charAt(0).toUpperCase() + parts[parts.length - 1].slice(1);
-      setSourceCity(from);
-      setDestinationCity(to);
+      setSourceCity(parts[0].charAt(0).toUpperCase() + parts[0].slice(1));
+      setDestinationCity(parts[parts.length - 1].charAt(0).toUpperCase() + parts[parts.length - 1].slice(1));
     }
   }, [dataSource?.corridor, sourceTouched, destinationTouched]);
 
   useEffect(() => {
+    if (!activeCorridorId) return;
     let isMounted = true;
     const rankingKey = `${operator}:${mode}:${blend}:${safetyMode}`;
     setLoadingRoutes(true);
     setError("");
 
-    fetchRoutes({
-      operator,
-      mode,
-      eta_connectivity_blend: blend,
-      safety_mode: safetyMode,
-      corridor_id: activeCorridorId ?? undefined,
-    })
+    fetchRoutes({ operator, mode, eta_connectivity_blend: blend, safety_mode: safetyMode, corridor_id: activeCorridorId })
       .then((data) => {
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) return;
         setRoutesResponse(data);
         const fallback = data.recommended_route_id;
         const rankingChanged = lastRankingKeyRef.current !== rankingKey;
         lastRankingKeyRef.current = rankingKey;
-
         setSelectedRouteId((current) => {
-          const exists = data.routes.some((route) => route.route_id === current);
-          if (!exists || rankingChanged) {
-            return fallback;
-          }
+          const exists = data.routes.some((r) => r.route_id === current);
+          if (!exists || rankingChanged) return fallback;
           return current;
         });
       })
-      .catch((err) => {
-        if (!isMounted) {
-          return;
-        }
-        setError(String(err));
-      })
-      .finally(() => {
-        if (isMounted) {
-          setLoadingRoutes(false);
-        }
-      });
+      .catch((err) => { if (isMounted) setError(String(err)); })
+      .finally(() => { if (isMounted) setLoadingRoutes(false); });
 
-    return () => {
-      isMounted = false;
-    };
+    return () => { isMounted = false; };
   }, [operator, mode, blend, safetyMode, activeCorridorId]);
 
   useEffect(() => {
-    if (!playback || playback.steps.length === 0) {
-      return;
-    }
-
+    if (!playback || playback.steps.length === 0) return;
     setPlaybackIndex(0);
-
     const timer = window.setInterval(() => {
       setPlaybackIndex((current) => {
-        if (current >= playback.steps.length - 1) {
-          window.clearInterval(timer);
-          return current;
-        }
+        if (current >= playback.steps.length - 1) { window.clearInterval(timer); return current; }
         return current + 1;
       });
-    }, 850);
-
-    return () => {
-      window.clearInterval(timer);
-    };
+    }, 300);
+    return () => window.clearInterval(timer);
   }, [playback]);
 
   const routes = routesResponse?.routes ?? [];
   const corridorName = formatCorridorName(dataSource?.corridor);
-  const operatorLabels = dataSource?.operator_labels ?? {
-    jio: "Jio",
-    airtel: "Airtel",
-  };
+  const operatorLabels = dataSource?.operator_labels ?? { jio: "Jio", airtel: "Airtel" };
   const operatorNote = dataSource?.operator_note ?? undefined;
 
   const selectedRoute = useMemo<Route | null>(() => {
-    if (!routes.length) {
-      return null;
-    }
-    return routes.find((route) => route.route_id === selectedRouteId) ?? routes[0];
+    if (!routes.length) return null;
+    return routes.find((r) => r.route_id === selectedRouteId) ?? routes[0];
   }, [routes, selectedRouteId]);
 
   const activeStep =
@@ -246,26 +161,18 @@ export default function Home() {
   const playbackSegmentIndex = activeStep?.segment_index ?? -1;
 
   async function runPlayback(decision: "continue" | "switch") {
-    if (!selectedRoute) {
-      return;
-    }
+    if (!selectedRoute) return;
     setLoadingPlayback(true);
     setError("");
     try {
       const response = await fetchPlayback({
-        operator,
-        route_id: selectedRoute.route_id,
-        mode,
-        eta_connectivity_blend: blend,
-        safety_mode: safetyMode,
-        decision_at_warning: decision,
-        corridor_id: activeCorridorId ?? undefined,
+        operator, route_id: selectedRoute.route_id, mode,
+        eta_connectivity_blend: blend, safety_mode: safetyMode,
+        decision_at_warning: decision, corridor_id: activeCorridorId ?? undefined,
       });
       setPlayback(response);
       setPlaybackIndex(-1);
-      if (response.switched_route) {
-        setSelectedRouteId(response.final_route_id);
-      }
+      if (response.switched_route) setSelectedRouteId(response.final_route_id);
     } catch (err) {
       setError(String(err));
     } finally {
@@ -278,14 +185,12 @@ export default function Home() {
       try {
         const latest = await fetchCorridorJob(jobId);
         setJob(latest);
-
         if (latest.status === "failed") {
           window.clearInterval(timer);
           setBuildingCorridor(false);
           setError(latest.error ?? "Corridor task failed.");
           return;
         }
-
         if (latest.status === "ready" || latest.status === "ready_degraded") {
           window.clearInterval(timer);
           setBuildingCorridor(false);
@@ -304,10 +209,8 @@ export default function Home() {
       setError("Please enter both source and destination cities.");
       return;
     }
-
     setError("");
     setBuildingCorridor(true);
-
     try {
       const created = await createCorridorJob({
         source_city: sourceCity.trim(),
@@ -315,13 +218,11 @@ export default function Home() {
         force_refresh: forceRefresh,
       });
       setJob(created);
-
       if (created.status === "ready" || created.status === "ready_degraded") {
         setActiveCorridorId(created.corridor_id);
         setBuildingCorridor(false);
         return;
       }
-
       await pollCorridor(created.job_id);
     } catch (buildError) {
       setBuildingCorridor(false);
@@ -333,165 +234,185 @@ export default function Home() {
   const destinationLabel = job?.destination_label ?? destinationCity;
 
   return (
-    <main className="relative h-[100dvh] w-screen overflow-hidden bg-[var(--surface)] text-[var(--text-primary)]">
-      <MapView
-        routes={routes}
-        selectedRouteId={mapActiveRouteId}
-        playbackSegmentIndex={playbackSegmentIndex}
-        startLabel={sourceLabel}
-        endLabel={destinationLabel}
-        theme={theme}
-      />
+    <div className="flex h-[100dvh] w-screen flex-col overflow-hidden bg-[var(--surface)] text-[var(--text-primary)]">
 
-      <section className="pointer-events-none relative z-10 flex h-full flex-col px-4 pb-4 pt-4 sm:px-8 sm:pb-6 sm:pt-6">
-        <div className="flex items-start justify-between gap-3">
-          <div className="pointer-events-auto floating-card flex w-full max-w-[760px] flex-wrap items-center gap-3 rounded-2xl px-4 py-3 sm:px-6 sm:py-4">
-            <div className="min-w-[170px] flex-1">
-              <p className="text-sm text-[var(--text-muted)]">Origin</p>
-              <input
-                value={sourceCity}
-                onChange={(event) => {
-                  setSourceTouched(true);
-                  setSourceCity(event.target.value);
-                }}
-                className="w-full bg-transparent text-2xl font-extrabold leading-none tracking-tight outline-none sm:text-3xl"
-              />
-            </div>
+      {/* ── Top Bar ─────────────────────────────────────── */}
+      <header className="pointer-events-auto z-20 flex shrink-0 items-center gap-3 border-b border-[var(--border)] bg-[var(--card)] px-4 py-2.5 shadow-sm backdrop-blur-md">
 
-            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-elevated)] text-xl font-bold">
-              -&gt;
-            </div>
-
-            <div className="min-w-[170px] flex-1">
-              <p className="text-sm text-[var(--text-muted)]">Destination</p>
-              <input
-                value={destinationCity}
-                onChange={(event) => {
-                  setDestinationTouched(true);
-                  setDestinationCity(event.target.value);
-                }}
-                className="w-full bg-transparent text-2xl font-extrabold leading-none tracking-tight outline-none sm:text-3xl"
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <span className="text-base font-medium">{theme === "light" ? "Light" : "Dark"}</span>
-              <button
-                type="button"
-                onClick={() => setTheme((current) => (current === "light" ? "dark" : "light"))}
-                className={`theme-toggle ${theme === "dark" ? "is-dark" : ""}`}
-                aria-label="Toggle theme"
-                aria-pressed={theme === "dark"}
-              >
-                <span className="theme-toggle-knob" />
-              </button>
-            </div>
+        {/* Origin → Destination */}
+        <div className="flex min-w-0 flex-1 items-center gap-2">
+          <div className="flex min-w-0 flex-1 flex-col">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">Origin</span>
+            <input
+              value={sourceCity}
+              onChange={(e) => { setSourceTouched(true); setSourceCity(e.target.value); }}
+              className="w-full truncate bg-transparent text-lg font-extrabold leading-tight tracking-tight outline-none"
+              placeholder="Source city"
+            />
           </div>
 
-          <button
-            type="button"
-            disabled={loadingRoutes || loadingPlayback || !selectedRoute}
-            onClick={() => runPlayback(playbackDecision)}
-            className="pointer-events-auto rounded-xl border border-black bg-black px-4 py-2 text-sm font-extrabold uppercase tracking-wide text-white shadow-lg transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:border-white dark:bg-white dark:text-black"
-          >
-            {loadingPlayback ? "Analyzing..." : "Analyze"}
-          </button>
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-elevated)] text-sm font-bold text-[var(--text-muted)]">
+            →
+          </div>
+
+          <div className="flex min-w-0 flex-1 flex-col">
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">Destination</span>
+            <input
+              value={destinationCity}
+              onChange={(e) => { setDestinationTouched(true); setDestinationCity(e.target.value); }}
+              className="w-full truncate bg-transparent text-lg font-extrabold leading-tight tracking-tight outline-none"
+              placeholder="Destination city"
+            />
+          </div>
         </div>
 
-        <div className="pointer-events-auto mt-3 flex flex-wrap gap-2">
+        {/* Corridor actions */}
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             disabled={buildingCorridor}
             onClick={() => onBuildCorridor(false)}
-            className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-lg border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-1.5 text-xs font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {buildingCorridor ? "Building..." : "Build Corridor"}
+            {buildingCorridor ? "Building…" : "Build Corridor"}
           </button>
           <button
             type="button"
             disabled={buildingCorridor}
             onClick={() => onBuildCorridor(true)}
-            className="rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-sm font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-lg border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-1.5 text-xs font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {buildingCorridor ? "Refreshing..." : "Refresh Data"}
+            {buildingCorridor ? "Refreshing…" : "Refresh Data"}
           </button>
           {dataSource ? (
-            <div className="hidden items-center rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-xs text-[var(--text-muted)] lg:flex">
-              {corridorName} | {dataSource.source_mode === "cached" ? "Cached OSRM+OpenCellID" : "Fallback Synthetic"}
-            </div>
+            <span className="hidden rounded-lg border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-1.5 text-[11px] text-[var(--text-muted)] xl:inline-flex">
+              {corridorName} · {dataSource.source_mode === "cached" ? "Cached OSRM+OpenCellID" : "Fallback Synthetic"}
+            </span>
           ) : null}
         </div>
 
-        {job ? (
-          <div className="pointer-events-auto mt-2 inline-flex rounded-xl border border-[var(--border)] bg-[var(--card)] px-3 py-2 text-xs text-[var(--text-muted)]">
-            Job {job.job_id} | {job.stage} | {job.progress_pct}% | {job.status}
-            {job.degraded && job.degraded_reason ? ` | ${job.degraded_reason}` : ""}
-          </div>
-        ) : null}
-
-        {error ? (
-          <div className="pointer-events-auto mt-2 inline-flex rounded-xl border border-red-500/60 bg-red-500/10 px-3 py-2 text-xs text-red-600 dark:text-red-300">
-            {error}
-          </div>
-        ) : null}
-
-        <div className="mt-4 grid flex-1 grid-cols-1 gap-3 lg:grid-cols-[300px_minmax(0,1fr)]">
-          <div className="pointer-events-auto min-h-0" onWheelCapture={(event) => event.stopPropagation()}>
-            <ControlPanel
-              operator={operator}
-              operatorLabels={operatorLabels}
-              operatorNote={operatorNote}
-              mode={mode}
-              blend={blend}
-              safetyMode={safetyMode}
-              playbackDecision={playbackDecision}
-              routes={routes}
-              selectedRouteId={selectedRouteId}
-              loading={loadingRoutes || loadingPlayback}
-              onOperatorChange={setOperator}
-              onModeChange={setMode}
-              onBlendChange={setBlend}
-              onSafetyModeChange={setSafetyMode}
-              onPlaybackDecisionChange={setPlaybackDecision}
-              onSelectRoute={setSelectedRouteId}
-              theme={theme}
-            />
-          </div>
-          <div className="pointer-events-auto min-h-0 space-y-3">
-            <section className="floating-card rounded-2xl px-4 py-4">
-              <h2 className="text-2xl font-extrabold leading-none tracking-tight">Selected Route Insight</h2>
-              {selectedRoute ? (
-                <div className="mt-3 grid grid-cols-2 gap-2 text-sm xl:grid-cols-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">ETA</p>
-                    <p className="text-2xl font-bold">{selectedRoute.eta_minutes} min</p>
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Distance</p>
-                    <p className="text-2xl font-bold">{selectedRoute.distance_km} km</p>
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Connectivity</p>
-                    <p className="text-2xl font-bold">{selectedRoute.connectivity_score}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-wide text-[var(--text-muted)]">Longest Weak Stretch</p>
-                    <p className="text-2xl font-bold">{selectedRoute.longest_weak_stretch_m} m</p>
-                  </div>
-                </div>
-              ) : (
-                <p className="mt-3 text-sm text-[var(--text-muted)]">Loading route intelligence...</p>
-              )}
-            </section>
-
-            {playback ? (
-              <div className="max-h-[min(34vh,280px)] overflow-auto rounded-2xl">
-                <Timeline playback={playback} activeStep={activeStep} />
-              </div>
-            ) : null}
-          </div>
+        {/* Theme toggle */}
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="text-xs font-medium text-[var(--text-muted)]">{theme === "light" ? "Light" : "Dark"}</span>
+          <button
+            type="button"
+            onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+            className={`theme-toggle ${theme === "dark" ? "is-dark" : ""}`}
+            aria-label="Toggle theme"
+            aria-pressed={theme === "dark"}
+          >
+            <span className="theme-toggle-knob" />
+          </button>
         </div>
-      </section>
-    </main>
+
+        {/* Analyze */}
+        <button
+          type="button"
+          disabled={loadingRoutes || loadingPlayback || !selectedRoute}
+          onClick={() => runPlayback(playbackDecision)}
+          className="shrink-0 rounded-lg bg-black px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black"
+        >
+          {loadingPlayback ? "…" : "Analyze"}
+        </button>
+      </header>
+
+      {/* ── Status toasts ────────────────────────────────── */}
+      {(job || error) ? (
+        <div className="pointer-events-auto z-20 flex shrink-0 items-center gap-2 border-b border-[var(--border)] bg-[var(--card)] px-4 py-1.5">
+          {job ? (
+            <span className="text-[11px] text-[var(--text-muted)]">
+              Job {job.job_id} · {job.stage} · {job.progress_pct}% · {job.status}
+              {job.degraded && job.degraded_reason ? ` · ${job.degraded_reason}` : ""}
+            </span>
+          ) : null}
+          {error ? (
+            <span className="rounded-md border border-red-500/60 bg-red-500/10 px-2 py-0.5 text-[11px] text-red-600 dark:text-red-300">
+              {error}
+            </span>
+          ) : null}
+        </div>
+      ) : null}
+
+      {/* ── Main body: map + panels ──────────────────────── */}
+      <div className="relative flex min-h-0 flex-1">
+
+        {/* Full-bleed map layer */}
+        <div className="absolute inset-0 z-0">
+          <MapView
+            routes={routes}
+            selectedRouteId={mapActiveRouteId}
+            playbackSegmentIndex={playbackSegmentIndex}
+            startLabel={sourceLabel}
+            endLabel={destinationLabel}
+            theme={theme}
+          />
+        </div>
+
+        {/* Left sidebar */}
+        <div className="pointer-events-auto relative z-10 flex shrink-0 flex-col gap-3 overflow-y-auto p-3" style={{ width: 296 }}>
+          <ControlPanel
+            operator={operator}
+            operatorLabels={operatorLabels}
+            operatorNote={operatorNote}
+            mode={mode}
+            blend={blend}
+            safetyMode={safetyMode}
+            playbackDecision={playbackDecision}
+            routes={routes}
+            selectedRouteId={selectedRouteId}
+            loading={loadingRoutes || loadingPlayback}
+            onOperatorChange={setOperator}
+            onModeChange={handleModeChange}
+            onBlendChange={setBlend}
+            onSafetyModeChange={setSafetyMode}
+            onPlaybackDecisionChange={setPlaybackDecision}
+            onSelectRoute={setSelectedRouteId}
+            theme={theme}
+          />
+        </div>
+
+        {/* Right info column */}
+        <div className="pointer-events-none relative z-10 ml-auto flex w-[320px] shrink-0 flex-col gap-3 p-3">
+
+          {/* Route Insight card */}
+          <div className="pointer-events-auto floating-card rounded-2xl p-4">
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Selected Route Insight</p>
+            {selectedRoute ? (
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { label: "ETA", value: `${selectedRoute.eta_minutes} min` },
+                  { label: "Distance", value: `${selectedRoute.distance_km} km` },
+                  { label: "Connectivity", value: String(selectedRoute.connectivity_score) },
+                  { label: "Longest Weak", value: `${selectedRoute.longest_weak_stretch_m} m` },
+                ].map(({ label, value }) => (
+                  <div key={label} className="rounded-xl border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-2">
+                    <p className="text-[10px] uppercase tracking-wide text-[var(--text-muted)]">{label}</p>
+                    <p className="text-xl font-bold leading-tight">{value}</p>
+                  </div>
+                ))}
+              </div>
+            ) : activeCorridorId && !loadingRoutes ? (
+              <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-3 text-center">
+                <p className="text-sm font-semibold text-red-600 dark:text-red-300">No route data found</p>
+                <p className="mt-1 text-[11px] text-[var(--text-muted)]">
+                  No connectivity data is available for this corridor. Try a different origin or destination.
+                </p>
+              </div>
+            ) : activeCorridorId && loadingRoutes ? (
+              <p className="text-xs text-[var(--text-muted)]">Loading route intelligence…</p>
+            ) : (
+              <p className="text-xs text-[var(--text-muted)]">Enter origin and destination, then click Build Corridor.</p>
+            )}
+          </div>
+
+          {/* Timeline (always visible — shows prompt before playback, results after) */}
+          {(routes.length > 0 || playback) ? (
+            <div className="pointer-events-auto max-h-[min(38vh,340px)] overflow-auto rounded-2xl">
+              <Timeline playback={playback} activeStep={activeStep} />
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
   );
 }

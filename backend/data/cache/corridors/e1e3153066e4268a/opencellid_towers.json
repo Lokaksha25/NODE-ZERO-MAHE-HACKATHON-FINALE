@@ -1,8 +1,16 @@
 {
-  "source": "corridor-csv",
-  "corridor": "mahe-mysore-404",
-  "generated_at": 1776520692,
-  "tower_count": 1503,
+  "source": "opencellid-dynamic",
+  "corridor": "MAHE-Mysore",
+  "corridor_id": "e1e3153066e4268a",
+  "generated_at": 1776558801,
+  "tower_count": 1519,
+  "operator_labels": {
+    "jio": "MCC 405 MNC 34",
+    "airtel": "MCC 404 MNC 86"
+  },
+  "operator_note": "Auto-mapped operator buckets for MCC 405 using dominant MNCs in this corridor.",
+  "degraded": false,
+  "degraded_reason": null,
   "towers": [
     {
       "lat": 12.9024,
@@ -62,7 +70,7 @@
       "radio": "UMTS",
       "range": 4141.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.2917,
@@ -86,7 +94,7 @@
       "radio": "LTE",
       "range": 2171.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.296,
@@ -98,7 +106,7 @@
       "radio": "UMTS",
       "range": 2056.0,
       "samples": 24,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.008,
@@ -134,7 +142,7 @@
       "radio": "LTE",
       "range": 2141.0,
       "samples": 1,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5568,
@@ -146,7 +154,7 @@
       "radio": "LTE",
       "range": 3090.0,
       "samples": 14,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9697,
@@ -158,7 +166,7 @@
       "radio": "GSM",
       "range": 1034.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9407,
@@ -182,7 +190,7 @@
       "radio": "GSM",
       "range": 3828.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9508,
@@ -194,7 +202,7 @@
       "radio": "LTE",
       "range": 3169.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.331,
@@ -206,7 +214,7 @@
       "radio": "LTE",
       "range": 3783.0,
       "samples": 30,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6562,
@@ -266,7 +274,7 @@
       "radio": "LTE",
       "range": 4914.0,
       "samples": 19,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4942,
@@ -278,7 +286,7 @@
       "radio": "LTE",
       "range": 1256.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1278,
@@ -290,7 +298,7 @@
       "radio": "LTE",
       "range": 2434.0,
       "samples": 44,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3118,
@@ -302,19 +310,7 @@
       "radio": "LTE",
       "range": 1522.0,
       "samples": 48,
-      "operator": null
-    },
-    {
-      "lat": 12.5902,
-      "lon": 77.0284,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 54695,
-      "cellid": 25536331,
-      "radio": "LTE",
-      "range": 2746.0,
-      "samples": 31,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0791,
@@ -362,7 +358,7 @@
       "radio": "UMTS",
       "range": 3790.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9549,
@@ -386,7 +382,7 @@
       "radio": "LTE",
       "range": 4484.0,
       "samples": 1,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.753,
@@ -410,19 +406,7 @@
       "radio": "LTE",
       "range": 3992.0,
       "samples": 38,
-      "operator": null
-    },
-    {
-      "lat": 12.5768,
-      "lon": 77.0124,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 10563,
-      "cellid": 30424390,
-      "radio": "LTE",
-      "range": 1884.0,
-      "samples": 11,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6355,
@@ -434,7 +418,7 @@
       "radio": "LTE",
       "range": 2191.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5421,
@@ -446,7 +430,7 @@
       "radio": "GSM",
       "range": 4109.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7487,
@@ -458,7 +442,7 @@
       "radio": "LTE",
       "range": 2463.0,
       "samples": 37,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9252,
@@ -494,7 +478,7 @@
       "radio": "LTE",
       "range": 1687.0,
       "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1293,
@@ -557,18 +541,6 @@
       "operator": null
     },
     {
-      "lat": 12.5552,
-      "lon": 77.009,
-      "mcc": 404,
-      "mnc": 45,
-      "lac": 37466,
-      "cellid": 31471478,
-      "radio": "LTE",
-      "range": 1133.0,
-      "samples": 37,
-      "operator": null
-    },
-    {
       "lat": 12.5014,
       "lon": 76.8552,
       "mcc": 404,
@@ -614,7 +586,7 @@
       "radio": "LTE",
       "range": 3975.0,
       "samples": 7,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9452,
@@ -638,7 +610,7 @@
       "radio": "LTE",
       "range": 3982.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0159,
@@ -650,7 +622,7 @@
       "radio": "LTE",
       "range": 1516.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3789,
@@ -662,7 +634,7 @@
       "radio": "UMTS",
       "range": 3421.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7544,
@@ -674,7 +646,7 @@
       "radio": "LTE",
       "range": 2647.0,
       "samples": 27,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1178,
@@ -722,7 +694,7 @@
       "radio": "LTE",
       "range": 4949.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9451,
@@ -734,7 +706,7 @@
       "radio": "LTE",
       "range": 2766.0,
       "samples": 47,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4544,
@@ -770,7 +742,7 @@
       "radio": "UMTS",
       "range": 2087.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5372,
@@ -794,7 +766,7 @@
       "radio": "GSM",
       "range": 3837.0,
       "samples": 3,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0408,
@@ -830,7 +802,7 @@
       "radio": "UMTS",
       "range": 2638.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5042,
@@ -842,7 +814,7 @@
       "radio": "LTE",
       "range": 3866.0,
       "samples": 11,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3016,
@@ -890,7 +862,7 @@
       "radio": "UMTS",
       "range": 2614.0,
       "samples": 26,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9389,
@@ -902,7 +874,7 @@
       "radio": "LTE",
       "range": 3982.0,
       "samples": 20,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.895,
@@ -950,7 +922,7 @@
       "radio": "LTE",
       "range": 1017.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8078,
@@ -962,7 +934,7 @@
       "radio": "LTE",
       "range": 4535.0,
       "samples": 23,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8672,
@@ -974,7 +946,7 @@
       "radio": "UMTS",
       "range": 783.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9503,
@@ -1022,7 +994,7 @@
       "radio": "GSM",
       "range": 4077.0,
       "samples": 7,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5766,
@@ -1046,7 +1018,7 @@
       "radio": "LTE",
       "range": 1001.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9666,
@@ -1058,7 +1030,7 @@
       "radio": "LTE",
       "range": 3292.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9402,
@@ -1118,7 +1090,7 @@
       "radio": "LTE",
       "range": 1769.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1159,
@@ -1130,19 +1102,7 @@
       "radio": "UMTS",
       "range": 4848.0,
       "samples": 40,
-      "operator": null
-    },
-    {
-      "lat": 12.5731,
-      "lon": 77.0097,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 15407,
-      "cellid": 54653615,
-      "radio": "UMTS",
-      "range": 985.0,
-      "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3782,
@@ -1154,7 +1114,7 @@
       "radio": "LTE",
       "range": 3103.0,
       "samples": 34,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.2937,
@@ -1202,7 +1162,7 @@
       "radio": "LTE",
       "range": 3250.0,
       "samples": 41,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8101,
@@ -1226,7 +1186,7 @@
       "radio": "GSM",
       "range": 660.0,
       "samples": 1,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9756,
@@ -1274,7 +1234,7 @@
       "radio": "UMTS",
       "range": 4100.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9682,
@@ -1286,7 +1246,7 @@
       "radio": "GSM",
       "range": 1989.0,
       "samples": 35,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.971,
@@ -1298,7 +1258,7 @@
       "radio": "LTE",
       "range": 1092.0,
       "samples": 23,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3087,
@@ -1310,7 +1270,7 @@
       "radio": "UMTS",
       "range": 1798.0,
       "samples": 26,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9699,
@@ -1322,7 +1282,7 @@
       "radio": "GSM",
       "range": 1819.0,
       "samples": 20,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9827,
@@ -1334,7 +1294,7 @@
       "radio": "GSM",
       "range": 3351.0,
       "samples": 39,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7258,
@@ -1394,7 +1354,7 @@
       "radio": "LTE",
       "range": 3192.0,
       "samples": 13,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.917,
@@ -1406,7 +1366,7 @@
       "radio": "GSM",
       "range": 603.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8712,
@@ -1418,7 +1378,7 @@
       "radio": "LTE",
       "range": 3930.0,
       "samples": 41,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9763,
@@ -1430,7 +1390,7 @@
       "radio": "GSM",
       "range": 4457.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9543,
@@ -1454,7 +1414,7 @@
       "radio": "UMTS",
       "range": 943.0,
       "samples": 1,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9292,
@@ -1490,7 +1450,7 @@
       "radio": "GSM",
       "range": 3175.0,
       "samples": 15,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8147,
@@ -1514,7 +1474,7 @@
       "radio": "LTE",
       "range": 1854.0,
       "samples": 16,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4359,
@@ -1538,7 +1498,7 @@
       "radio": "LTE",
       "range": 4747.0,
       "samples": 47,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0498,
@@ -1550,7 +1510,7 @@
       "radio": "LTE",
       "range": 1979.0,
       "samples": 37,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8827,
@@ -1562,7 +1522,7 @@
       "radio": "LTE",
       "range": 2850.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8173,
@@ -1610,7 +1570,7 @@
       "radio": "LTE",
       "range": 4297.0,
       "samples": 26,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.123,
@@ -1634,7 +1594,7 @@
       "radio": "GSM",
       "range": 4928.0,
       "samples": 14,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.904,
@@ -1646,7 +1606,7 @@
       "radio": "GSM",
       "range": 1236.0,
       "samples": 18,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6314,
@@ -1670,7 +1630,7 @@
       "radio": "LTE",
       "range": 3452.0,
       "samples": 7,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3824,
@@ -1682,7 +1642,7 @@
       "radio": "UMTS",
       "range": 2235.0,
       "samples": 21,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7837,
@@ -1694,7 +1654,7 @@
       "radio": "LTE",
       "range": 860.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5564,
@@ -1706,19 +1666,7 @@
       "radio": "LTE",
       "range": 4739.0,
       "samples": 24,
-      "operator": null
-    },
-    {
-      "lat": 12.5848,
-      "lon": 77.0277,
-      "mcc": 404,
-      "mnc": 45,
-      "lac": 37243,
-      "cellid": 11590304,
-      "radio": "UMTS",
-      "range": 1619.0,
-      "samples": 6,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7977,
@@ -1742,7 +1690,7 @@
       "radio": "LTE",
       "range": 4705.0,
       "samples": 50,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1212,
@@ -1766,7 +1714,7 @@
       "radio": "GSM",
       "range": 2476.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.307,
@@ -1814,7 +1762,7 @@
       "radio": "LTE",
       "range": 3036.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9496,
@@ -1838,7 +1786,7 @@
       "radio": "LTE",
       "range": 3291.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5736,
@@ -1850,7 +1798,7 @@
       "radio": "UMTS",
       "range": 3063.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3242,
@@ -1898,7 +1846,7 @@
       "radio": "LTE",
       "range": 1392.0,
       "samples": 5,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9627,
@@ -1922,7 +1870,7 @@
       "radio": "LTE",
       "range": 2874.0,
       "samples": 23,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9059,
@@ -1958,7 +1906,7 @@
       "radio": "GSM",
       "range": 1437.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0048,
@@ -1970,7 +1918,7 @@
       "radio": "LTE",
       "range": 2989.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4882,
@@ -1994,7 +1942,7 @@
       "radio": "GSM",
       "range": 2627.0,
       "samples": 8,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9925,
@@ -2042,7 +1990,7 @@
       "radio": "LTE",
       "range": 2101.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9345,
@@ -2054,7 +2002,7 @@
       "radio": "UMTS",
       "range": 1892.0,
       "samples": 21,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3723,
@@ -2078,7 +2026,7 @@
       "radio": "LTE",
       "range": 3737.0,
       "samples": 28,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9821,
@@ -2102,7 +2050,7 @@
       "radio": "LTE",
       "range": 2767.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9662,
@@ -2114,7 +2062,7 @@
       "radio": "GSM",
       "range": 4043.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9584,
@@ -2126,7 +2074,7 @@
       "radio": "GSM",
       "range": 3237.0,
       "samples": 35,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6472,
@@ -2150,7 +2098,7 @@
       "radio": "LTE",
       "range": 1857.0,
       "samples": 43,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3074,
@@ -2174,7 +2122,7 @@
       "radio": "LTE",
       "range": 3007.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9677,
@@ -2246,7 +2194,7 @@
       "radio": "LTE",
       "range": 1882.0,
       "samples": 3,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4777,
@@ -2258,18 +2206,6 @@
       "radio": "LTE",
       "range": 2175.0,
       "samples": 3,
-      "operator": null
-    },
-    {
-      "lat": 12.6018,
-      "lon": 77.0765,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 23008,
-      "cellid": 57753428,
-      "radio": "LTE",
-      "range": 1113.0,
-      "samples": 13,
       "operator": null
     },
     {
@@ -2330,7 +2266,7 @@
       "radio": "LTE",
       "range": 4676.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3414,
@@ -2390,7 +2326,7 @@
       "radio": "LTE",
       "range": 1349.0,
       "samples": 20,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7538,
@@ -2402,7 +2338,7 @@
       "radio": "GSM",
       "range": 4054.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7678,
@@ -2426,7 +2362,7 @@
       "radio": "UMTS",
       "range": 2743.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0708,
@@ -2438,7 +2374,7 @@
       "radio": "UMTS",
       "range": 1805.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6763,
@@ -2462,7 +2398,7 @@
       "radio": "LTE",
       "range": 1793.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0033,
@@ -2570,7 +2506,7 @@
       "radio": "GSM",
       "range": 2592.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8662,
@@ -2582,7 +2518,7 @@
       "radio": "LTE",
       "range": 2612.0,
       "samples": 24,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8964,
@@ -2594,7 +2530,7 @@
       "radio": "UMTS",
       "range": 4316.0,
       "samples": 42,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3172,
@@ -2654,7 +2590,7 @@
       "radio": "LTE",
       "range": 3166.0,
       "samples": 13,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3193,
@@ -2693,18 +2629,6 @@
       "operator": null
     },
     {
-      "lat": 12.5886,
-      "lon": 77.0043,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 12365,
-      "cellid": 20302815,
-      "radio": "UMTS",
-      "range": 3629.0,
-      "samples": 6,
-      "operator": null
-    },
-    {
       "lat": 12.9316,
       "lon": 77.5347,
       "mcc": 405,
@@ -2714,7 +2638,7 @@
       "radio": "GSM",
       "range": 1172.0,
       "samples": 2,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1127,
@@ -2750,7 +2674,7 @@
       "radio": "LTE",
       "range": 4866.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3425,
@@ -2822,7 +2746,7 @@
       "radio": "GSM",
       "range": 4445.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1129,
@@ -2858,7 +2782,7 @@
       "radio": "LTE",
       "range": 3801.0,
       "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5546,
@@ -2870,7 +2794,7 @@
       "radio": "GSM",
       "range": 1258.0,
       "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7953,
@@ -2906,7 +2830,7 @@
       "radio": "LTE",
       "range": 2313.0,
       "samples": 48,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5182,
@@ -2969,18 +2893,6 @@
       "operator": null
     },
     {
-      "lat": 12.5839,
-      "lon": 77.0506,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 20187,
-      "cellid": 37839186,
-      "radio": "UMTS",
-      "range": 4694.0,
-      "samples": 7,
-      "operator": null
-    },
-    {
       "lat": 12.9493,
       "lon": 77.5326,
       "mcc": 405,
@@ -2990,7 +2902,7 @@
       "radio": "GSM",
       "range": 4018.0,
       "samples": 27,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9626,
@@ -3002,7 +2914,7 @@
       "radio": "GSM",
       "range": 849.0,
       "samples": 27,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9473,
@@ -3017,18 +2929,6 @@
       "operator": null
     },
     {
-      "lat": 12.5932,
-      "lon": 77.0324,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 48716,
-      "cellid": 20922799,
-      "radio": "LTE",
-      "range": 4477.0,
-      "samples": 42,
-      "operator": null
-    },
-    {
       "lat": 12.8213,
       "lon": 77.4049,
       "mcc": 405,
@@ -3038,7 +2938,7 @@
       "radio": "LTE",
       "range": 4287.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3144,
@@ -3074,7 +2974,7 @@
       "radio": "LTE",
       "range": 2893.0,
       "samples": 41,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9747,
@@ -3110,7 +3010,7 @@
       "radio": "LTE",
       "range": 1806.0,
       "samples": 9,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.769,
@@ -3122,7 +3022,7 @@
       "radio": "LTE",
       "range": 2864.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3048,
@@ -3146,7 +3046,7 @@
       "radio": "GSM",
       "range": 526.0,
       "samples": 47,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1343,
@@ -3158,7 +3058,7 @@
       "radio": "GSM",
       "range": 1895.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0485,
@@ -3182,7 +3082,7 @@
       "radio": "GSM",
       "range": 3065.0,
       "samples": 15,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9507,
@@ -3218,7 +3118,7 @@
       "radio": "LTE",
       "range": 620.0,
       "samples": 7,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8701,
@@ -3242,7 +3142,7 @@
       "radio": "LTE",
       "range": 3431.0,
       "samples": 50,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4327,
@@ -3278,7 +3178,7 @@
       "radio": "GSM",
       "range": 1119.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1023,
@@ -3290,18 +3190,6 @@
       "radio": "LTE",
       "range": 2980.0,
       "samples": 17,
-      "operator": null
-    },
-    {
-      "lat": 12.5775,
-      "lon": 77.0339,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 63173,
-      "cellid": 4528507,
-      "radio": "GSM",
-      "range": 2457.0,
-      "samples": 10,
       "operator": null
     },
     {
@@ -3362,7 +3250,7 @@
       "radio": "LTE",
       "range": 4570.0,
       "samples": 18,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7455,
@@ -3386,7 +3274,7 @@
       "radio": "UMTS",
       "range": 2337.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7594,
@@ -3398,18 +3286,6 @@
       "radio": "LTE",
       "range": 3489.0,
       "samples": 12,
-      "operator": null
-    },
-    {
-      "lat": 12.5812,
-      "lon": 77.0544,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 39558,
-      "cellid": 16582666,
-      "radio": "LTE",
-      "range": 2371.0,
-      "samples": 22,
       "operator": null
     },
     {
@@ -3434,7 +3310,7 @@
       "radio": "UMTS",
       "range": 4696.0,
       "samples": 49,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3372,
@@ -3458,7 +3334,7 @@
       "radio": "LTE",
       "range": 2265.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.771,
@@ -3470,7 +3346,7 @@
       "radio": "LTE",
       "range": 3104.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7527,
@@ -3482,7 +3358,7 @@
       "radio": "UMTS",
       "range": 3517.0,
       "samples": 2,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1117,
@@ -3497,18 +3373,6 @@
       "operator": null
     },
     {
-      "lat": 12.5617,
-      "lon": 77.0147,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 37168,
-      "cellid": 26174271,
-      "radio": "LTE",
-      "range": 3866.0,
-      "samples": 41,
-      "operator": null
-    },
-    {
       "lat": 12.9868,
       "lon": 77.5825,
       "mcc": 405,
@@ -3518,7 +3382,7 @@
       "radio": "LTE",
       "range": 859.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7929,
@@ -3530,7 +3394,7 @@
       "radio": "LTE",
       "range": 1388.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.956,
@@ -3542,7 +3406,7 @@
       "radio": "LTE",
       "range": 3925.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9138,
@@ -3590,7 +3454,7 @@
       "radio": "UMTS",
       "range": 2398.0,
       "samples": 36,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9182,
@@ -3602,7 +3466,7 @@
       "radio": "LTE",
       "range": 4603.0,
       "samples": 18,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8467,
@@ -3674,7 +3538,7 @@
       "radio": "LTE",
       "range": 2644.0,
       "samples": 36,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5254,
@@ -3686,7 +3550,7 @@
       "radio": "LTE",
       "range": 4827.0,
       "samples": 42,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1088,
@@ -3710,7 +3574,7 @@
       "radio": "GSM",
       "range": 2736.0,
       "samples": 7,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7472,
@@ -3782,7 +3646,7 @@
       "radio": "GSM",
       "range": 4211.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5178,
@@ -3806,7 +3670,7 @@
       "radio": "UMTS",
       "range": 1291.0,
       "samples": 3,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8648,
@@ -3866,7 +3730,7 @@
       "radio": "LTE",
       "range": 717.0,
       "samples": 49,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3092,
@@ -3878,7 +3742,7 @@
       "radio": "LTE",
       "range": 3383.0,
       "samples": 24,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9099,
@@ -3890,7 +3754,7 @@
       "radio": "LTE",
       "range": 4777.0,
       "samples": 1,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8871,
@@ -3974,7 +3838,7 @@
       "radio": "UMTS",
       "range": 1991.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8107,
@@ -3986,7 +3850,7 @@
       "radio": "GSM",
       "range": 1323.0,
       "samples": 10,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3408,
@@ -4058,7 +3922,7 @@
       "radio": "LTE",
       "range": 3868.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.808,
@@ -4082,7 +3946,7 @@
       "radio": "LTE",
       "range": 4225.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7442,
@@ -4106,7 +3970,7 @@
       "radio": "LTE",
       "range": 1103.0,
       "samples": 9,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.924,
@@ -4118,7 +3982,7 @@
       "radio": "GSM",
       "range": 1945.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.932,
@@ -4130,7 +3994,7 @@
       "radio": "LTE",
       "range": 2512.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8286,
@@ -4142,7 +4006,7 @@
       "radio": "LTE",
       "range": 4171.0,
       "samples": 13,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9098,
@@ -4226,7 +4090,7 @@
       "radio": "LTE",
       "range": 1229.0,
       "samples": 30,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.016,
@@ -4238,7 +4102,7 @@
       "radio": "LTE",
       "range": 2265.0,
       "samples": 38,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0647,
@@ -4250,7 +4114,7 @@
       "radio": "LTE",
       "range": 1238.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.2853,
@@ -4274,7 +4138,7 @@
       "radio": "LTE",
       "range": 2172.0,
       "samples": 49,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9176,
@@ -4286,7 +4150,7 @@
       "radio": "UMTS",
       "range": 787.0,
       "samples": 3,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8721,
@@ -4334,7 +4198,7 @@
       "radio": "GSM",
       "range": 3453.0,
       "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4516,
@@ -4358,7 +4222,7 @@
       "radio": "LTE",
       "range": 640.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4224,
@@ -4418,7 +4282,7 @@
       "radio": "GSM",
       "range": 4446.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0096,
@@ -4442,7 +4306,7 @@
       "radio": "GSM",
       "range": 1216.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5313,
@@ -4478,7 +4342,7 @@
       "radio": "LTE",
       "range": 2703.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9117,
@@ -4490,7 +4354,7 @@
       "radio": "LTE",
       "range": 4285.0,
       "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6902,
@@ -4526,7 +4390,7 @@
       "radio": "GSM",
       "range": 4649.0,
       "samples": 49,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.866,
@@ -4598,7 +4462,7 @@
       "radio": "GSM",
       "range": 2180.0,
       "samples": 39,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3502,
@@ -4622,7 +4486,7 @@
       "radio": "GSM",
       "range": 718.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4723,
@@ -4634,7 +4498,7 @@
       "radio": "LTE",
       "range": 3242.0,
       "samples": 30,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.827,
@@ -4646,7 +4510,7 @@
       "radio": "LTE",
       "range": 2186.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8045,
@@ -4694,7 +4558,7 @@
       "radio": "LTE",
       "range": 1696.0,
       "samples": 27,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1353,
@@ -4730,7 +4594,7 @@
       "radio": "LTE",
       "range": 4912.0,
       "samples": 43,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9406,
@@ -4838,7 +4702,7 @@
       "radio": "LTE",
       "range": 2317.0,
       "samples": 37,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7555,
@@ -4850,7 +4714,7 @@
       "radio": "LTE",
       "range": 3946.0,
       "samples": 50,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8674,
@@ -4862,7 +4726,7 @@
       "radio": "LTE",
       "range": 3343.0,
       "samples": 34,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3161,
@@ -4886,7 +4750,7 @@
       "radio": "UMTS",
       "range": 2534.0,
       "samples": 23,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1373,
@@ -4898,7 +4762,7 @@
       "radio": "LTE",
       "range": 1508.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8109,
@@ -4922,7 +4786,7 @@
       "radio": "LTE",
       "range": 3264.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9573,
@@ -4934,7 +4798,7 @@
       "radio": "GSM",
       "range": 1167.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5453,
@@ -4970,7 +4834,7 @@
       "radio": "UMTS",
       "range": 3588.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9956,
@@ -5066,7 +4930,7 @@
       "radio": "LTE",
       "range": 3425.0,
       "samples": 43,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7839,
@@ -5102,7 +4966,7 @@
       "radio": "LTE",
       "range": 1503.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8257,
@@ -5114,7 +4978,7 @@
       "radio": "UMTS",
       "range": 3854.0,
       "samples": 5,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9415,
@@ -5138,7 +5002,7 @@
       "radio": "UMTS",
       "range": 1329.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8022,
@@ -5150,7 +5014,7 @@
       "radio": "LTE",
       "range": 2550.0,
       "samples": 28,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5065,
@@ -5162,7 +5026,7 @@
       "radio": "GSM",
       "range": 3355.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0015,
@@ -5174,7 +5038,7 @@
       "radio": "LTE",
       "range": 2305.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5591,
@@ -5210,7 +5074,7 @@
       "radio": "LTE",
       "range": 3460.0,
       "samples": 7,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.2991,
@@ -5222,7 +5086,7 @@
       "radio": "LTE",
       "range": 2096.0,
       "samples": 17,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5108,
@@ -5258,7 +5122,7 @@
       "radio": "GSM",
       "range": 4058.0,
       "samples": 15,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9127,
@@ -5270,7 +5134,7 @@
       "radio": "LTE",
       "range": 1680.0,
       "samples": 48,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0207,
@@ -5294,18 +5158,6 @@
       "radio": "UMTS",
       "range": 1983.0,
       "samples": 11,
-      "operator": null
-    },
-    {
-      "lat": 12.5901,
-      "lon": 77.0203,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 43656,
-      "cellid": 50164948,
-      "radio": "UMTS",
-      "range": 2407.0,
-      "samples": 22,
       "operator": null
     },
     {
@@ -5342,7 +5194,7 @@
       "radio": "UMTS",
       "range": 2033.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5428,
@@ -5378,7 +5230,7 @@
       "radio": "GSM",
       "range": 1387.0,
       "samples": 29,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1295,
@@ -5426,7 +5278,7 @@
       "radio": "LTE",
       "range": 1310.0,
       "samples": 35,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9366,
@@ -5438,18 +5290,6 @@
       "radio": "UMTS",
       "range": 1159.0,
       "samples": 50,
-      "operator": null
-    },
-    {
-      "lat": 12.5769,
-      "lon": 77.0073,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 40873,
-      "cellid": 42596860,
-      "radio": "LTE",
-      "range": 4052.0,
-      "samples": 14,
       "operator": null
     },
     {
@@ -5498,7 +5338,7 @@
       "radio": "UMTS",
       "range": 3143.0,
       "samples": 8,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9242,
@@ -5522,7 +5362,7 @@
       "radio": "UMTS",
       "range": 4349.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3075,
@@ -5546,7 +5386,7 @@
       "radio": "GSM",
       "range": 4850.0,
       "samples": 8,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4822,
@@ -5558,7 +5398,7 @@
       "radio": "LTE",
       "range": 4315.0,
       "samples": 38,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8157,
@@ -5570,7 +5410,7 @@
       "radio": "UMTS",
       "range": 1357.0,
       "samples": 21,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9429,
@@ -5594,7 +5434,7 @@
       "radio": "UMTS",
       "range": 875.0,
       "samples": 3,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8183,
@@ -5642,19 +5482,7 @@
       "radio": "LTE",
       "range": 4582.0,
       "samples": 9,
-      "operator": null
-    },
-    {
-      "lat": 12.5767,
-      "lon": 77.0344,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 18498,
-      "cellid": 35557002,
-      "radio": "LTE",
-      "range": 2443.0,
-      "samples": 12,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3999,
@@ -5690,7 +5518,7 @@
       "radio": "LTE",
       "range": 3018.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1114,
@@ -5702,7 +5530,7 @@
       "radio": "GSM",
       "range": 2440.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9964,
@@ -5714,7 +5542,7 @@
       "radio": "UMTS",
       "range": 1200.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7798,
@@ -5726,7 +5554,7 @@
       "radio": "UMTS",
       "range": 1010.0,
       "samples": 24,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9934,
@@ -5810,7 +5638,7 @@
       "radio": "LTE",
       "range": 4533.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9244,
@@ -5822,7 +5650,7 @@
       "radio": "LTE",
       "range": 2482.0,
       "samples": 11,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0765,
@@ -5858,7 +5686,7 @@
       "radio": "LTE",
       "range": 2021.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9413,
@@ -5870,7 +5698,7 @@
       "radio": "LTE",
       "range": 2990.0,
       "samples": 46,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7561,
@@ -5906,7 +5734,7 @@
       "radio": "GSM",
       "range": 4772.0,
       "samples": 3,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9734,
@@ -5954,7 +5782,7 @@
       "radio": "LTE",
       "range": 1772.0,
       "samples": 6,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6459,
@@ -5966,7 +5794,7 @@
       "radio": "GSM",
       "range": 1941.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9387,
@@ -6002,7 +5830,7 @@
       "radio": "UMTS",
       "range": 1888.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3651,
@@ -6026,7 +5854,7 @@
       "radio": "LTE",
       "range": 3173.0,
       "samples": 3,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0726,
@@ -6038,7 +5866,7 @@
       "radio": "UMTS",
       "range": 2480.0,
       "samples": 37,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4045,
@@ -6062,7 +5890,7 @@
       "radio": "UMTS",
       "range": 1657.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1169,
@@ -6074,7 +5902,7 @@
       "radio": "GSM",
       "range": 3449.0,
       "samples": 33,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9424,
@@ -6110,7 +5938,7 @@
       "radio": "GSM",
       "range": 2897.0,
       "samples": 20,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1142,
@@ -6134,7 +5962,7 @@
       "radio": "LTE",
       "range": 3796.0,
       "samples": 5,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3238,
@@ -6146,7 +5974,7 @@
       "radio": "GSM",
       "range": 2574.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4832,
@@ -6170,7 +5998,7 @@
       "radio": "GSM",
       "range": 4098.0,
       "samples": 31,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.294,
@@ -6194,7 +6022,7 @@
       "radio": "LTE",
       "range": 3322.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9922,
@@ -6206,7 +6034,7 @@
       "radio": "LTE",
       "range": 3644.0,
       "samples": 3,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9681,
@@ -6293,18 +6121,6 @@
       "operator": null
     },
     {
-      "lat": 12.5581,
-      "lon": 77.011,
-      "mcc": 404,
-      "mnc": 45,
-      "lac": 2151,
-      "cellid": 24174643,
-      "radio": "LTE",
-      "range": 4056.0,
-      "samples": 27,
-      "operator": null
-    },
-    {
       "lat": 12.5717,
       "lon": 76.9883,
       "mcc": 404,
@@ -6326,7 +6142,7 @@
       "radio": "UMTS",
       "range": 3341.0,
       "samples": 16,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5047,
@@ -6374,19 +6190,7 @@
       "radio": "LTE",
       "range": 2039.0,
       "samples": 22,
-      "operator": null
-    },
-    {
-      "lat": 12.6152,
-      "lon": 77.0705,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 56385,
-      "cellid": 54438650,
-      "radio": "GSM",
-      "range": 3707.0,
-      "samples": 2,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7491,
@@ -6398,7 +6202,7 @@
       "radio": "LTE",
       "range": 1182.0,
       "samples": 47,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9259,
@@ -6410,31 +6214,7 @@
       "radio": "LTE",
       "range": 3231.0,
       "samples": 10,
-      "operator": null
-    },
-    {
-      "lat": 12.6192,
-      "lon": 77.094,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 41987,
-      "cellid": 19944101,
-      "radio": "LTE",
-      "range": 3938.0,
-      "samples": 28,
-      "operator": null
-    },
-    {
-      "lat": 12.598,
-      "lon": 77.0566,
-      "mcc": 404,
-      "mnc": 45,
-      "lac": 17108,
-      "cellid": 26916159,
-      "radio": "GSM",
-      "range": 3027.0,
-      "samples": 43,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9651,
@@ -6494,7 +6274,7 @@
       "radio": "LTE",
       "range": 1142.0,
       "samples": 33,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8138,
@@ -6506,7 +6286,7 @@
       "radio": "UMTS",
       "range": 1728.0,
       "samples": 23,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5424,
@@ -6530,7 +6310,7 @@
       "radio": "UMTS",
       "range": 3848.0,
       "samples": 9,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9187,
@@ -6554,7 +6334,7 @@
       "radio": "LTE",
       "range": 2990.0,
       "samples": 19,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5011,
@@ -6602,7 +6382,7 @@
       "radio": "LTE",
       "range": 4889.0,
       "samples": 38,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5528,
@@ -6614,7 +6394,7 @@
       "radio": "UMTS",
       "range": 4188.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9456,
@@ -6698,7 +6478,7 @@
       "radio": "LTE",
       "range": 4546.0,
       "samples": 49,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3817,
@@ -6722,7 +6502,7 @@
       "radio": "GSM",
       "range": 2464.0,
       "samples": 21,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.899,
@@ -6734,7 +6514,7 @@
       "radio": "LTE",
       "range": 2394.0,
       "samples": 15,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.51,
@@ -6758,7 +6538,7 @@
       "radio": "LTE",
       "range": 1496.0,
       "samples": 21,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9338,
@@ -6770,19 +6550,7 @@
       "radio": "LTE",
       "range": 4071.0,
       "samples": 26,
-      "operator": null
-    },
-    {
-      "lat": 12.5758,
-      "lon": 77.0144,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 55772,
-      "cellid": 35949068,
-      "radio": "UMTS",
-      "range": 3243.0,
-      "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8393,
@@ -6806,7 +6574,7 @@
       "radio": "LTE",
       "range": 1074.0,
       "samples": 38,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9764,
@@ -6818,7 +6586,7 @@
       "radio": "UMTS",
       "range": 3623.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8551,
@@ -6842,7 +6610,7 @@
       "radio": "UMTS",
       "range": 2975.0,
       "samples": 26,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9581,
@@ -6854,7 +6622,7 @@
       "radio": "LTE",
       "range": 3755.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7754,
@@ -6878,7 +6646,7 @@
       "radio": "LTE",
       "range": 675.0,
       "samples": 38,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9275,
@@ -6914,7 +6682,7 @@
       "radio": "LTE",
       "range": 1547.0,
       "samples": 27,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9006,
@@ -6926,7 +6694,7 @@
       "radio": "LTE",
       "range": 3389.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.687,
@@ -6938,7 +6706,7 @@
       "radio": "LTE",
       "range": 720.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9638,
@@ -6950,7 +6718,7 @@
       "radio": "LTE",
       "range": 2096.0,
       "samples": 19,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8112,
@@ -6986,7 +6754,7 @@
       "radio": "GSM",
       "range": 3206.0,
       "samples": 44,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5432,
@@ -6998,7 +6766,7 @@
       "radio": "UMTS",
       "range": 4533.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6466,
@@ -7022,19 +6790,7 @@
       "radio": "GSM",
       "range": 2899.0,
       "samples": 22,
-      "operator": null
-    },
-    {
-      "lat": 12.5726,
-      "lon": 77.0449,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 22437,
-      "cellid": 14222500,
-      "radio": "LTE",
-      "range": 1753.0,
-      "samples": 34,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6409,
@@ -7070,7 +6826,7 @@
       "radio": "GSM",
       "range": 4337.0,
       "samples": 5,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9009,
@@ -7118,7 +6874,7 @@
       "radio": "LTE",
       "range": 2946.0,
       "samples": 3,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9829,
@@ -7130,7 +6886,7 @@
       "radio": "LTE",
       "range": 2998.0,
       "samples": 23,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0286,
@@ -7202,7 +6958,7 @@
       "radio": "LTE",
       "range": 1488.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3423,
@@ -7226,19 +6982,7 @@
       "radio": "GSM",
       "range": 3885.0,
       "samples": 13,
-      "operator": null
-    },
-    {
-      "lat": 12.6136,
-      "lon": 77.1157,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 39266,
-      "cellid": 16226726,
-      "radio": "GSM",
-      "range": 1931.0,
-      "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8709,
@@ -7274,7 +7018,7 @@
       "radio": "GSM",
       "range": 3705.0,
       "samples": 3,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4628,
@@ -7286,7 +7030,7 @@
       "radio": "GSM",
       "range": 4881.0,
       "samples": 42,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3334,
@@ -7298,7 +7042,7 @@
       "radio": "LTE",
       "range": 932.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9264,
@@ -7310,7 +7054,7 @@
       "radio": "LTE",
       "range": 3357.0,
       "samples": 21,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1067,
@@ -7358,7 +7102,7 @@
       "radio": "GSM",
       "range": 2294.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9663,
@@ -7370,19 +7114,7 @@
       "radio": "LTE",
       "range": 2830.0,
       "samples": 41,
-      "operator": null
-    },
-    {
-      "lat": 12.597,
-      "lon": 77.0609,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 36951,
-      "cellid": 22739553,
-      "radio": "UMTS",
-      "range": 4185.0,
-      "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8571,
@@ -7394,7 +7126,7 @@
       "radio": "LTE",
       "range": 4157.0,
       "samples": 3,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9816,
@@ -7421,18 +7153,6 @@
       "operator": null
     },
     {
-      "lat": 12.6091,
-      "lon": 77.0787,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 57164,
-      "cellid": 50054027,
-      "radio": "LTE",
-      "range": 4823.0,
-      "samples": 1,
-      "operator": null
-    },
-    {
       "lat": 12.4943,
       "lon": 76.7819,
       "mcc": 405,
@@ -7442,7 +7162,7 @@
       "radio": "LTE",
       "range": 1235.0,
       "samples": 15,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9434,
@@ -7454,7 +7174,7 @@
       "radio": "UMTS",
       "range": 643.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9653,
@@ -7478,7 +7198,7 @@
       "radio": "UMTS",
       "range": 1658.0,
       "samples": 2,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9707,
@@ -7514,7 +7234,7 @@
       "radio": "LTE",
       "range": 2927.0,
       "samples": 30,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5391,
@@ -7526,7 +7246,7 @@
       "radio": "GSM",
       "range": 1789.0,
       "samples": 7,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5425,
@@ -7562,7 +7282,7 @@
       "radio": "GSM",
       "range": 4241.0,
       "samples": 49,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9385,
@@ -7598,7 +7318,7 @@
       "radio": "LTE",
       "range": 1697.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3152,
@@ -7610,7 +7330,7 @@
       "radio": "LTE",
       "range": 1085.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9458,
@@ -7622,7 +7342,7 @@
       "radio": "LTE",
       "range": 4240.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7566,
@@ -7658,7 +7378,7 @@
       "radio": "GSM",
       "range": 2910.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0536,
@@ -7670,7 +7390,7 @@
       "radio": "LTE",
       "range": 4176.0,
       "samples": 30,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7019,
@@ -7682,7 +7402,7 @@
       "radio": "GSM",
       "range": 4312.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9933,
@@ -7718,7 +7438,7 @@
       "radio": "LTE",
       "range": 1419.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4073,
@@ -7745,18 +7465,6 @@
       "operator": null
     },
     {
-      "lat": 12.6049,
-      "lon": 77.0838,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 31054,
-      "cellid": 19137795,
-      "radio": "LTE",
-      "range": 1825.0,
-      "samples": 44,
-      "operator": null
-    },
-    {
       "lat": 12.9238,
       "lon": 77.5287,
       "mcc": 404,
@@ -7766,7 +7474,7 @@
       "radio": "LTE",
       "range": 505.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4896,
@@ -7778,7 +7486,7 @@
       "radio": "LTE",
       "range": 3889.0,
       "samples": 31,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3111,
@@ -7790,7 +7498,7 @@
       "radio": "GSM",
       "range": 1742.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9021,
@@ -7802,7 +7510,7 @@
       "radio": "GSM",
       "range": 681.0,
       "samples": 35,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9536,
@@ -7841,18 +7549,6 @@
       "operator": null
     },
     {
-      "lat": 12.5976,
-      "lon": 77.0518,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 53207,
-      "cellid": 13169843,
-      "radio": "LTE",
-      "range": 2309.0,
-      "samples": 31,
-      "operator": null
-    },
-    {
       "lat": 13.1015,
       "lon": 77.5821,
       "mcc": 405,
@@ -7862,7 +7558,7 @@
       "radio": "LTE",
       "range": 966.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7534,
@@ -7874,7 +7570,7 @@
       "radio": "GSM",
       "range": 4827.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7681,
@@ -7898,7 +7594,7 @@
       "radio": "GSM",
       "range": 4741.0,
       "samples": 6,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9418,
@@ -7922,7 +7618,7 @@
       "radio": "UMTS",
       "range": 1243.0,
       "samples": 8,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0944,
@@ -7934,7 +7630,7 @@
       "radio": "LTE",
       "range": 4656.0,
       "samples": 8,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3043,
@@ -7958,7 +7654,7 @@
       "radio": "LTE",
       "range": 3715.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4897,
@@ -7994,7 +7690,7 @@
       "radio": "GSM",
       "range": 3000.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8923,
@@ -8018,7 +7714,7 @@
       "radio": "LTE",
       "range": 590.0,
       "samples": 18,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9557,
@@ -8078,7 +7774,7 @@
       "radio": "LTE",
       "range": 1542.0,
       "samples": 30,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9579,
@@ -8126,19 +7822,7 @@
       "radio": "LTE",
       "range": 3071.0,
       "samples": 42,
-      "operator": null
-    },
-    {
-      "lat": 12.5724,
-      "lon": 77.0367,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 48902,
-      "cellid": 50046918,
-      "radio": "LTE",
-      "range": 3643.0,
-      "samples": 43,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8987,
@@ -8162,7 +7846,7 @@
       "radio": "GSM",
       "range": 3391.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3223,
@@ -8186,7 +7870,7 @@
       "radio": "LTE",
       "range": 2584.0,
       "samples": 27,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0043,
@@ -8234,7 +7918,7 @@
       "radio": "GSM",
       "range": 3616.0,
       "samples": 41,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.727,
@@ -8246,7 +7930,7 @@
       "radio": "UMTS",
       "range": 3791.0,
       "samples": 35,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3989,
@@ -8258,7 +7942,7 @@
       "radio": "UMTS",
       "range": 1453.0,
       "samples": 27,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8986,
@@ -8294,7 +7978,7 @@
       "radio": "UMTS",
       "range": 4412.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9016,
@@ -8330,7 +8014,7 @@
       "radio": "LTE",
       "range": 4554.0,
       "samples": 7,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0025,
@@ -8342,7 +8026,7 @@
       "radio": "LTE",
       "range": 709.0,
       "samples": 46,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5415,
@@ -8426,7 +8110,7 @@
       "radio": "GSM",
       "range": 4456.0,
       "samples": 15,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1132,
@@ -8510,7 +8194,7 @@
       "radio": "LTE",
       "range": 2171.0,
       "samples": 6,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.2934,
@@ -8522,31 +8206,7 @@
       "radio": "GSM",
       "range": 4404.0,
       "samples": 42,
-      "operator": null
-    },
-    {
-      "lat": 12.6054,
-      "lon": 77.0803,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 15790,
-      "cellid": 6616763,
-      "radio": "UMTS",
-      "range": 2238.0,
-      "samples": 13,
-      "operator": null
-    },
-    {
-      "lat": 12.5801,
-      "lon": 77.0126,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 36831,
-      "cellid": 28276991,
-      "radio": "LTE",
-      "range": 1695.0,
-      "samples": 34,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0355,
@@ -8558,7 +8218,7 @@
       "radio": "UMTS",
       "range": 4191.0,
       "samples": 23,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3723,
@@ -8606,7 +8266,7 @@
       "radio": "GSM",
       "range": 3075.0,
       "samples": 50,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1333,
@@ -8630,7 +8290,7 @@
       "radio": "UMTS",
       "range": 776.0,
       "samples": 31,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5151,
@@ -8702,7 +8362,7 @@
       "radio": "LTE",
       "range": 1904.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0967,
@@ -8714,7 +8374,7 @@
       "radio": "LTE",
       "range": 3399.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.828,
@@ -8726,7 +8386,7 @@
       "radio": "LTE",
       "range": 687.0,
       "samples": 11,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5558,
@@ -8750,7 +8410,7 @@
       "radio": "LTE",
       "range": 3679.0,
       "samples": 24,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9239,
@@ -8870,7 +8530,7 @@
       "radio": "LTE",
       "range": 3935.0,
       "samples": 25,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9535,
@@ -8882,7 +8542,7 @@
       "radio": "LTE",
       "range": 4903.0,
       "samples": 37,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5579,
@@ -8894,7 +8554,7 @@
       "radio": "LTE",
       "range": 1753.0,
       "samples": 4,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.65,
@@ -8918,7 +8578,7 @@
       "radio": "LTE",
       "range": 3160.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0385,
@@ -8942,7 +8602,7 @@
       "radio": "LTE",
       "range": 867.0,
       "samples": 21,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.948,
@@ -8954,7 +8614,7 @@
       "radio": "LTE",
       "range": 2384.0,
       "samples": 37,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3702,
@@ -8990,7 +8650,7 @@
       "radio": "LTE",
       "range": 2890.0,
       "samples": 31,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7322,
@@ -9002,7 +8662,7 @@
       "radio": "LTE",
       "range": 1505.0,
       "samples": 26,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3196,
@@ -9014,7 +8674,7 @@
       "radio": "LTE",
       "range": 3456.0,
       "samples": 14,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9567,
@@ -9038,7 +8698,7 @@
       "radio": "LTE",
       "range": 3534.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.575,
@@ -9050,7 +8710,7 @@
       "radio": "UMTS",
       "range": 2641.0,
       "samples": 31,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9274,
@@ -9062,7 +8722,7 @@
       "radio": "LTE",
       "range": 3613.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7479,
@@ -9074,7 +8734,7 @@
       "radio": "LTE",
       "range": 4512.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1327,
@@ -9098,7 +8758,7 @@
       "radio": "LTE",
       "range": 4838.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3232,
@@ -9110,7 +8770,7 @@
       "radio": "LTE",
       "range": 4443.0,
       "samples": 36,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6611,
@@ -9134,7 +8794,7 @@
       "radio": "GSM",
       "range": 1107.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9502,
@@ -9146,7 +8806,7 @@
       "radio": "LTE",
       "range": 2995.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.976,
@@ -9158,7 +8818,7 @@
       "radio": "LTE",
       "range": 3855.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9244,
@@ -9194,7 +8854,7 @@
       "radio": "LTE",
       "range": 3973.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5209,
@@ -9206,7 +8866,7 @@
       "radio": "LTE",
       "range": 1559.0,
       "samples": 28,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9242,
@@ -9230,7 +8890,7 @@
       "radio": "UMTS",
       "range": 2960.0,
       "samples": 18,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9309,
@@ -9254,7 +8914,7 @@
       "radio": "GSM",
       "range": 1870.0,
       "samples": 31,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3091,
@@ -9266,7 +8926,7 @@
       "radio": "GSM",
       "range": 4304.0,
       "samples": 4,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9034,
@@ -9278,7 +8938,7 @@
       "radio": "LTE",
       "range": 3010.0,
       "samples": 19,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7614,
@@ -9290,7 +8950,7 @@
       "radio": "LTE",
       "range": 542.0,
       "samples": 34,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.2903,
@@ -9302,7 +8962,7 @@
       "radio": "GSM",
       "range": 3935.0,
       "samples": 7,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.2933,
@@ -9314,7 +8974,7 @@
       "radio": "UMTS",
       "range": 2277.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3153,
@@ -9350,7 +9010,7 @@
       "radio": "UMTS",
       "range": 744.0,
       "samples": 1,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.905,
@@ -9410,7 +9070,7 @@
       "radio": "UMTS",
       "range": 2510.0,
       "samples": 26,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3148,
@@ -9422,7 +9082,7 @@
       "radio": "LTE",
       "range": 3514.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7394,
@@ -9446,7 +9106,7 @@
       "radio": "UMTS",
       "range": 858.0,
       "samples": 37,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6433,
@@ -9458,7 +9118,7 @@
       "radio": "UMTS",
       "range": 1249.0,
       "samples": 23,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8215,
@@ -9470,7 +9130,7 @@
       "radio": "LTE",
       "range": 3095.0,
       "samples": 23,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0558,
@@ -9482,19 +9142,7 @@
       "radio": "GSM",
       "range": 2309.0,
       "samples": 20,
-      "operator": null
-    },
-    {
-      "lat": 12.5826,
-      "lon": 77.0136,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 10493,
-      "cellid": 34653742,
-      "radio": "LTE",
-      "range": 4846.0,
-      "samples": 20,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.939,
@@ -9542,19 +9190,7 @@
       "radio": "GSM",
       "range": 3535.0,
       "samples": 31,
-      "operator": null
-    },
-    {
-      "lat": 12.5762,
-      "lon": 77.0129,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 1407,
-      "cellid": 33768725,
-      "radio": "LTE",
-      "range": 3301.0,
-      "samples": 20,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9706,
@@ -9569,18 +9205,6 @@
       "operator": null
     },
     {
-      "lat": 12.5809,
-      "lon": 77.0093,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 29639,
-      "cellid": 40456721,
-      "radio": "LTE",
-      "range": 4591.0,
-      "samples": 20,
-      "operator": null
-    },
-    {
       "lat": 12.5124,
       "lon": 76.8388,
       "mcc": 404,
@@ -9590,7 +9214,7 @@
       "radio": "LTE",
       "range": 1823.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4809,
@@ -9614,7 +9238,7 @@
       "radio": "LTE",
       "range": 4462.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5412,
@@ -9650,7 +9274,7 @@
       "radio": "LTE",
       "range": 4466.0,
       "samples": 50,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5435,
@@ -9662,7 +9286,7 @@
       "radio": "LTE",
       "range": 4903.0,
       "samples": 1,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.887,
@@ -9674,7 +9298,7 @@
       "radio": "LTE",
       "range": 1615.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9688,
@@ -9686,7 +9310,7 @@
       "radio": "LTE",
       "range": 1353.0,
       "samples": 48,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5603,
@@ -9710,7 +9334,7 @@
       "radio": "GSM",
       "range": 2259.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7412,
@@ -9746,7 +9370,7 @@
       "radio": "LTE",
       "range": 866.0,
       "samples": 49,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1284,
@@ -9758,7 +9382,7 @@
       "radio": "LTE",
       "range": 2825.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1277,
@@ -9794,7 +9418,7 @@
       "radio": "LTE",
       "range": 4398.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.536,
@@ -9806,7 +9430,7 @@
       "radio": "LTE",
       "range": 2239.0,
       "samples": 36,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9125,
@@ -9818,7 +9442,7 @@
       "radio": "LTE",
       "range": 1382.0,
       "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9965,
@@ -9830,7 +9454,7 @@
       "radio": "GSM",
       "range": 1993.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7358,
@@ -9926,7 +9550,7 @@
       "radio": "GSM",
       "range": 4207.0,
       "samples": 5,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3886,
@@ -9998,7 +9622,7 @@
       "radio": "LTE",
       "range": 1294.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.321,
@@ -10022,7 +9646,7 @@
       "radio": "UMTS",
       "range": 1638.0,
       "samples": 24,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1154,
@@ -10046,7 +9670,7 @@
       "radio": "LTE",
       "range": 4159.0,
       "samples": 47,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8432,
@@ -10058,7 +9682,7 @@
       "radio": "LTE",
       "range": 4020.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9641,
@@ -10106,7 +9730,7 @@
       "radio": "LTE",
       "range": 1207.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1284,
@@ -10130,7 +9754,7 @@
       "radio": "LTE",
       "range": 2717.0,
       "samples": 29,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9792,
@@ -10154,7 +9778,7 @@
       "radio": "LTE",
       "range": 1340.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1294,
@@ -10166,7 +9790,7 @@
       "radio": "LTE",
       "range": 1583.0,
       "samples": 4,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8806,
@@ -10202,7 +9826,7 @@
       "radio": "UMTS",
       "range": 4006.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9947,
@@ -10214,7 +9838,7 @@
       "radio": "UMTS",
       "range": 1707.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6869,
@@ -10226,7 +9850,7 @@
       "radio": "LTE",
       "range": 804.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4768,
@@ -10250,7 +9874,7 @@
       "radio": "LTE",
       "range": 4685.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4867,
@@ -10286,7 +9910,7 @@
       "radio": "GSM",
       "range": 1874.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9845,
@@ -10298,7 +9922,7 @@
       "radio": "LTE",
       "range": 3411.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9774,
@@ -10310,7 +9934,7 @@
       "radio": "GSM",
       "range": 2337.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1338,
@@ -10346,7 +9970,7 @@
       "radio": "LTE",
       "range": 4778.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3701,
@@ -10382,7 +10006,7 @@
       "radio": "UMTS",
       "range": 1883.0,
       "samples": 30,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0141,
@@ -10394,7 +10018,7 @@
       "radio": "LTE",
       "range": 1139.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.037,
@@ -10406,7 +10030,7 @@
       "radio": "LTE",
       "range": 3467.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5102,
@@ -10481,18 +10105,6 @@
       "operator": null
     },
     {
-      "lat": 12.5815,
-      "lon": 77.0191,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 11409,
-      "cellid": 12302681,
-      "radio": "LTE",
-      "range": 4836.0,
-      "samples": 33,
-      "operator": null
-    },
-    {
       "lat": 12.9446,
       "lon": 77.5231,
       "mcc": 404,
@@ -10502,30 +10114,6 @@
       "radio": "LTE",
       "range": 3437.0,
       "samples": 46,
-      "operator": null
-    },
-    {
-      "lat": 12.5896,
-      "lon": 77.0314,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 23726,
-      "cellid": 45999392,
-      "radio": "UMTS",
-      "range": 1980.0,
-      "samples": 23,
-      "operator": null
-    },
-    {
-      "lat": 12.5923,
-      "lon": 77.0652,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 32680,
-      "cellid": 21380325,
-      "radio": "LTE",
-      "range": 1800.0,
-      "samples": 4,
       "operator": null
     },
     {
@@ -10562,7 +10150,7 @@
       "radio": "LTE",
       "range": 586.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5014,
@@ -10646,7 +10234,7 @@
       "radio": "GSM",
       "range": 4976.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1198,
@@ -10658,7 +10246,7 @@
       "radio": "UMTS",
       "range": 2502.0,
       "samples": 1,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6349,
@@ -10670,7 +10258,7 @@
       "radio": "LTE",
       "range": 3775.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1219,
@@ -10697,18 +10285,6 @@
       "operator": null
     },
     {
-      "lat": 12.5975,
-      "lon": 77.0488,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 58814,
-      "cellid": 59036840,
-      "radio": "LTE",
-      "range": 2283.0,
-      "samples": 42,
-      "operator": null
-    },
-    {
       "lat": 12.94,
       "lon": 77.5112,
       "mcc": 405,
@@ -10718,7 +10294,7 @@
       "radio": "UMTS",
       "range": 598.0,
       "samples": 49,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6533,
@@ -10730,7 +10306,7 @@
       "radio": "LTE",
       "range": 2609.0,
       "samples": 24,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7573,
@@ -10754,7 +10330,7 @@
       "radio": "LTE",
       "range": 557.0,
       "samples": 43,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0977,
@@ -10766,7 +10342,7 @@
       "radio": "LTE",
       "range": 3883.0,
       "samples": 19,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6941,
@@ -10778,19 +10354,7 @@
       "radio": "GSM",
       "range": 2964.0,
       "samples": 16,
-      "operator": null
-    },
-    {
-      "lat": 12.5862,
-      "lon": 77.023,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 2739,
-      "cellid": 45697360,
-      "radio": "GSM",
-      "range": 552.0,
-      "samples": 37,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1281,
@@ -10802,7 +10366,7 @@
       "radio": "LTE",
       "range": 2047.0,
       "samples": 9,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0141,
@@ -10826,7 +10390,7 @@
       "radio": "LTE",
       "range": 2372.0,
       "samples": 26,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1108,
@@ -10934,7 +10498,7 @@
       "radio": "LTE",
       "range": 1587.0,
       "samples": 13,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0992,
@@ -10982,7 +10546,7 @@
       "radio": "LTE",
       "range": 2378.0,
       "samples": 46,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5115,
@@ -10994,7 +10558,7 @@
       "radio": "LTE",
       "range": 4252.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9498,
@@ -11006,7 +10570,7 @@
       "radio": "UMTS",
       "range": 3486.0,
       "samples": 1,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8204,
@@ -11030,7 +10594,7 @@
       "radio": "LTE",
       "range": 2849.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9277,
@@ -11054,7 +10618,7 @@
       "radio": "LTE",
       "range": 3655.0,
       "samples": 48,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.021,
@@ -11066,7 +10630,7 @@
       "radio": "GSM",
       "range": 1305.0,
       "samples": 25,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9346,
@@ -11078,7 +10642,7 @@
       "radio": "UMTS",
       "range": 930.0,
       "samples": 21,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6672,
@@ -11090,7 +10654,7 @@
       "radio": "UMTS",
       "range": 4664.0,
       "samples": 15,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3197,
@@ -11138,7 +10702,7 @@
       "radio": "LTE",
       "range": 3681.0,
       "samples": 12,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.805,
@@ -11174,7 +10738,7 @@
       "radio": "GSM",
       "range": 1580.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3385,
@@ -11222,7 +10786,7 @@
       "radio": "LTE",
       "range": 3012.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5134,
@@ -11246,7 +10810,7 @@
       "radio": "LTE",
       "range": 2540.0,
       "samples": 13,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8122,
@@ -11282,7 +10846,7 @@
       "radio": "GSM",
       "range": 2293.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1274,
@@ -11294,7 +10858,7 @@
       "radio": "UMTS",
       "range": 4083.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5301,
@@ -11306,7 +10870,7 @@
       "radio": "UMTS",
       "range": 1000.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4377,
@@ -11318,7 +10882,7 @@
       "radio": "UMTS",
       "range": 541.0,
       "samples": 7,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9616,
@@ -11330,7 +10894,7 @@
       "radio": "LTE",
       "range": 2635.0,
       "samples": 4,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9504,
@@ -11366,7 +10930,7 @@
       "radio": "LTE",
       "range": 4029.0,
       "samples": 47,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8044,
@@ -11402,7 +10966,7 @@
       "radio": "UMTS",
       "range": 661.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3985,
@@ -11426,7 +10990,7 @@
       "radio": "LTE",
       "range": 1275.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9586,
@@ -11498,19 +11062,7 @@
       "radio": "GSM",
       "range": 883.0,
       "samples": 15,
-      "operator": null
-    },
-    {
-      "lat": 12.5702,
-      "lon": 77.0272,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 22662,
-      "cellid": 48387088,
-      "radio": "GSM",
-      "range": 2211.0,
-      "samples": 7,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1235,
@@ -11558,7 +11110,7 @@
       "radio": "LTE",
       "range": 1897.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4821,
@@ -11582,7 +11134,7 @@
       "radio": "LTE",
       "range": 2494.0,
       "samples": 29,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7484,
@@ -11618,7 +11170,7 @@
       "radio": "UMTS",
       "range": 1251.0,
       "samples": 8,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.444,
@@ -11630,7 +11182,7 @@
       "radio": "GSM",
       "range": 2482.0,
       "samples": 30,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.878,
@@ -11654,7 +11206,7 @@
       "radio": "LTE",
       "range": 3910.0,
       "samples": 26,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9551,
@@ -11678,7 +11230,7 @@
       "radio": "LTE",
       "range": 1026.0,
       "samples": 12,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3726,
@@ -11750,7 +11302,7 @@
       "radio": "UMTS",
       "range": 3226.0,
       "samples": 1,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4961,
@@ -11834,7 +11386,7 @@
       "radio": "LTE",
       "range": 1270.0,
       "samples": 48,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0305,
@@ -11870,7 +11422,7 @@
       "radio": "LTE",
       "range": 4887.0,
       "samples": 39,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9295,
@@ -11882,7 +11434,7 @@
       "radio": "LTE",
       "range": 2351.0,
       "samples": 27,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8758,
@@ -11918,7 +11470,7 @@
       "radio": "LTE",
       "range": 4310.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5072,
@@ -11942,19 +11494,7 @@
       "radio": "LTE",
       "range": 3430.0,
       "samples": 19,
-      "operator": null
-    },
-    {
-      "lat": 12.5947,
-      "lon": 77.0284,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 49689,
-      "cellid": 17448862,
-      "radio": "GSM",
-      "range": 1112.0,
-      "samples": 8,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3998,
@@ -12014,7 +11554,7 @@
       "radio": "GSM",
       "range": 3693.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9231,
@@ -12086,7 +11626,7 @@
       "radio": "LTE",
       "range": 1522.0,
       "samples": 49,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7431,
@@ -12098,7 +11638,7 @@
       "radio": "LTE",
       "range": 2345.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5192,
@@ -12134,7 +11674,7 @@
       "radio": "LTE",
       "range": 1410.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.853,
@@ -12146,7 +11686,7 @@
       "radio": "UMTS",
       "range": 2847.0,
       "samples": 30,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9161,
@@ -12242,7 +11782,7 @@
       "radio": "GSM",
       "range": 1744.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6514,
@@ -12254,7 +11794,7 @@
       "radio": "LTE",
       "range": 4864.0,
       "samples": 44,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0165,
@@ -12278,7 +11818,7 @@
       "radio": "GSM",
       "range": 3888.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7488,
@@ -12338,7 +11878,7 @@
       "radio": "LTE",
       "range": 4857.0,
       "samples": 45,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3163,
@@ -12362,7 +11902,7 @@
       "radio": "GSM",
       "range": 3825.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.001,
@@ -12374,19 +11914,7 @@
       "radio": "LTE",
       "range": 3377.0,
       "samples": 46,
-      "operator": null
-    },
-    {
-      "lat": 12.5862,
-      "lon": 77.0188,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 17356,
-      "cellid": 12135005,
-      "radio": "LTE",
-      "range": 4788.0,
-      "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7362,
@@ -12458,7 +11986,7 @@
       "radio": "LTE",
       "range": 1016.0,
       "samples": 37,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0431,
@@ -12482,7 +12010,7 @@
       "radio": "GSM",
       "range": 3214.0,
       "samples": 4,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9888,
@@ -12542,7 +12070,7 @@
       "radio": "LTE",
       "range": 3365.0,
       "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8135,
@@ -12590,7 +12118,7 @@
       "radio": "UMTS",
       "range": 2051.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1235,
@@ -12614,7 +12142,7 @@
       "radio": "UMTS",
       "range": 1774.0,
       "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6349,
@@ -12626,7 +12154,7 @@
       "radio": "UMTS",
       "range": 4676.0,
       "samples": 18,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7804,
@@ -12638,7 +12166,7 @@
       "radio": "GSM",
       "range": 4251.0,
       "samples": 26,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9888,
@@ -12674,7 +12202,7 @@
       "radio": "LTE",
       "range": 2964.0,
       "samples": 29,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8261,
@@ -12698,7 +12226,7 @@
       "radio": "UMTS",
       "range": 1657.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9565,
@@ -12734,7 +12262,7 @@
       "radio": "UMTS",
       "range": 1998.0,
       "samples": 18,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0519,
@@ -12746,7 +12274,7 @@
       "radio": "LTE",
       "range": 3351.0,
       "samples": 33,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9416,
@@ -12854,7 +12382,7 @@
       "radio": "LTE",
       "range": 2218.0,
       "samples": 20,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6203,
@@ -12926,7 +12454,7 @@
       "radio": "GSM",
       "range": 3473.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9478,
@@ -12941,18 +12469,6 @@
       "operator": null
     },
     {
-      "lat": 12.5638,
-      "lon": 77.0273,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 18526,
-      "cellid": 17310862,
-      "radio": "UMTS",
-      "range": 3482.0,
-      "samples": 1,
-      "operator": null
-    },
-    {
       "lat": 12.4977,
       "lon": 76.8201,
       "mcc": 404,
@@ -12962,7 +12478,7 @@
       "radio": "LTE",
       "range": 4137.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4795,
@@ -12998,7 +12514,7 @@
       "radio": "UMTS",
       "range": 4752.0,
       "samples": 7,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6441,
@@ -13022,7 +12538,7 @@
       "radio": "LTE",
       "range": 3351.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3845,
@@ -13034,7 +12550,7 @@
       "radio": "LTE",
       "range": 1184.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9499,
@@ -13046,7 +12562,7 @@
       "radio": "LTE",
       "range": 4482.0,
       "samples": 11,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7391,
@@ -13106,7 +12622,7 @@
       "radio": "LTE",
       "range": 2442.0,
       "samples": 44,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4201,
@@ -13118,7 +12634,7 @@
       "radio": "UMTS",
       "range": 1912.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7538,
@@ -13178,7 +12694,7 @@
       "radio": "LTE",
       "range": 535.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6647,
@@ -13190,7 +12706,7 @@
       "radio": "GSM",
       "range": 693.0,
       "samples": 38,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3232,
@@ -13205,18 +12721,6 @@
       "operator": null
     },
     {
-      "lat": 12.5668,
-      "lon": 77.0032,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 50465,
-      "cellid": 3741685,
-      "radio": "GSM",
-      "range": 3791.0,
-      "samples": 8,
-      "operator": null
-    },
-    {
       "lat": 12.7776,
       "lon": 77.3692,
       "mcc": 405,
@@ -13226,7 +12730,7 @@
       "radio": "LTE",
       "range": 3961.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5699,
@@ -13238,7 +12742,7 @@
       "radio": "LTE",
       "range": 4254.0,
       "samples": 39,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9525,
@@ -13250,7 +12754,7 @@
       "radio": "LTE",
       "range": 4027.0,
       "samples": 35,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9296,
@@ -13286,7 +12790,7 @@
       "radio": "LTE",
       "range": 825.0,
       "samples": 19,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1218,
@@ -13310,7 +12814,7 @@
       "radio": "LTE",
       "range": 3546.0,
       "samples": 20,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8807,
@@ -13334,7 +12838,7 @@
       "radio": "GSM",
       "range": 2142.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.79,
@@ -13346,7 +12850,7 @@
       "radio": "LTE",
       "range": 2344.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8967,
@@ -13370,7 +12874,7 @@
       "radio": "LTE",
       "range": 1423.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5335,
@@ -13394,7 +12898,7 @@
       "radio": "LTE",
       "range": 3715.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9092,
@@ -13454,7 +12958,7 @@
       "radio": "LTE",
       "range": 603.0,
       "samples": 22,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6558,
@@ -13481,18 +12985,6 @@
       "operator": null
     },
     {
-      "lat": 12.5696,
-      "lon": 77.0011,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 26912,
-      "cellid": 50147921,
-      "radio": "UMTS",
-      "range": 591.0,
-      "samples": 17,
-      "operator": null
-    },
-    {
       "lat": 12.3168,
       "lon": 76.6715,
       "mcc": 404,
@@ -13502,7 +12994,7 @@
       "radio": "GSM",
       "range": 2124.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9721,
@@ -13517,18 +13009,6 @@
       "operator": null
     },
     {
-      "lat": 12.6106,
-      "lon": 77.0852,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 7993,
-      "cellid": 44828334,
-      "radio": "GSM",
-      "range": 1114.0,
-      "samples": 28,
-      "operator": null
-    },
-    {
       "lat": 12.9813,
       "lon": 77.5894,
       "mcc": 404,
@@ -13538,7 +13018,7 @@
       "radio": "LTE",
       "range": 3113.0,
       "samples": 10,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1024,
@@ -13562,7 +13042,7 @@
       "radio": "UMTS",
       "range": 1467.0,
       "samples": 26,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8946,
@@ -13586,7 +13066,7 @@
       "radio": "LTE",
       "range": 2805.0,
       "samples": 4,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7435,
@@ -13598,7 +13078,7 @@
       "radio": "GSM",
       "range": 821.0,
       "samples": 19,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3136,
@@ -13610,7 +13090,7 @@
       "radio": "GSM",
       "range": 3799.0,
       "samples": 48,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3141,
@@ -13622,7 +13102,7 @@
       "radio": "LTE",
       "range": 4162.0,
       "samples": 34,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8978,
@@ -13634,7 +13114,7 @@
       "radio": "LTE",
       "range": 1013.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5387,
@@ -13649,18 +13129,6 @@
       "operator": null
     },
     {
-      "lat": 12.5741,
-      "lon": 77.0299,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 41718,
-      "cellid": 21716686,
-      "radio": "LTE",
-      "range": 735.0,
-      "samples": 25,
-      "operator": null
-    },
-    {
       "lat": 13.0893,
       "lon": 77.5863,
       "mcc": 405,
@@ -13670,7 +13138,7 @@
       "radio": "LTE",
       "range": 4838.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7187,
@@ -13682,7 +13150,7 @@
       "radio": "LTE",
       "range": 3930.0,
       "samples": 37,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.959,
@@ -13742,7 +13210,7 @@
       "radio": "LTE",
       "range": 3280.0,
       "samples": 19,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8295,
@@ -13754,19 +13222,7 @@
       "radio": "LTE",
       "range": 2240.0,
       "samples": 20,
-      "operator": null
-    },
-    {
-      "lat": 12.5886,
-      "lon": 77.0433,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 39819,
-      "cellid": 54963498,
-      "radio": "GSM",
-      "range": 4010.0,
-      "samples": 27,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7994,
@@ -13802,7 +13258,7 @@
       "radio": "LTE",
       "range": 4581.0,
       "samples": 9,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3229,
@@ -13814,7 +13270,7 @@
       "radio": "LTE",
       "range": 4923.0,
       "samples": 5,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8016,
@@ -13850,7 +13306,7 @@
       "radio": "LTE",
       "range": 820.0,
       "samples": 50,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7947,
@@ -13886,7 +13342,7 @@
       "radio": "GSM",
       "range": 1873.0,
       "samples": 45,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9107,
@@ -13898,7 +13354,7 @@
       "radio": "UMTS",
       "range": 4491.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3707,
@@ -13910,7 +13366,7 @@
       "radio": "LTE",
       "range": 4925.0,
       "samples": 39,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1136,
@@ -13982,7 +13438,7 @@
       "radio": "LTE",
       "range": 2775.0,
       "samples": 4,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8359,
@@ -13994,7 +13450,7 @@
       "radio": "LTE",
       "range": 4011.0,
       "samples": 16,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0317,
@@ -14030,7 +13486,7 @@
       "radio": "LTE",
       "range": 4876.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.4024,
@@ -14114,7 +13570,7 @@
       "radio": "LTE",
       "range": 1758.0,
       "samples": 19,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.114,
@@ -14186,7 +13642,7 @@
       "radio": "GSM",
       "range": 4243.0,
       "samples": 10,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9322,
@@ -14198,7 +13654,7 @@
       "radio": "LTE",
       "range": 3242.0,
       "samples": 39,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6543,
@@ -14210,7 +13666,7 @@
       "radio": "LTE",
       "range": 4202.0,
       "samples": 6,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1222,
@@ -14330,7 +13786,7 @@
       "radio": "LTE",
       "range": 1717.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5384,
@@ -14342,7 +13798,7 @@
       "radio": "LTE",
       "range": 4941.0,
       "samples": 26,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3517,
@@ -14354,7 +13810,7 @@
       "radio": "LTE",
       "range": 4242.0,
       "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1205,
@@ -14378,7 +13834,7 @@
       "radio": "LTE",
       "range": 4833.0,
       "samples": 44,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1393,
@@ -14414,7 +13870,7 @@
       "radio": "LTE",
       "range": 4177.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7478,
@@ -14450,7 +13906,7 @@
       "radio": "LTE",
       "range": 1703.0,
       "samples": 23,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0225,
@@ -14462,7 +13918,7 @@
       "radio": "LTE",
       "range": 3762.0,
       "samples": 34,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3121,
@@ -14486,7 +13942,7 @@
       "radio": "UMTS",
       "range": 4102.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1287,
@@ -14498,7 +13954,7 @@
       "radio": "UMTS",
       "range": 762.0,
       "samples": 14,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5758,
@@ -14546,7 +14002,7 @@
       "radio": "GSM",
       "range": 3962.0,
       "samples": 23,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8092,
@@ -14597,18 +14053,6 @@
       "operator": null
     },
     {
-      "lat": 12.5871,
-      "lon": 77.0271,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 8886,
-      "cellid": 58074369,
-      "radio": "LTE",
-      "range": 4905.0,
-      "samples": 39,
-      "operator": null
-    },
-    {
       "lat": 12.6438,
       "lon": 77.1614,
       "mcc": 404,
@@ -14630,7 +14074,7 @@
       "radio": "LTE",
       "range": 4161.0,
       "samples": 47,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6391,
@@ -14690,7 +14134,7 @@
       "radio": "LTE",
       "range": 4059.0,
       "samples": 32,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3327,
@@ -14750,7 +14194,7 @@
       "radio": "UMTS",
       "range": 4270.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0359,
@@ -14834,7 +14278,7 @@
       "radio": "LTE",
       "range": 4903.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9296,
@@ -14858,7 +14302,7 @@
       "radio": "LTE",
       "range": 4761.0,
       "samples": 44,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3416,
@@ -14870,7 +14314,7 @@
       "radio": "GSM",
       "range": 3960.0,
       "samples": 25,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9905,
@@ -14906,7 +14350,7 @@
       "radio": "LTE",
       "range": 1842.0,
       "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3077,
@@ -14978,7 +14422,7 @@
       "radio": "LTE",
       "range": 1059.0,
       "samples": 4,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9347,
@@ -15002,7 +14446,7 @@
       "radio": "LTE",
       "range": 2399.0,
       "samples": 43,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9182,
@@ -15041,18 +14485,6 @@
       "operator": null
     },
     {
-      "lat": 12.6196,
-      "lon": 77.0818,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 31065,
-      "cellid": 27265553,
-      "radio": "UMTS",
-      "range": 3647.0,
-      "samples": 21,
-      "operator": null
-    },
-    {
       "lat": 12.9841,
       "lon": 77.5913,
       "mcc": 404,
@@ -15062,7 +14494,7 @@
       "radio": "UMTS",
       "range": 3524.0,
       "samples": 12,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0269,
@@ -15110,7 +14542,7 @@
       "radio": "UMTS",
       "range": 1144.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0605,
@@ -15122,7 +14554,7 @@
       "radio": "LTE",
       "range": 863.0,
       "samples": 18,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7766,
@@ -15134,7 +14566,7 @@
       "radio": "GSM",
       "range": 1414.0,
       "samples": 35,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3986,
@@ -15146,7 +14578,7 @@
       "radio": "LTE",
       "range": 2943.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7989,
@@ -15170,7 +14602,7 @@
       "radio": "UMTS",
       "range": 1664.0,
       "samples": 49,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.894,
@@ -15182,7 +14614,7 @@
       "radio": "GSM",
       "range": 1916.0,
       "samples": 50,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6359,
@@ -15194,7 +14626,7 @@
       "radio": "LTE",
       "range": 4228.0,
       "samples": 41,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3135,
@@ -15206,7 +14638,7 @@
       "radio": "UMTS",
       "range": 1637.0,
       "samples": 12,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9822,
@@ -15218,7 +14650,7 @@
       "radio": "UMTS",
       "range": 4374.0,
       "samples": 25,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5429,
@@ -15230,7 +14662,7 @@
       "radio": "LTE",
       "range": 4665.0,
       "samples": 45,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9497,
@@ -15242,7 +14674,7 @@
       "radio": "GSM",
       "range": 3742.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1182,
@@ -15254,7 +14686,7 @@
       "radio": "UMTS",
       "range": 4797.0,
       "samples": 37,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0052,
@@ -15266,7 +14698,7 @@
       "radio": "LTE",
       "range": 2269.0,
       "samples": 16,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9451,
@@ -15278,7 +14710,7 @@
       "radio": "LTE",
       "range": 3306.0,
       "samples": 27,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8149,
@@ -15290,7 +14722,7 @@
       "radio": "LTE",
       "range": 2163.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9356,
@@ -15350,7 +14782,7 @@
       "radio": "LTE",
       "range": 4335.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.313,
@@ -15386,7 +14818,7 @@
       "radio": "UMTS",
       "range": 1915.0,
       "samples": 36,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9946,
@@ -15398,7 +14830,7 @@
       "radio": "UMTS",
       "range": 1126.0,
       "samples": 39,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3624,
@@ -15410,18 +14842,6 @@
       "radio": "LTE",
       "range": 2523.0,
       "samples": 33,
-      "operator": null
-    },
-    {
-      "lat": 12.6018,
-      "lon": 77.0516,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 29911,
-      "cellid": 52537992,
-      "radio": "UMTS",
-      "range": 963.0,
-      "samples": 6,
       "operator": null
     },
     {
@@ -15446,7 +14866,7 @@
       "radio": "UMTS",
       "range": 3281.0,
       "samples": 6,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9965,
@@ -15482,7 +14902,7 @@
       "radio": "GSM",
       "range": 1356.0,
       "samples": 8,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8994,
@@ -15494,7 +14914,7 @@
       "radio": "LTE",
       "range": 601.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0325,
@@ -15506,7 +14926,7 @@
       "radio": "GSM",
       "range": 4242.0,
       "samples": 43,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9234,
@@ -15533,18 +14953,6 @@
       "operator": null
     },
     {
-      "lat": 12.6154,
-      "lon": 77.1039,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 5026,
-      "cellid": 29917419,
-      "radio": "UMTS",
-      "range": 2068.0,
-      "samples": 12,
-      "operator": null
-    },
-    {
       "lat": 12.7626,
       "lon": 77.2584,
       "mcc": 405,
@@ -15566,7 +14974,7 @@
       "radio": "UMTS",
       "range": 4653.0,
       "samples": 30,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9317,
@@ -15578,7 +14986,7 @@
       "radio": "GSM",
       "range": 4067.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5074,
@@ -15626,7 +15034,7 @@
       "radio": "UMTS",
       "range": 4417.0,
       "samples": 28,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7928,
@@ -15650,7 +15058,7 @@
       "radio": "GSM",
       "range": 3569.0,
       "samples": 6,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6239,
@@ -15662,7 +15070,7 @@
       "radio": "LTE",
       "range": 3509.0,
       "samples": 1,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5513,
@@ -15686,7 +15094,7 @@
       "radio": "GSM",
       "range": 4296.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1033,
@@ -15710,7 +15118,7 @@
       "radio": "UMTS",
       "range": 519.0,
       "samples": 43,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3015,
@@ -15722,7 +15130,7 @@
       "radio": "GSM",
       "range": 2512.0,
       "samples": 31,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5369,
@@ -15734,7 +15142,7 @@
       "radio": "GSM",
       "range": 593.0,
       "samples": 50,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8459,
@@ -15746,7 +15154,7 @@
       "radio": "LTE",
       "range": 1642.0,
       "samples": 44,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9792,
@@ -15758,7 +15166,7 @@
       "radio": "LTE",
       "range": 2347.0,
       "samples": 41,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5048,
@@ -15770,7 +15178,7 @@
       "radio": "LTE",
       "range": 4346.0,
       "samples": 39,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8645,
@@ -15806,7 +15214,7 @@
       "radio": "GSM",
       "range": 2777.0,
       "samples": 16,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.68,
@@ -15818,7 +15226,7 @@
       "radio": "LTE",
       "range": 4033.0,
       "samples": 23,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8483,
@@ -15854,7 +15262,7 @@
       "radio": "LTE",
       "range": 4189.0,
       "samples": 11,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9783,
@@ -15878,7 +15286,7 @@
       "radio": "UMTS",
       "range": 3743.0,
       "samples": 33,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3246,
@@ -15914,18 +15322,6 @@
       "radio": "UMTS",
       "range": 2369.0,
       "samples": 18,
-      "operator": null
-    },
-    {
-      "lat": 12.5617,
-      "lon": 77.0189,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 35670,
-      "cellid": 26338187,
-      "radio": "LTE",
-      "range": 2882.0,
-      "samples": 27,
       "operator": null
     },
     {
@@ -15986,7 +15382,7 @@
       "radio": "LTE",
       "range": 4494.0,
       "samples": 50,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5364,
@@ -15998,7 +15394,7 @@
       "radio": "LTE",
       "range": 1610.0,
       "samples": 21,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9649,
@@ -16010,7 +15406,7 @@
       "radio": "LTE",
       "range": 4728.0,
       "samples": 27,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5247,
@@ -16022,7 +15418,7 @@
       "radio": "LTE",
       "range": 3602.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9624,
@@ -16070,7 +15466,7 @@
       "radio": "UMTS",
       "range": 4276.0,
       "samples": 44,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5408,
@@ -16085,18 +15481,6 @@
       "operator": null
     },
     {
-      "lat": 12.5929,
-      "lon": 77.0491,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 50749,
-      "cellid": 49575363,
-      "radio": "UMTS",
-      "range": 1044.0,
-      "samples": 25,
-      "operator": null
-    },
-    {
       "lat": 12.9874,
       "lon": 77.5997,
       "mcc": 405,
@@ -16105,18 +15489,6 @@
       "cellid": 13187302,
       "radio": "GSM",
       "range": 4424.0,
-      "samples": 28,
-      "operator": null
-    },
-    {
-      "lat": 12.5923,
-      "lon": 77.0267,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 50441,
-      "cellid": 48902546,
-      "radio": "UMTS",
-      "range": 790.0,
       "samples": 28,
       "operator": null
     },
@@ -16166,7 +15538,7 @@
       "radio": "GSM",
       "range": 3875.0,
       "samples": 3,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4845,
@@ -16178,7 +15550,7 @@
       "radio": "GSM",
       "range": 561.0,
       "samples": 15,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0897,
@@ -16202,7 +15574,7 @@
       "radio": "LTE",
       "range": 2693.0,
       "samples": 30,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.954,
@@ -16238,7 +15610,7 @@
       "radio": "LTE",
       "range": 4259.0,
       "samples": 41,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.1236,
@@ -16253,18 +15625,6 @@
       "operator": null
     },
     {
-      "lat": 12.5847,
-      "lon": 77.051,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 30550,
-      "cellid": 46335932,
-      "radio": "UMTS",
-      "range": 2094.0,
-      "samples": 23,
-      "operator": null
-    },
-    {
       "lat": 13.1073,
       "lon": 77.6047,
       "mcc": 404,
@@ -16274,7 +15634,7 @@
       "radio": "LTE",
       "range": 4577.0,
       "samples": 4,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.94,
@@ -16298,7 +15658,7 @@
       "radio": "LTE",
       "range": 2161.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9439,
@@ -16310,7 +15670,7 @@
       "radio": "LTE",
       "range": 3064.0,
       "samples": 50,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8504,
@@ -16322,7 +15682,7 @@
       "radio": "LTE",
       "range": 3632.0,
       "samples": 10,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7724,
@@ -16346,7 +15706,7 @@
       "radio": "LTE",
       "range": 2163.0,
       "samples": 48,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0322,
@@ -16370,7 +15730,7 @@
       "radio": "UMTS",
       "range": 4818.0,
       "samples": 45,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8799,
@@ -16382,7 +15742,7 @@
       "radio": "LTE",
       "range": 893.0,
       "samples": 5,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4534,
@@ -16406,7 +15766,7 @@
       "radio": "LTE",
       "range": 1996.0,
       "samples": 36,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9808,
@@ -16418,7 +15778,7 @@
       "radio": "UMTS",
       "range": 3192.0,
       "samples": 46,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0317,
@@ -16466,7 +15826,7 @@
       "radio": "LTE",
       "range": 3360.0,
       "samples": 25,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7502,
@@ -16478,7 +15838,7 @@
       "radio": "GSM",
       "range": 1400.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3943,
@@ -16502,7 +15862,7 @@
       "radio": "LTE",
       "range": 3523.0,
       "samples": 1,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.891,
@@ -16550,7 +15910,7 @@
       "radio": "LTE",
       "range": 1314.0,
       "samples": 50,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3131,
@@ -16598,7 +15958,7 @@
       "radio": "GSM",
       "range": 3843.0,
       "samples": 15,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0503,
@@ -16634,7 +15994,7 @@
       "radio": "LTE",
       "range": 1340.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4645,
@@ -16730,7 +16090,7 @@
       "radio": "GSM",
       "range": 705.0,
       "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.089,
@@ -16742,19 +16102,7 @@
       "radio": "LTE",
       "range": 1002.0,
       "samples": 44,
-      "operator": null
-    },
-    {
-      "lat": 12.5805,
-      "lon": 77.0436,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 48342,
-      "cellid": 19043111,
-      "radio": "LTE",
-      "range": 1724.0,
-      "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5695,
@@ -16790,7 +16138,7 @@
       "radio": "UMTS",
       "range": 4832.0,
       "samples": 18,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9581,
@@ -16802,7 +16150,7 @@
       "radio": "LTE",
       "range": 4974.0,
       "samples": 16,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.451,
@@ -16826,7 +16174,7 @@
       "radio": "LTE",
       "range": 2908.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3015,
@@ -16838,7 +16186,7 @@
       "radio": "LTE",
       "range": 1064.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8744,
@@ -16874,7 +16222,7 @@
       "radio": "LTE",
       "range": 960.0,
       "samples": 14,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.7324,
@@ -16898,7 +16246,7 @@
       "radio": "UMTS",
       "range": 832.0,
       "samples": 17,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9451,
@@ -16910,7 +16258,7 @@
       "radio": "LTE",
       "range": 4797.0,
       "samples": 14,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3767,
@@ -16946,7 +16294,7 @@
       "radio": "UMTS",
       "range": 4858.0,
       "samples": 18,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.3055,
@@ -17018,7 +16366,7 @@
       "radio": "GSM",
       "range": 685.0,
       "samples": 44,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9805,
@@ -17042,7 +16390,7 @@
       "radio": "GSM",
       "range": 530.0,
       "samples": 36,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5797,
@@ -17066,7 +16414,7 @@
       "radio": "LTE",
       "range": 1072.0,
       "samples": 17,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.475,
@@ -17114,7 +16462,7 @@
       "radio": "LTE",
       "range": 4744.0,
       "samples": 6,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9311,
@@ -17126,7 +16474,7 @@
       "radio": "LTE",
       "range": 2606.0,
       "samples": 35,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6349,
@@ -17138,7 +16486,7 @@
       "radio": "GSM",
       "range": 2954.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9604,
@@ -17150,7 +16498,7 @@
       "radio": "LTE",
       "range": 2712.0,
       "samples": 29,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.1198,
@@ -17186,7 +16534,7 @@
       "radio": "GSM",
       "range": 648.0,
       "samples": 15,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.7551,
@@ -17198,7 +16546,7 @@
       "radio": "LTE",
       "range": 4406.0,
       "samples": 38,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8095,
@@ -17258,7 +16606,7 @@
       "radio": "LTE",
       "range": 3124.0,
       "samples": 18,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8201,
@@ -17282,7 +16630,7 @@
       "radio": "LTE",
       "range": 4670.0,
       "samples": 2,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6298,
@@ -17294,7 +16642,7 @@
       "radio": "LTE",
       "range": 4347.0,
       "samples": 47,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9088,
@@ -17306,7 +16654,7 @@
       "radio": "LTE",
       "range": 2382.0,
       "samples": 28,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.5486,
@@ -17354,7 +16702,7 @@
       "radio": "LTE",
       "range": 4713.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9401,
@@ -17390,7 +16738,7 @@
       "radio": "LTE",
       "range": 2868.0,
       "samples": 18,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.94,
@@ -17402,7 +16750,7 @@
       "radio": "LTE",
       "range": 2077.0,
       "samples": 32,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6419,
@@ -17414,7 +16762,7 @@
       "radio": "LTE",
       "range": 4221.0,
       "samples": 9,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.5015,
@@ -17426,7 +16774,7 @@
       "radio": "GSM",
       "range": 907.0,
       "samples": 43,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.8258,
@@ -17438,7 +16786,7 @@
       "radio": "LTE",
       "range": 862.0,
       "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3176,
@@ -17450,18 +16798,6 @@
       "radio": "LTE",
       "range": 1958.0,
       "samples": 49,
-      "operator": null
-    },
-    {
-      "lat": 12.5695,
-      "lon": 77.0205,
-      "mcc": 404,
-      "mnc": 44,
-      "lac": 57212,
-      "cellid": 54202261,
-      "radio": "GSM",
-      "range": 4961.0,
-      "samples": 32,
       "operator": null
     },
     {
@@ -17522,7 +16858,7 @@
       "radio": "LTE",
       "range": 4163.0,
       "samples": 35,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.477,
@@ -17558,7 +16894,7 @@
       "radio": "UMTS",
       "range": 2495.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4893,
@@ -17594,7 +16930,7 @@
       "radio": "UMTS",
       "range": 4619.0,
       "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 13.0984,
@@ -17654,7 +16990,7 @@
       "radio": "GSM",
       "range": 4413.0,
       "samples": 13,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8072,
@@ -17690,7 +17026,7 @@
       "radio": "GSM",
       "range": 1250.0,
       "samples": 40,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9362,
@@ -17714,7 +17050,7 @@
       "radio": "LTE",
       "range": 3351.0,
       "samples": 1,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 13.0247,
@@ -17726,30 +17062,6 @@
       "radio": "UMTS",
       "range": 2573.0,
       "samples": 2,
-      "operator": null
-    },
-    {
-      "lat": 12.6001,
-      "lon": 77.0736,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 16347,
-      "cellid": 43653398,
-      "radio": "LTE",
-      "range": 864.0,
-      "samples": 2,
-      "operator": null
-    },
-    {
-      "lat": 12.5641,
-      "lon": 77.0239,
-      "mcc": 404,
-      "mnc": 86,
-      "lac": 23314,
-      "cellid": 43961561,
-      "radio": "LTE",
-      "range": 4763.0,
-      "samples": 5,
       "operator": null
     },
     {
@@ -17774,7 +17086,7 @@
       "radio": "UMTS",
       "range": 4532.0,
       "samples": 14,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3373,
@@ -17810,7 +17122,7 @@
       "radio": "LTE",
       "range": 3024.0,
       "samples": 22,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8988,
@@ -17822,19 +17134,7 @@
       "radio": "UMTS",
       "range": 1352.0,
       "samples": 2,
-      "operator": null
-    },
-    {
-      "lat": 12.5946,
-      "lon": 77.0378,
-      "mcc": 405,
-      "mnc": 10,
-      "lac": 60387,
-      "cellid": 24347021,
-      "radio": "LTE",
-      "range": 3113.0,
-      "samples": 5,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.6663,
@@ -17894,7 +17194,7 @@
       "radio": "UMTS",
       "range": 2929.0,
       "samples": 48,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.3375,
@@ -17918,7 +17218,7 @@
       "radio": "UMTS",
       "range": 2266.0,
       "samples": 42,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.8675,
@@ -17945,18 +17245,6 @@
       "operator": null
     },
     {
-      "lat": 12.5789,
-      "lon": 77.0136,
-      "mcc": 405,
-      "mnc": 34,
-      "lac": 46000,
-      "cellid": 26833859,
-      "radio": "LTE",
-      "range": 4092.0,
-      "samples": 44,
-      "operator": null
-    },
-    {
       "lat": 12.3217,
       "lon": 76.6682,
       "mcc": 405,
@@ -17966,7 +17254,7 @@
       "radio": "GSM",
       "range": 1188.0,
       "samples": 40,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.9758,
@@ -17990,7 +17278,7 @@
       "radio": "LTE",
       "range": 1424.0,
       "samples": 17,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.4652,
@@ -18002,7 +17290,7 @@
       "radio": "LTE",
       "range": 2704.0,
       "samples": 19,
-      "operator": null
+      "operator": "jio"
     },
     {
       "lat": 12.6336,
@@ -18014,7 +17302,7 @@
       "radio": "UMTS",
       "range": 4647.0,
       "samples": 19,
-      "operator": null
+      "operator": "airtel"
     },
     {
       "lat": 12.9248,
@@ -18038,6 +17326,918 @@
       "radio": "LTE",
       "range": 1300.0,
       "samples": 15,
+      "operator": null
+    },
+    {
+      "lat": 12.650397,
+      "lon": 76.967272,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 35893462,
+      "radio": "UMTS",
+      "range": 3880.0,
+      "samples": 14,
+      "operator": null
+    },
+    {
+      "lat": 12.652108,
+      "lon": 76.973004,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 16487659,
+      "radio": "LTE",
+      "range": 1513.0,
+      "samples": 94,
+      "operator": null
+    },
+    {
+      "lat": 12.627428,
+      "lon": 76.935103,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 9719209,
+      "radio": "LTE",
+      "range": 2085.0,
+      "samples": 48,
+      "operator": null
+    },
+    {
+      "lat": 12.650557,
+      "lon": 76.974976,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 53959866,
+      "radio": "LTE",
+      "range": 2404.0,
+      "samples": 45,
+      "operator": null
+    },
+    {
+      "lat": 12.663954,
+      "lon": 76.9678,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 41275151,
+      "radio": "UMTS",
+      "range": 1804.0,
+      "samples": 25,
+      "operator": null
+    },
+    {
+      "lat": 12.626639,
+      "lon": 76.969672,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 40717150,
+      "radio": "UMTS",
+      "range": 2931.0,
+      "samples": 84,
+      "operator": null
+    },
+    {
+      "lat": 12.606603,
+      "lon": 76.978506,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52001,
+      "cellid": 52121262,
+      "radio": "LTE",
+      "range": 1025.0,
+      "samples": 61,
+      "operator": null
+    },
+    {
+      "lat": 12.652247,
+      "lon": 76.977565,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 65496746,
+      "radio": "LTE",
+      "range": 1297.0,
+      "samples": 44,
+      "operator": null
+    },
+    {
+      "lat": 12.642011,
+      "lon": 76.989026,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 1075666,
+      "radio": "LTE",
+      "range": 1327.0,
+      "samples": 47,
+      "operator": null
+    },
+    {
+      "lat": 12.623134,
+      "lon": 76.981204,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52001,
+      "cellid": 63197804,
+      "radio": "LTE",
+      "range": 1646.0,
+      "samples": 39,
+      "operator": null
+    },
+    {
+      "lat": 12.630904,
+      "lon": 76.970642,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10102,
+      "cellid": 37686755,
+      "radio": "UMTS",
+      "range": 1563.0,
+      "samples": 37,
+      "operator": null
+    },
+    {
+      "lat": 12.607715,
+      "lon": 76.98027,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 56806145,
+      "radio": "LTE",
+      "range": 2429.0,
+      "samples": 72,
+      "operator": null
+    },
+    {
+      "lat": 12.671311,
+      "lon": 76.982746,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52000,
+      "cellid": 5262606,
+      "radio": "UMTS",
+      "range": 1719.0,
+      "samples": 116,
+      "operator": null
+    },
+    {
+      "lat": 12.648727,
+      "lon": 76.972375,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 4215072,
+      "radio": "LTE",
+      "range": 2365.0,
+      "samples": 72,
+      "operator": null
+    },
+    {
+      "lat": 12.614075,
+      "lon": 76.954132,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 64250188,
+      "radio": "LTE",
+      "range": 2601.0,
+      "samples": 9,
+      "operator": null
+    },
+    {
+      "lat": 12.623073,
+      "lon": 76.985468,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52002,
+      "cellid": 22996174,
+      "radio": "LTE",
+      "range": 1146.0,
+      "samples": 118,
+      "operator": null
+    },
+    {
+      "lat": 12.67722,
+      "lon": 76.932673,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52000,
+      "cellid": 49057983,
+      "radio": "UMTS",
+      "range": 2115.0,
+      "samples": 30,
+      "operator": null
+    },
+    {
+      "lat": 12.606756,
+      "lon": 76.967244,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52002,
+      "cellid": 55919358,
+      "radio": "LTE",
+      "range": 976.0,
+      "samples": 9,
+      "operator": null
+    },
+    {
+      "lat": 12.742064,
+      "lon": 77.081884,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52001,
+      "cellid": 50131870,
+      "radio": "LTE",
+      "range": 805.0,
+      "samples": 74,
+      "operator": null
+    },
+    {
+      "lat": 12.735122,
+      "lon": 77.044765,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10102,
+      "cellid": 25394728,
+      "radio": "LTE",
+      "range": 1922.0,
+      "samples": 18,
+      "operator": null
+    },
+    {
+      "lat": 12.730625,
+      "lon": 77.038415,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10102,
+      "cellid": 61518062,
+      "radio": "LTE",
+      "range": 2042.0,
+      "samples": 30,
+      "operator": null
+    },
+    {
+      "lat": 12.698243,
+      "lon": 77.026594,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 20550273,
+      "radio": "UMTS",
+      "range": 1820.0,
+      "samples": 87,
+      "operator": null
+    },
+    {
+      "lat": 12.743853,
+      "lon": 77.059604,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 57879132,
+      "radio": "UMTS",
+      "range": 1627.0,
+      "samples": 45,
+      "operator": null
+    },
+    {
+      "lat": 12.697187,
+      "lon": 77.079246,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 23360690,
+      "radio": "UMTS",
+      "range": 1987.0,
+      "samples": 52,
+      "operator": null
+    },
+    {
+      "lat": 12.726186,
+      "lon": 77.055345,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52002,
+      "cellid": 26556042,
+      "radio": "UMTS",
+      "range": 2304.0,
+      "samples": 20,
+      "operator": null
+    },
+    {
+      "lat": 12.736508,
+      "lon": 77.041134,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 1417560,
+      "radio": "LTE",
+      "range": 1873.0,
+      "samples": 92,
+      "operator": null
+    },
+    {
+      "lat": 12.73164,
+      "lon": 77.065832,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10102,
+      "cellid": 62339335,
+      "radio": "LTE",
+      "range": 968.0,
+      "samples": 88,
+      "operator": null
+    },
+    {
+      "lat": 12.701796,
+      "lon": 77.039125,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 3610928,
+      "radio": "LTE",
+      "range": 1951.0,
+      "samples": 39,
+      "operator": null
+    },
+    {
+      "lat": 12.747657,
+      "lon": 77.046827,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 22348793,
+      "radio": "LTE",
+      "range": 2229.0,
+      "samples": 37,
+      "operator": null
+    },
+    {
+      "lat": 12.732081,
+      "lon": 77.084199,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 27853417,
+      "radio": "LTE",
+      "range": 2261.0,
+      "samples": 45,
+      "operator": null
+    },
+    {
+      "lat": 12.713887,
+      "lon": 77.081386,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 15367785,
+      "radio": "UMTS",
+      "range": 3758.0,
+      "samples": 71,
+      "operator": null
+    },
+    {
+      "lat": 12.706646,
+      "lon": 77.059902,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 47167989,
+      "radio": "LTE",
+      "range": 1864.0,
+      "samples": 62,
+      "operator": null
+    },
+    {
+      "lat": 12.7468,
+      "lon": 77.043815,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 14117660,
+      "radio": "LTE",
+      "range": 2135.0,
+      "samples": 6,
+      "operator": null
+    },
+    {
+      "lat": 12.747151,
+      "lon": 77.054643,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 41527593,
+      "radio": "LTE",
+      "range": 1445.0,
+      "samples": 119,
+      "operator": null
+    },
+    {
+      "lat": 12.741382,
+      "lon": 77.10175,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 28322937,
+      "radio": "LTE",
+      "range": 1370.0,
+      "samples": 37,
+      "operator": null
+    },
+    {
+      "lat": 12.771582,
+      "lon": 77.116387,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 16516131,
+      "radio": "UMTS",
+      "range": 1503.0,
+      "samples": 83,
+      "operator": null
+    },
+    {
+      "lat": 12.778061,
+      "lon": 77.125623,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 1430467,
+      "radio": "LTE",
+      "range": 2345.0,
+      "samples": 16,
+      "operator": null
+    },
+    {
+      "lat": 12.770295,
+      "lon": 77.131421,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52002,
+      "cellid": 43291247,
+      "radio": "UMTS",
+      "range": 3825.0,
+      "samples": 54,
+      "operator": null
+    },
+    {
+      "lat": 12.778589,
+      "lon": 77.101929,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41003,
+      "cellid": 5132268,
+      "radio": "UMTS",
+      "range": 1400.0,
+      "samples": 64,
+      "operator": null
+    },
+    {
+      "lat": 12.725703,
+      "lon": 77.131581,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41003,
+      "cellid": 50225882,
+      "radio": "LTE",
+      "range": 1044.0,
+      "samples": 63,
+      "operator": null
+    },
+    {
+      "lat": 12.721553,
+      "lon": 77.123743,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 48735721,
+      "radio": "LTE",
+      "range": 2431.0,
+      "samples": 84,
+      "operator": null
+    },
+    {
+      "lat": 12.737654,
+      "lon": 77.116538,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52000,
+      "cellid": 48884646,
+      "radio": "LTE",
+      "range": 1690.0,
+      "samples": 30,
+      "operator": null
+    },
+    {
+      "lat": 12.730726,
+      "lon": 77.145607,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41001,
+      "cellid": 9988661,
+      "radio": "LTE",
+      "range": 1438.0,
+      "samples": 64,
+      "operator": null
+    },
+    {
+      "lat": 12.720138,
+      "lon": 77.110295,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41003,
+      "cellid": 39516241,
+      "radio": "LTE",
+      "range": 1031.0,
+      "samples": 18,
+      "operator": null
+    },
+    {
+      "lat": 12.745653,
+      "lon": 77.148627,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41003,
+      "cellid": 62503937,
+      "radio": "LTE",
+      "range": 2562.0,
+      "samples": 7,
+      "operator": null
+    },
+    {
+      "lat": 12.746494,
+      "lon": 77.130129,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 15157431,
+      "radio": "LTE",
+      "range": 2552.0,
+      "samples": 99,
+      "operator": null
+    },
+    {
+      "lat": 12.772041,
+      "lon": 77.115093,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41002,
+      "cellid": 21047149,
+      "radio": "LTE",
+      "range": 1922.0,
+      "samples": 15,
+      "operator": null
+    },
+    {
+      "lat": 12.742442,
+      "lon": 77.104297,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52002,
+      "cellid": 48654587,
+      "radio": "UMTS",
+      "range": 2304.0,
+      "samples": 41,
+      "operator": null
+    },
+    {
+      "lat": 12.355804,
+      "lon": 76.651107,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 23057845,
+      "radio": "UMTS",
+      "range": 2678.0,
+      "samples": 53,
+      "operator": null
+    },
+    {
+      "lat": 12.392785,
+      "lon": 76.690726,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 26954939,
+      "radio": "UMTS",
+      "range": 1454.0,
+      "samples": 10,
+      "operator": null
+    },
+    {
+      "lat": 12.370485,
+      "lon": 76.717764,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 17229887,
+      "radio": "LTE",
+      "range": 999.0,
+      "samples": 56,
+      "operator": null
+    },
+    {
+      "lat": 12.359032,
+      "lon": 76.655543,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10102,
+      "cellid": 54054756,
+      "radio": "LTE",
+      "range": 2495.0,
+      "samples": 37,
+      "operator": null
+    },
+    {
+      "lat": 12.385175,
+      "lon": 76.712968,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52001,
+      "cellid": 24578117,
+      "radio": "LTE",
+      "range": 1263.0,
+      "samples": 46,
+      "operator": null
+    },
+    {
+      "lat": 12.377387,
+      "lon": 76.700277,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 59958898,
+      "radio": "LTE",
+      "range": 1398.0,
+      "samples": 115,
+      "operator": null
+    },
+    {
+      "lat": 12.37982,
+      "lon": 76.668831,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 44822634,
+      "radio": "UMTS",
+      "range": 3370.0,
+      "samples": 109,
+      "operator": null
+    },
+    {
+      "lat": 12.348945,
+      "lon": 76.712668,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52000,
+      "cellid": 47581228,
+      "radio": "LTE",
+      "range": 831.0,
+      "samples": 114,
+      "operator": null
+    },
+    {
+      "lat": 12.331686,
+      "lon": 76.691569,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52001,
+      "cellid": 47314687,
+      "radio": "LTE",
+      "range": 1518.0,
+      "samples": 86,
+      "operator": null
+    },
+    {
+      "lat": 12.371545,
+      "lon": 76.674514,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52002,
+      "cellid": 51848290,
+      "radio": "LTE",
+      "range": 1949.0,
+      "samples": 31,
+      "operator": null
+    },
+    {
+      "lat": 12.311839,
+      "lon": 76.708219,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 53456689,
+      "radio": "LTE",
+      "range": 1325.0,
+      "samples": 7,
+      "operator": null
+    },
+    {
+      "lat": 12.303727,
+      "lon": 76.709891,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 33016978,
+      "radio": "LTE",
+      "range": 1365.0,
+      "samples": 34,
+      "operator": null
+    },
+    {
+      "lat": 12.924045,
+      "lon": 77.523159,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10101,
+      "cellid": 58791802,
+      "radio": "UMTS",
+      "range": 1988.0,
+      "samples": 108,
+      "operator": null
+    },
+    {
+      "lat": 12.949866,
+      "lon": 77.619818,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52002,
+      "cellid": 43278624,
+      "radio": "LTE",
+      "range": 2079.0,
+      "samples": 67,
+      "operator": null
+    },
+    {
+      "lat": 12.959894,
+      "lon": 77.53955,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52000,
+      "cellid": 5451895,
+      "radio": "LTE",
+      "range": 2450.0,
+      "samples": 62,
+      "operator": null
+    },
+    {
+      "lat": 12.933539,
+      "lon": 77.571908,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 12668841,
+      "radio": "LTE",
+      "range": 1887.0,
+      "samples": 58,
+      "operator": null
+    },
+    {
+      "lat": 12.939972,
+      "lon": 77.511004,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41002,
+      "cellid": 64895738,
+      "radio": "LTE",
+      "range": 927.0,
+      "samples": 111,
+      "operator": null
+    },
+    {
+      "lat": 12.925072,
+      "lon": 77.61367,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 41435049,
+      "radio": "LTE",
+      "range": 1577.0,
+      "samples": 109,
+      "operator": null
+    },
+    {
+      "lat": 12.957907,
+      "lon": 77.605614,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52000,
+      "cellid": 9832568,
+      "radio": "LTE",
+      "range": 1023.0,
+      "samples": 58,
+      "operator": null
+    },
+    {
+      "lat": 12.963658,
+      "lon": 77.520589,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 57465293,
+      "radio": "LTE",
+      "range": 2786.0,
+      "samples": 49,
+      "operator": null
+    },
+    {
+      "lat": 12.962805,
+      "lon": 77.559423,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 59569435,
+      "radio": "LTE",
+      "range": 1111.0,
+      "samples": 17,
+      "operator": null
+    },
+    {
+      "lat": 12.961059,
+      "lon": 77.542862,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10102,
+      "cellid": 40095900,
+      "radio": "LTE",
+      "range": 1591.0,
+      "samples": 119,
+      "operator": null
+    },
+    {
+      "lat": 12.970328,
+      "lon": 77.54808,
+      "mcc": 404,
+      "mnc": 20,
+      "lac": 41002,
+      "cellid": 13011029,
+      "radio": "UMTS",
+      "range": 1675.0,
+      "samples": 22,
+      "operator": null
+    },
+    {
+      "lat": 12.9255,
+      "lon": 77.522956,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 43153274,
+      "radio": "LTE",
+      "range": 1901.0,
+      "samples": 103,
+      "operator": null
+    },
+    {
+      "lat": 12.974439,
+      "lon": 77.586417,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 40277684,
+      "radio": "LTE",
+      "range": 1546.0,
+      "samples": 110,
+      "operator": null
+    },
+    {
+      "lat": 12.938252,
+      "lon": 77.506562,
+      "mcc": 404,
+      "mnc": 10,
+      "lac": 52003,
+      "cellid": 3553580,
+      "radio": "LTE",
+      "range": 2118.0,
+      "samples": 104,
+      "operator": null
+    },
+    {
+      "lat": 12.921573,
+      "lon": 77.52923,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10103,
+      "cellid": 17193619,
+      "radio": "LTE",
+      "range": 1660.0,
+      "samples": 111,
+      "operator": null
+    },
+    {
+      "lat": 12.933204,
+      "lon": 77.551254,
+      "mcc": 405,
+      "mnc": 86,
+      "lac": 10104,
+      "cellid": 58410560,
+      "radio": "LTE",
+      "range": 1523.0,
+      "samples": 47,
       "operator": null
     }
   ]

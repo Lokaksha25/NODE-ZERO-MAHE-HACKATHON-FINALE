@@ -1,0 +1,18 @@
+{
+  "job_id": "2dc20a38a5d03587",
+  "corridor_id": "ca45c4b0c6a44a1a",
+  "source_city": "Koramangala",
+  "destination_city": "Whitefield",
+  "status": "ready",
+  "stage": "Completed",
+  "progress_pct": 100,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": null,
+  "tower_count": 260,
+  "route_count": 2,
+  "created_at": 1776561459,
+  "completed_at": 1776561466,
+  "source_label": "Koramangala, Sri Lakshmi Devi Ward, Bengaluru South City Corporation, Bengaluru, Bangalore South, Bengaluru Urban, Karnataka, 560095, India",
+  "destination_label": "Whitefield, Post Office Road, Kadugodi, Bengaluru East City Corporation, Bengaluru, Bangalore East, Bengaluru Urban, Karnataka, 560067, India"
+}

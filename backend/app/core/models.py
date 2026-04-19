@@ -142,6 +142,7 @@ class NotificationEvent(BaseModel):
     state: NotificationState
     release_reason: str
     released_at_segment: int | None = None
+    visible: bool = True
 
 
 class PlaybackRequest(BaseModel):
@@ -168,6 +169,7 @@ class PlaybackStep(BaseModel):
     segment_score: float
     classification: Literal["weak", "moderate", "strong"]
     notification_events: list[NotificationEvent]
+    visible_notifications: list[NotificationEvent]
     warning: WeakZoneWarning | None = None
 
 

@@ -1,0 +1,18 @@
+{
+  "corridor_id": "ca45c4b0c6a44a1a",
+  "source_city": "Koramangala",
+  "destination_city": "Whitefield",
+  "source_label": "Koramangala, Sri Lakshmi Devi Ward, Bengaluru South City Corporation, Bengaluru, Bangalore South, Bengaluru Urban, Karnataka, 560095, India",
+  "destination_label": "Whitefield, Post Office Road, Kadugodi, Bengaluru East City Corporation, Bengaluru, Bangalore East, Bengaluru Urban, Karnataka, 560067, India",
+  "generated_at": 1776561466,
+  "expires_at": 1776647866,
+  "degraded": false,
+  "degraded_reason": null,
+  "route_count": 2,
+  "tower_count": 260,
+  "operator_labels": {
+    "jio": "MCC 404 MNC 10",
+    "airtel": "MCC 405 MNC 86"
+  },
+  "operator_note": "Auto-mapped operator buckets for MCC 404 using dominant MNCs in this corridor."
+}

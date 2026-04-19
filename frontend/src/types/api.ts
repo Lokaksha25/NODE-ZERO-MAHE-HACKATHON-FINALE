@@ -105,6 +105,7 @@ export interface NotificationEvent {
   state: NotificationState;
   release_reason: string;
   released_at_segment: number | null;
+  visible: boolean;
 }
 
 export interface WeakZoneWarning {
@@ -121,6 +122,7 @@ export interface PlaybackStep {
   segment_score: number;
   classification: SegmentClass;
   notification_events: NotificationEvent[];
+  visible_notifications: NotificationEvent[];
   warning: WeakZoneWarning | null;
 }
 

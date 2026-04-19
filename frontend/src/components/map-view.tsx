@@ -27,13 +27,34 @@ function classifyColor(classification: "weak" | "moderate" | "strong") {
   return ROUTE_COLORS[classification] ?? "#7d8aa6";
 }
 
-function PlaybackIcon() {
+function NavigationArrowIcon(heading: number) {
+  // Google Maps-style navigation arrow (blue teardrop pointing in direction of travel)
   return L.divIcon({
     className: "",
-    html: '<div style="width:14px;height:14px;border-radius:9999px;background:#ff8a3d;border:2px solid #ffffff;box-shadow:0 0 0 6px rgba(255,138,61,0.25)"></div>',
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
+    html: `<div style="
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      transform: rotate(${heading}deg);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    ">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" fill="#4285F4" fill-opacity="0.15" stroke="#4285F4" stroke-width="1.5" stroke-opacity="0.3"/>
+        <path d="M18 6 L26 26 L18 21 L10 26 Z" fill="#4285F4" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+    </div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
   });
+}
+
+function computeHeading(startLon: number, startLat: number, endLon: number, endLat: number): number {
+  const dLon = ((endLon - startLon) * Math.PI) / 180;
+  const lat1 = (startLat * Math.PI) / 180;
+  const lat2 = (endLat * Math.PI) / 180;
+  const y = Math.sin(dLon) * Math.cos(lat2);
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+  const bearing = (Math.atan2(y, x) * 180) / Math.PI;
+  return (bearing + 360) % 360;
 }
 
 function MapViewport({ selectedRoute }: { selectedRoute: Route | null }) {
@@ -88,7 +109,16 @@ export function MapView({
     );
   }, [selectedRoute, activeSegment]);
 
-  const playbackIcon = useMemo(() => PlaybackIcon(), []);
+  const heading = useMemo(() => {
+    if (!activeSegment) return 0;
+    return computeHeading(
+      activeSegment.start.lon, activeSegment.start.lat,
+      activeSegment.end.lon, activeSegment.end.lat,
+    );
+  }, [activeSegment]);
+
+  const playbackIcon = useMemo(() => NavigationArrowIcon(heading), [heading]);
+
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
@@ -108,24 +138,47 @@ export function MapView({
         />
 
         <Pane name="routes" style={{ zIndex: 400 }}>
-          {routes.map((route) => {
-            const faded = route.route_id !== selectedRouteId;
-            return route.segments.map((segment) => (
-              <Polyline
-                key={`${route.route_id}-${segment.index}`}
-                positions={[
-                  [segment.start.lat, segment.start.lon],
-                  [segment.end.lat, segment.end.lon],
-                ]}
-                pathOptions={{
-                  color: classifyColor(segment.classification),
-                  weight: faded ? 3 : 6,
-                  opacity: faded ? 0.3 : 0.96,
-                  lineCap: "round",
-                }}
-              />
-            ));
-          })}
+          {/* Non-selected routes first (behind) */}
+          {routes
+            .filter((route) => route.route_id !== selectedRouteId)
+            .map((route) =>
+              route.segments.map((segment) => (
+                <Polyline
+                  key={`${route.route_id}-${segment.index}`}
+                  positions={[
+                    [segment.start.lat, segment.start.lon],
+                    [segment.end.lat, segment.end.lon],
+                  ]}
+                  pathOptions={{
+                    color: "#9ca3af",
+                    weight: 3,
+                    opacity: 0.35,
+                    lineCap: "round",
+                    dashArray: "6 4",
+                  }}
+                />
+              )),
+            )}
+          {/* Selected route on top */}
+          {routes
+            .filter((route) => route.route_id === selectedRouteId)
+            .map((route) =>
+              route.segments.map((segment) => (
+                <Polyline
+                  key={`${route.route_id}-${segment.index}`}
+                  positions={[
+                    [segment.start.lat, segment.start.lon],
+                    [segment.end.lat, segment.end.lon],
+                  ]}
+                  pathOptions={{
+                    color: classifyColor(segment.classification),
+                    weight: 6,
+                    opacity: 0.96,
+                    lineCap: "round",
+                  }}
+                />
+              )),
+            )}
         </Pane>
 
         <Pane name="endpoints" style={{ zIndex: 500 }}>

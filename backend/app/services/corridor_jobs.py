@@ -18,10 +18,13 @@ import mapbox_vector_tile
 
 
 ROOT = Path(__file__).resolve().parents[2]
+PROJECT_ROOT = ROOT.parent  # project root (one level above backend/)
 DATA_DIR = ROOT / "data"
 CACHE_DIR = DATA_DIR / "cache"
 CORRIDOR_CACHE_DIR = CACHE_DIR / "corridors"
 CORRIDOR_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+# CSV tower data lives at project root level, not backend level
+CORRIDOR_CSV_DIR = PROJECT_ROOT / "data" / "cache" / "corridor_csv"
 
 JOB_DIR = CACHE_DIR / "jobs"
 JOB_DIR.mkdir(parents=True, exist_ok=True)
@@ -134,14 +137,90 @@ def _request_json(
         return json.loads(response.read().decode("utf-8"))
 
 
-def geocode_city(city: str) -> tuple[float, float, str]:
+def _find_corridor_csvs(source_city: str, destination_city: str) -> list[Path]:
+    """Find pre-cached corridor CSV files for this city pair.
+
+    Tries both the full city name and the short name (before comma) to match
+    files like 'koramangala-whitefield-404-1.csv' even when the user typed
+    'Koramangala,Bengaluru'.
+    """
+    if not CORRIDOR_CSV_DIR.exists():
+        return []
+
+    def _short(name: str) -> str:
+        return _normalize_city(name).split(",")[0].strip().replace(" ", "")
+
+    def _full(name: str) -> str:
+        return _normalize_city(name).replace(",", "").replace(" ", "")
+
+    # Try short names first (most common match), then full.
+    # For each variant, also try the reversed pair (dst-src) so that
+    # a CSV cached as "koramangala-whitefield-*.csv" is found even when
+    # the user routes from Whitefield → Koramangala.
+    for src_fn, dst_fn in [
+        (_short(source_city), _short(destination_city)),
+        (_full(source_city), _full(destination_city)),
+    ]:
+        for corridor_name in [f"{src_fn}-{dst_fn}", f"{dst_fn}-{src_fn}"]:
+            matches = sorted(CORRIDOR_CSV_DIR.glob(f"{corridor_name}-*.csv"))
+            if matches:
+                return matches
+    return []
+
+
+def _load_towers_from_csv(csv_path: Path) -> list[Tower]:
+    """Load towers from a pre-cached corridor CSV (OpenCellID format)."""
+    towers: list[Tower] = []
+    with csv_path.open("r", encoding="utf-8") as handle:
+        for line in handle:
+            parts = line.strip().split(",")
+            if len(parts) < 10:
+                continue
+            try:
+                radio = parts[0].strip()
+                mcc = int(parts[1])
+                mnc = int(parts[2])
+                lac = int(parts[3])
+                cellid = int(parts[4])
+                lon = float(parts[6])
+                lat = float(parts[7])
+                range_m = max(200.0, min(float(parts[8]), 5000.0))
+                samples = int(parts[9])
+                towers.append(
+                    Tower(
+                        lat=lat, lon=lon, mcc=mcc, mnc=mnc,
+                        lac=lac, cellid=cellid, radio=radio,
+                        range_m=range_m, samples=samples,
+                    )
+                )
+            except (ValueError, IndexError):
+                continue
+    return towers
+
+
+def _compute_viewbox(towers: list[Tower]) -> str | None:
+    """Compute a Nominatim viewbox string from tower coordinates to bias geocoding."""
+    if not towers:
+        return None
+    lons = [t.lon for t in towers]
+    lats = [t.lat for t in towers]
+    margin = 0.15
+    return f"{min(lons) - margin},{max(lats) + margin},{max(lons) + margin},{min(lats) - margin}"
+
+
+def geocode_city(city: str, viewbox: str | None = None) -> tuple[float, float, str]:
+    params: dict[str, Any] = {
+        "q": city,
+        "format": "jsonv2",
+        "limit": 1,
+    }
+    if viewbox:
+        params["viewbox"] = viewbox
+        params["bounded"] = "0"
+
     payload = _request_json(
         "https://nominatim.openstreetmap.org/search",
-        {
-            "q": city,
-            "format": "jsonv2",
-            "limit": 1,
-        },
+        params,
         timeout=30,
     )
     if not payload:
@@ -1008,11 +1087,19 @@ def _run_job(job_id: str) -> None:
         corridor_id = job["corridor_id"]
 
     try:
+        # --- Check for pre-cached CSV tower data ---
+        csv_files = _find_corridor_csvs(source_city, destination_city)
+        csv_towers: list[Tower] = []
+        for csv_path in csv_files:
+            csv_towers.extend(_load_towers_from_csv(csv_path))
+
+        viewbox = _compute_viewbox(csv_towers) if csv_towers else None
+
         _update_job(
             job_id, status="geocoding", stage="Geocoding cities", progress_pct=15
         )
-        origin_lon, origin_lat, source_label = geocode_city(source_city)
-        dest_lon, dest_lat, destination_label = geocode_city(destination_city)
+        origin_lon, origin_lat, source_label = geocode_city(source_city, viewbox=viewbox)
+        dest_lon, dest_lat, destination_label = geocode_city(destination_city, viewbox=viewbox)
 
         _update_job(
             job_id, status="routing", stage="Fetching OSRM routes", progress_pct=35
@@ -1096,21 +1183,39 @@ def _run_job(job_id: str) -> None:
                         f"CoverageMap returned too few samples ({len(towers)})."
                     )
         else:
-            _update_job(
-                job_id,
-                status="tower_fetch",
-                stage="Fetching OpenCellID towers",
-                progress_pct=60,
-            )
-            if not opencellid_api_key:
-                towers = []
-                degraded = True
-                degraded_reason = "OPENCELLID_API_KEY is not configured"
-            else:
+            # Use pre-cached CSV towers if available
+            if csv_towers:
+                _update_job(
+                    job_id,
+                    status="tower_fetch",
+                    stage=f"Using {len(csv_towers)} pre-cached CSV towers",
+                    progress_pct=60,
+                )
+                towers = csv_towers
+                if len(towers) < 50:
+                    degraded = True
+                    degraded_reason = f"Pre-cached CSV has few towers ({len(towers)}). Connectivity confidence is low."
+            elif opencellid_api_key:
+                _update_job(
+                    job_id,
+                    status="tower_fetch",
+                    stage="Fetching OpenCellID towers",
+                    progress_pct=60,
+                )
                 towers = fetch_opencellid_towers(opencellid_api_key, routes)
                 if len(towers) < 50:
                     degraded = True
                     degraded_reason = f"Too few towers returned ({len(towers)}). Connectivity confidence is low."
+            else:
+                _update_job(
+                    job_id,
+                    status="tower_fetch",
+                    stage="No tower source available",
+                    progress_pct=60,
+                )
+                towers = []
+                degraded = True
+                degraded_reason = "OPENCELLID_API_KEY is not configured"
 
             operator_labels, operator_note = _derive_operator_profile(towers)
 

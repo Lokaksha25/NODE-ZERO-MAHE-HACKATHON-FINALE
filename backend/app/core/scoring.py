@@ -55,6 +55,8 @@ def _weak_zones(scores: list[float]) -> list[WeakZoneResponse]:
 
 
 def _normalize_inverse(values: list[int]) -> list[float]:
+    if not values:
+        return []
     minimum = min(values)
     maximum = max(values)
     if maximum == minimum:
@@ -69,6 +71,8 @@ def rank_routes(
     blend: float,
     safety_mode: bool,
 ) -> list[RouteResponse]:
+    if not templates:
+        return []
     eta_scores = _normalize_inverse([template.eta_minutes for template in templates])
     weights = resolve_mode_weights(blend=blend, mode=mode.value, safety_mode=safety_mode)
 
@@ -94,9 +98,14 @@ def rank_routes(
         connectivity_score = sum(segment_scores) / len(segment_scores)
 
         connectivity_rank_score = max(0.0, connectivity_score - weak_ratio * 22)
-        weak_penalty = weights.weak_penalty_weight * (
+        raw_weak_penalty = weights.weak_penalty_weight * (
             (longest_weak / 1000.0) * 13 + weak_ratio * 35
         )
+        # Scale penalty by connectivity weight so "fastest" mode doesn't get
+        # overwhelmed by weak-zone penalties.  In safety mode the full penalty
+        # applies regardless.
+        penalty_scale = 1.0 if safety_mode else (0.3 + 0.7 * weights.connectivity_weight)
+        weak_penalty = raw_weak_penalty * penalty_scale
 
         combined = (
             weights.eta_weight * eta_score

@@ -1,176 +1,285 @@
-# Node Zero - Connectivity-Aware Routing Demo
+# 🛰️ Node Zero — Connectivity-Aware Routing & Geo-Deferred Notifications
 
-Offline hackathon prototype for:
-- operator-specific connectivity-aware routing (`Jio`, `Airtel`)
-- weak-zone warning before low predicted coverage
-- geo-deferred notification delivery during route playback
-- safety mode that biases toward connectivity continuity
+<div align="center">
 
-## Are We Using OpenStreetMap?
+**Operator-Specific Connectivity-Aware Routing and Geo-Deferred Notifications for Indian Road Corridors**
 
-Yes.
-- The frontend map uses **OpenStreetMap tiles** via React Leaflet (`https://tile.openstreetmap.org/{z}/{x}/{y}.png`).
-- Route geometry is now fetched from **OSRM** (road network based on OSM data), then cached for deterministic replay.
-- This means route polylines follow roads rather than straight interpolation lines.
+*Built for the MAHE Hackathon Finale*
 
-## Tech Stack
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)](https://python.org)
+[![Next.js](https://img.shields.io/badge/Next.js-15-000000?logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://docker.com)
 
-- Frontend: Next.js, TypeScript, Tailwind CSS, React Leaflet, Turf
-- Backend: FastAPI, Pydantic
-- Demo data: deterministic corridor route templates + sample normalized tower file
-- Deployment: Docker Compose
+</div>
 
-## Project Structure
+---
 
-- `frontend/` - UI, map, controls, playback timeline
-- `backend/` - route ranking API + notification simulation API
-- `data/demo/` - sample normalized corridor tower file
-- `docker-compose.yml` - one-command startup for frontend + backend
+## 📋 What Is Node Zero?
 
-## Prerequisites
+Node Zero is a prototype system that makes mobile routing **connectivity-aware**. Instead of just finding the fastest path between two cities, it evaluates **cellular network coverage** along every candidate route — per operator (Jio, Airtel) — and uses that data to:
 
-For Docker flow (recommended):
-- Docker
-- Docker Compose
+1. **Rank routes** by a blend of ETA and predicted connectivity quality
+2. **Identify weak coverage stretches** (dead zones) before the driver reaches them
+3. **Intelligently defer notifications** so drivers aren't bombarded with messages in areas with poor signal
+4. **Recommend safer routes** that avoid prolonged dead zones when safety mode is enabled
 
-For local non-Docker flow:
-- Node.js 20+ (or compatible with Next.js 15)
-- npm
-- Python 3.12+ recommended
+---
 
-## Quick Start (Recommended)
+## 🧩 The Problem
 
-1. Build real corridor cache (OSRM routes + OpenCellID towers):
+When a vehicle enters a weak-coverage zone:
 
-```bash
-python backend/scripts/build_corridor_dataset.py
+- **Queued notifications flood** the phone the moment signal returns — OTPs expire, messages arrive out of order, maps freeze mid-navigation
+- **Navigation apps don't factor connectivity** — they optimize purely for ETA or distance
+- **Drivers get distracted** by a sudden burst of 15+ notifications at once after exiting a tunnel or dead zone
+- **Safety-critical alerts** (SOS, emergency calls) compete with spam for the same weak signal
+
+There's no system today that **predicts** where connectivity will be weak and **proactively adapts** both the route and the notification behavior.
+
+---
+
+## 💡 How It Works
+
+### Architecture
+
+```
+┌──────────────────────────────────────────────────────┐
+│                   Frontend (Next.js)                 │
+│  ┌─────────┐  ┌───────────┐  ┌────────────────────┐ │
+│  │ Map View│  │  Controls │  │ Notification       │ │
+│  │ Leaflet │  │  Panel    │  │ Timeline           │ │
+│  └─────────┘  └───────────┘  └────────────────────┘ │
+└──────────────────────┬───────────────────────────────┘
+                       │ REST API
+┌──────────────────────▼───────────────────────────────┐
+│                  Backend (FastAPI)                    │
+│  ┌──────────────┐  ┌──────────────┐  ┌────────────┐ │
+│  │ Corridor     │  │ Scoring &    │  │ Notification│ │
+│  │ Builder      │  │ Ranking      │  │ Engine      │ │
+│  │ (OSRM +      │  │ Engine       │  │ (Zone-Aware)│ │
+│  │  OpenCellID) │  │              │  │             │ │
+│  └──────────────┘  └──────────────┘  └────────────┘ │
+└──────────────────────────────────────────────────────┘
 ```
 
-This writes:
-- `data/cache/corridor_routes_scored.json`
-- `data/cache/opencellid_towers.json`
+### Pipeline
 
-The backend container mounts `./data` into `/app/data` as read-only, so cached files are automatically visible to the API.
+1. **Corridor Building** — User enters origin & destination. The system queries [OSRM](http://router.project-osrm.org) for real road routes and [OpenCellID](https://opencellid.org) for cell tower data along each route.
 
-2. Build and run everything:
+2. **Segment Scoring** — Each route is divided into 100m segments. Every segment gets a connectivity score (0–100) based on:
+   - Number of nearby towers within range
+   - Tower radio technology (LTE > UMTS > GSM)
+   - Number of signal samples
+   - Tower range (smaller range = denser, better coverage)
+
+3. **Route Ranking** — Routes are ranked by a weighted formula:
+   ```
+   combined = (eta_weight × eta_score) + (connectivity_weight × connectivity_score) - weak_penalty
+   ```
+   The user controls the ETA vs Connectivity blend via a slider. Safety mode amplifies the weak-zone penalty.
+
+4. **Playback Simulation** — The driver's journey is simulated segment-by-segment. At each segment, the system classifies the zone:
+
+   | Zone | Score | Behavior |
+   |------|-------|----------|
+   | 🟢 Green (Strong) | ≥ 65 | All notifications visible; staggered release |
+   | 🟡 Yellow (Moderate) | 45–65 | Only urgent + semi-urgent visible |
+   | 🔴 Red (Weak) | < 45 | Only urgent notifications visible |
+
+5. **Controlled Release** — When the driver re-enters a green zone, deferred notifications don't dump all at once. They release in a staggered, priority-ordered cascade to avoid overwhelming the driver.
+
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| **Operator-Specific Scoring** | Toggle between Jio, Airtel, or All Networks — each operator has different tower coverage |
+| **Ranking Mode** | "Fastest" (ETA-optimized) or "Most Connected" (coverage-optimized) presets |
+| **ETA vs Connectivity Slider** | Fine-tune the routing tradeoff on a continuous scale |
+| **Safety Mode** | Amplifies weak-zone penalties, makes notification release ultra-conservative |
+| **Zone-Aware Notifications** | Real-time filtering — red zones hide non-urgent, yellow hides low-priority |
+| **Staggered Release** | Deferred notifications release one-by-one in green zones, not all at once |
+| **Weak-Zone Warnings** | Lookahead alerts warn the driver before entering a dead zone |
+| **Mid-Route Auto-Switch** | Automatically re-routes to a better-connected alternative when a dead zone is detected |
+| **Navigation Arrow** | Google Maps-style directional arrow that rotates based on heading |
+| **Color-Coded Segments** | Map polylines are green/yellow/red per segment score |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Python** 3.12+
+- **Node.js** 18+
+- **Docker** (optional, for containerized setup)
+
+### Option 1: Docker Compose (Recommended)
 
 ```bash
+# Clone the repository
+git clone https://github.com/your-org/NODE-ZERO-MAHE-HACKATHON-FINALE.git
+cd NODE-ZERO-MAHE-HACKATHON-FINALE
+
+# Create .env file in the project root
+echo "OPENCELLID_API_KEY=your_api_key_here" > .env
+
+# Build and start both services
 docker compose up --build
 ```
 
-3. Open apps:
-- Frontend: `http://localhost:3001` (default compose mapping)
-- Backend docs: `http://localhost:8000/docs`
+| Service  | URL |
+|----------|-----|
+| Frontend | http://localhost:3001 |
+| Backend API | http://localhost:8000 |
+| API Docs (Swagger) | http://localhost:8000/docs |
 
-If port `3001` is also busy, choose another host port:
-
+To stop:
 ```bash
-FRONTEND_PORT=3010 docker compose up --build
+docker compose down
 ```
 
-4. Demo flow:
-- Choose operator (`Jio` or `Airtel`)
-- Choose mode (`Fastest` or `Most Connected`)
-- Move ETA vs Connectivity slider
-- Toggle Safety Mode
-- Click `Play: Continue` or `Play: Switch Route`
+### Option 2: Local Development (Without Docker)
 
-## Local Development (Without Docker)
-
-### 1) Backend
+#### Backend
 
 ```bash
 cd backend
+
+# Create and activate virtual environment
 python -m venv .venv
+
+# Windows
+.venv\Scripts\activate
+# macOS/Linux
 source .venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+# Create .env file
+echo "OPENCELLID_API_KEY=your_api_key_here" > .env
+
+# Start the server
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-### 2) Frontend
-
-In a new terminal:
+#### Frontend
 
 ```bash
 cd frontend
+
+# Install dependencies
 npm install
-NEXT_PUBLIC_API_BASE=http://localhost:8000/api npm run dev
+
+# Start the dev server
+npm run dev
 ```
 
-Then open `http://localhost:3000`.
+| Service  | URL |
+|----------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:8000 |
+| API Docs (Swagger) | http://localhost:8000/docs |
 
-## API Endpoints
+---
 
-Base URL: `http://localhost:8000/api`
+## 📁 Project Structure
 
-### Health
-- `GET /health`
-
-### Data Source Status
-- `GET /data-source`
-- Returns whether backend is using cached OSRM+OpenCellID data or fallback synthetic templates.
-- If this shows `fallback`, ensure cache files exist in `data/cache/` and restart Compose so the mount is active.
-
-### Rank Routes
-- `POST /routes`
-
-Request body:
-
-```json
-{
-  "operator": "jio",
-  "mode": "fastest",
-  "eta_connectivity_blend": 0.5,
-  "safety_mode": false
-}
+```
+NODE-ZERO-MAHE-HACKATHON-FINALE/
+├── backend/
+│   ├── app/
+│   │   ├── api/routes.py            # REST endpoints (routes, playback, corridor jobs)
+│   │   ├── core/
+│   │   │   ├── config.py            # Scoring thresholds, mode weights
+│   │   │   ├── models.py            # Pydantic models for all API types
+│   │   │   ├── notification_engine.py  # Zone-aware notification state machine
+│   │   │   └── scoring.py           # Route ranking & segment scoring
+│   │   ├── data/
+│   │   │   └── demo_routes.py       # Route template loader from cached corridors
+│   │   └── services/
+│   │       └── corridor_jobs.py     # OSRM + OpenCellID corridor builder
+│   ├── data/cache/                  # Cached corridor data & job results
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── app/page.tsx             # Main application page & playback loop
+│   │   ├── components/
+│   │   │   ├── control-panel.tsx    # Demo controls (operator, mode, slider, safety)
+│   │   │   ├── map-view.tsx         # Leaflet map with colored segments & nav arrow
+│   │   │   └── timeline.tsx         # Notification timeline with zone indicator
+│   │   ├── lib/api.ts               # API client functions
+│   │   └── types/api.ts             # TypeScript type definitions
+│   └── Dockerfile
+├── data/cache/corridor_csv/         # Pre-cached OpenCellID tower CSVs
+├── docker-compose.yml
+├── SPEC.md                          # Full technical specification
+└── README.md                        # ← You are here
 ```
 
-### Simulate Playback
-- `POST /playback`
+---
 
-Request body:
+## 🎮 Demo Flow
 
-```json
-{
-  "operator": "jio",
-  "route_id": "fast_corridor",
-  "mode": "fastest",
-  "eta_connectivity_blend": 0.5,
-  "safety_mode": false,
-  "decision_at_warning": "continue"
-}
-```
+1. **Enter corridor**: Type origin (e.g., "Koramangala") and destination (e.g., "Whitefield")
+2. **Build Corridor**: Click to fetch routes and tower data
+3. **Compare routes**: Route A (faster, has weak zone) vs Route B (slower, better coverage)
+4. **Toggle modes**: Switch between Fastest ↔ Most Connected to see BEST badge move
+5. **Adjust slider**: Drag ETA vs Connectivity to fine-tune the tradeoff
+6. **Start playback**: Click Analyze to simulate driving the selected route
+7. **Watch notifications**: Observe zone-aware filtering (green → yellow → red → green)
+8. **Enable Safety Mode**: Re-run playback to see conservative notification behavior
 
-`decision_at_warning` accepts:
-- `continue`
-- `switch`
+---
 
-## Determinism and Demo Reliability
+## 🔧 Environment Variables
 
-- Route alternatives and per-segment scores are loaded from cached dataset when available (`data/cache/corridor_routes_scored.json`).
-- If cache is missing, backend falls back to synthetic demo templates.
-- Connectivity warning/release behavior remains deterministic and rule-based.
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `OPENCELLID_API_KEY` | Yes | — | API key from [OpenCellID](https://opencellid.org) |
+| `COVERAGE_MAP` | No | `""` | Optional static coverage map path |
+| `COVERAGE_PROVIDER` | No | `auto` | Coverage data source |
+| `FRONTEND_PORT` | No | `3001` | Frontend port in Docker mode |
 
-## Current Limitations
+---
 
-- No live network measurements from user devices.
-- No real-time operator congestion/load prediction.
-- OpenCellID API coverage can vary by tile and account quotas.
-- Operator mapping is config-driven and currently seeded for Jio/Airtel target MNC sets.
+## 📊 API Endpoints
 
-## Useful Files
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/corridor-jobs` | Create a new corridor analysis job |
+| `GET` | `/api/corridor-jobs/{id}` | Poll job status |
+| `GET` | `/api/data-source` | Get data source metadata |
+| `POST` | `/api/routes` | Get ranked routes for a corridor |
+| `POST` | `/api/playback` | Simulate driving with notifications |
 
-- `backend/app/api/routes.py`
-- `backend/app/core/scoring.py`
-- `backend/app/core/notification_engine.py`
-- `backend/app/data/demo_routes.py`
-- `backend/scripts/build_corridor_dataset.py`
-- `frontend/src/app/page.tsx`
-- `frontend/src/components/map-view.tsx`
-- `data/cache/corridor_routes_scored.json`
-- `data/cache/opencellid_towers.json`
+Full interactive docs available at `/docs` (Swagger UI) when the backend is running.
 
-## Notes
+---
 
-- If local Python package install fails due to system Python restrictions, use Docker (recommended).
-- Frontend dependencies may show advisory warnings from upstream packages; demo flow remains functional.
+## 🛡️ Honest Framing
+
+This system uses **estimated coverage** from cell tower infrastructure data, not live signal measurements. We use the following language intentionally:
+
+- ✅ "carrier-specific coverage estimation"
+- ✅ "predicted connectivity continuity"
+- ✅ "estimated high-coverage segments"
+- ❌ ~~"live signal map"~~
+- ❌ ~~"real-time network quality"~~
+- ❌ ~~"guaranteed network availability"~~
+
+---
+
+## 👥 Team
+
+**Node Zero** — Built for the MAHE Hackathon Finale 2026
+
+---
+
+## 📄 License
+
+This project was built as a hackathon prototype. All rights reserved.

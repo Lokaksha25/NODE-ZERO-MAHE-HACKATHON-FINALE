@@ -336,7 +336,7 @@ def get_demo_routes(corridor_id: str | None = None) -> list[RouteTemplate]:
     cached = _load_cached_routes(corridor_id=corridor_id)
     if cached:
         return cached
-    return _fallback_routes()
+    return []
 
 
 def get_data_source_status(
@@ -344,13 +344,12 @@ def get_data_source_status(
 ) -> dict[str, int | str | bool | None]:
     payload = _read_cache_payload(corridor_id=corridor_id)
     if not payload:
-        fallback = _fallback_routes()
         return {
-            "source_mode": "fallback",
-            "source_name": "synthetic-demo",
-            "corridor": "bengaluru-mysuru-fallback",
+            "source_mode": "no_data",
+            "source_name": "none",
+            "corridor": None,
             "cache_exists": False,
-            "route_count": len(fallback),
+            "route_count": 0,
             "tower_count": 0,
             "generated_at": 0,
         }

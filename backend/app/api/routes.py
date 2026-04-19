@@ -19,6 +19,7 @@ from app.core.notification_engine import (
     build_seed_queue,
     evaluate_queue_at_segment,
     snapshot_pending,
+    snapshot_visible,
 )
 from app.core.scoring import rank_routes
 from app.data.demo_routes import get_data_source_status, get_demo_routes
@@ -68,6 +69,17 @@ def get_ranked_routes(payload: RouteRequest) -> RoutesResponse:
         safety_mode=payload.safety_mode,
     )
 
+    if not ranked:
+        return RoutesResponse(
+            selected_operator=payload.operator,
+            mode=payload.mode,
+            safety_mode=payload.safety_mode,
+            eta_connectivity_blend=payload.eta_connectivity_blend,
+            corridor_id=payload.corridor_id,
+            recommended_route_id="",
+            routes=[],
+        )
+
     recommended = next(
         (route.route_id for route in ranked if route.is_recommended), ranked[0].route_id
     )
@@ -105,29 +117,33 @@ def simulate_playback(payload: PlaybackRequest) -> PlaybackResponse:
 
     warning = _build_warning(selected, better, payload.mode)
 
-    active_route = selected
-    switched = False
-
-    if (
+    # Determine if we should do a mid-route switch
+    should_switch = (
         warning
         and payload.decision_at_warning == "switch"
         and better.route_id != selected.route_id
-    ):
-        active_route = better
-        switched = True
+    )
+    switch_at_segment = warning.at_segment_index if should_switch and warning else -1
 
     queue = build_seed_queue()
     steps: list[PlaybackStep] = []
     delivered = []
     consecutive_strong_meters = 0
 
-    for segment in active_route.segments:
+    # Phase 1: Drive on the SELECTED route (up to switch point, or all the way)
+    selected_segments = selected.segments
+    phase1_end = switch_at_segment if should_switch else len(selected_segments)
+
+    for segment in selected_segments[:phase1_end]:
         if segment.classification == "strong":
             consecutive_strong_meters += SEGMENT_LENGTH_METERS
         else:
             consecutive_strong_meters = 0
 
-        at_destination = segment.index == len(active_route.segments) - 1
+        at_destination = (
+            not should_switch
+            and segment.index == len(selected_segments) - 1
+        )
 
         events = evaluate_queue_at_segment(
             queue=queue,
@@ -139,28 +155,67 @@ def simulate_playback(payload: PlaybackRequest) -> PlaybackResponse:
         )
         delivered.extend(events)
 
+        # Show warning at the switch segment
         step_warning = (
             warning
-            if warning and segment.index == warning.at_segment_index and not switched
+            if warning and segment.index == warning.at_segment_index
             else None
         )
         steps.append(
             PlaybackStep(
                 segment_index=segment.index,
-                route_id=active_route.route_id,
+                route_id=selected.route_id,
                 segment_score=segment.score,
                 classification=segment.classification,
                 notification_events=events,
+                visible_notifications=snapshot_visible(queue),
                 warning=step_warning,
             )
         )
 
+    # Phase 2: If switching, continue on the BETTER route from the switch point
+    if should_switch:
+        better_segments = better.segments
+        # Start from the equivalent position on the better route
+        start_idx = min(switch_at_segment, len(better_segments) - 1)
+
+        for segment in better_segments[start_idx:]:
+            if segment.classification == "strong":
+                consecutive_strong_meters += SEGMENT_LENGTH_METERS
+            else:
+                consecutive_strong_meters = 0
+
+            at_destination = segment.index == len(better_segments) - 1
+
+            events = evaluate_queue_at_segment(
+                queue=queue,
+                segment_index=segment.index,
+                segment_score=segment.score,
+                consecutive_strong_meters=consecutive_strong_meters,
+                at_destination=at_destination,
+                safety_mode=payload.safety_mode,
+            )
+            delivered.extend(events)
+
+            steps.append(
+                PlaybackStep(
+                    segment_index=segment.index,
+                    route_id=better.route_id,
+                    segment_score=segment.score,
+                    classification=segment.classification,
+                    notification_events=events,
+                    visible_notifications=snapshot_visible(queue),
+                    warning=None,
+                )
+            )
+
+    final_route_id = better.route_id if should_switch else selected.route_id
     pending = snapshot_pending(queue)
 
     return PlaybackResponse(
         initial_route_id=selected.route_id,
-        final_route_id=active_route.route_id,
-        switched_route=switched,
+        final_route_id=final_route_id,
+        switched_route=bool(should_switch),
         steps=steps,
         delivered_notifications=delivered,
         pending_notifications=pending,
