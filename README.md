@@ -17,9 +17,9 @@
 
 ## 🎬 Demo
 
-https://github.com/user-attachments/assets/demo.mp4
+[![Watch Demo](https://img.shields.io/badge/▶_Watch_Demo-Google_Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1ybCmcBCp3pWoaBOzGMpjnkDLkhe9MZXt/view?usp=drivesdk)
 
-> **Note**: If the video doesn't load above, download `demo.mp4` from the repository root or watch it locally.
+> Click the badge above to watch the full demo video on Google Drive.
 
 <details>
 <summary>Can't see the video? Click here</summary>
