@@ -1,9 +1,12 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 
 from app.core.config import SEGMENT_LENGTH_METERS, WARNING_LOOKAHEAD_METERS
 from app.core.models import (
+    CorridorJobRequest,
+    CorridorJobResponse,
+    DataSourceStatus,
     Operator,
     PlaybackRequest,
     PlaybackResponse,
@@ -16,9 +19,11 @@ from app.core.notification_engine import (
     build_seed_queue,
     evaluate_queue_at_segment,
     snapshot_pending,
+    snapshot_visible,
 )
 from app.core.scoring import rank_routes
-from app.data.demo_routes import get_demo_routes
+from app.data.demo_routes import get_data_source_status, get_demo_routes
+from app.services.corridor_jobs import create_corridor_job, get_corridor_job
 
 router = APIRouter(prefix="/api", tags=["connectivity-demo"])
 
@@ -28,9 +33,34 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
+@router.get("/data-source", response_model=DataSourceStatus)
+def data_source_status(
+    corridor_id: str | None = Query(default=None),
+) -> DataSourceStatus:
+    return DataSourceStatus(**get_data_source_status(corridor_id=corridor_id))
+
+
+@router.post("/corridor-jobs", response_model=CorridorJobResponse)
+def create_job(payload: CorridorJobRequest) -> CorridorJobResponse:
+    job = create_corridor_job(
+        payload.source_city,
+        payload.destination_city,
+        force_refresh=payload.force_refresh,
+    )
+    return CorridorJobResponse(**job)
+
+
+@router.get("/corridor-jobs/{job_id}", response_model=CorridorJobResponse)
+def get_job(job_id: str) -> CorridorJobResponse:
+    job = get_corridor_job(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail=f"Unknown job_id: {job_id}")
+    return CorridorJobResponse(**job)
+
+
 @router.post("/routes", response_model=RoutesResponse)
 def get_ranked_routes(payload: RouteRequest) -> RoutesResponse:
-    templates = get_demo_routes()
+    templates = get_demo_routes(corridor_id=payload.corridor_id)
     ranked = rank_routes(
         templates=templates,
         operator=payload.operator,
@@ -39,13 +69,27 @@ def get_ranked_routes(payload: RouteRequest) -> RoutesResponse:
         safety_mode=payload.safety_mode,
     )
 
-    recommended = next((route.route_id for route in ranked if route.is_recommended), ranked[0].route_id)
+    if not ranked:
+        return RoutesResponse(
+            selected_operator=payload.operator,
+            mode=payload.mode,
+            safety_mode=payload.safety_mode,
+            eta_connectivity_blend=payload.eta_connectivity_blend,
+            corridor_id=payload.corridor_id,
+            recommended_route_id="",
+            routes=[],
+        )
+
+    recommended = next(
+        (route.route_id for route in ranked if route.is_recommended), ranked[0].route_id
+    )
 
     return RoutesResponse(
         selected_operator=payload.operator,
         mode=payload.mode,
         safety_mode=payload.safety_mode,
         eta_connectivity_blend=payload.eta_connectivity_blend,
+        corridor_id=payload.corridor_id,
         recommended_route_id=recommended,
         routes=ranked,
     )
@@ -53,7 +97,7 @@ def get_ranked_routes(payload: RouteRequest) -> RoutesResponse:
 
 @router.post("/playback", response_model=PlaybackResponse)
 def simulate_playback(payload: PlaybackRequest) -> PlaybackResponse:
-    templates = get_demo_routes()
+    templates = get_demo_routes(corridor_id=payload.corridor_id)
     ranked_routes = rank_routes(
         templates=templates,
         operator=payload.operator,
@@ -64,32 +108,42 @@ def simulate_playback(payload: PlaybackRequest) -> PlaybackResponse:
     route_map = {route.route_id: route for route in ranked_routes}
 
     if payload.route_id not in route_map:
-        raise HTTPException(status_code=404, detail=f"Unknown route_id: {payload.route_id}")
+        raise HTTPException(
+            status_code=404, detail=f"Unknown route_id: {payload.route_id}"
+        )
 
     selected = route_map[payload.route_id]
     better = ranked_routes[0]
 
     warning = _build_warning(selected, better, payload.mode)
 
-    active_route = selected
-    switched = False
-
-    if warning and payload.decision_at_warning == "switch" and better.route_id != selected.route_id:
-        active_route = better
-        switched = True
+    # Determine if we should do a mid-route switch
+    should_switch = (
+        warning
+        and payload.decision_at_warning == "switch"
+        and better.route_id != selected.route_id
+    )
+    switch_at_segment = warning.at_segment_index if should_switch and warning else -1
 
     queue = build_seed_queue()
     steps: list[PlaybackStep] = []
     delivered = []
     consecutive_strong_meters = 0
 
-    for segment in active_route.segments:
+    # Phase 1: Drive on the SELECTED route (up to switch point, or all the way)
+    selected_segments = selected.segments
+    phase1_end = switch_at_segment if should_switch else len(selected_segments)
+
+    for segment in selected_segments[:phase1_end]:
         if segment.classification == "strong":
             consecutive_strong_meters += SEGMENT_LENGTH_METERS
         else:
             consecutive_strong_meters = 0
 
-        at_destination = segment.index == len(active_route.segments) - 1
+        at_destination = (
+            not should_switch
+            and segment.index == len(selected_segments) - 1
+        )
 
         events = evaluate_queue_at_segment(
             queue=queue,
@@ -101,24 +155,67 @@ def simulate_playback(payload: PlaybackRequest) -> PlaybackResponse:
         )
         delivered.extend(events)
 
-        step_warning = warning if warning and segment.index == warning.at_segment_index and not switched else None
+        # Show warning at the switch segment
+        step_warning = (
+            warning
+            if warning and segment.index == warning.at_segment_index
+            else None
+        )
         steps.append(
             PlaybackStep(
                 segment_index=segment.index,
-                route_id=active_route.route_id,
+                route_id=selected.route_id,
                 segment_score=segment.score,
                 classification=segment.classification,
                 notification_events=events,
+                visible_notifications=snapshot_visible(queue),
                 warning=step_warning,
             )
         )
 
+    # Phase 2: If switching, continue on the BETTER route from the switch point
+    if should_switch:
+        better_segments = better.segments
+        # Start from the equivalent position on the better route
+        start_idx = min(switch_at_segment, len(better_segments) - 1)
+
+        for segment in better_segments[start_idx:]:
+            if segment.classification == "strong":
+                consecutive_strong_meters += SEGMENT_LENGTH_METERS
+            else:
+                consecutive_strong_meters = 0
+
+            at_destination = segment.index == len(better_segments) - 1
+
+            events = evaluate_queue_at_segment(
+                queue=queue,
+                segment_index=segment.index,
+                segment_score=segment.score,
+                consecutive_strong_meters=consecutive_strong_meters,
+                at_destination=at_destination,
+                safety_mode=payload.safety_mode,
+            )
+            delivered.extend(events)
+
+            steps.append(
+                PlaybackStep(
+                    segment_index=segment.index,
+                    route_id=better.route_id,
+                    segment_score=segment.score,
+                    classification=segment.classification,
+                    notification_events=events,
+                    visible_notifications=snapshot_visible(queue),
+                    warning=None,
+                )
+            )
+
+    final_route_id = better.route_id if should_switch else selected.route_id
     pending = snapshot_pending(queue)
 
     return PlaybackResponse(
         initial_route_id=selected.route_id,
-        final_route_id=active_route.route_id,
-        switched_route=switched,
+        final_route_id=final_route_id,
+        switched_route=bool(should_switch),
         steps=steps,
         delivered_notifications=delivered,
         pending_notifications=pending,
@@ -138,11 +235,14 @@ def _build_warning(
         warning_segment_index = 0
     else:
         lookahead_segments = WARNING_LOOKAHEAD_METERS // SEGMENT_LENGTH_METERS
-        warning_segment_index = max(0, first_weak.start_segment_index - lookahead_segments)
+        warning_segment_index = max(
+            0, first_weak.start_segment_index - lookahead_segments
+        )
 
     return WeakZoneWarning(
         at_segment_index=warning_segment_index,
-        distance_to_weak_zone_m=(first_weak.start_segment_index - warning_segment_index) * SEGMENT_LENGTH_METERS,
+        distance_to_weak_zone_m=(first_weak.start_segment_index - warning_segment_index)
+        * SEGMENT_LENGTH_METERS,
         estimated_weak_zone_length_m=first_weak.length_m,
         current_mode=mode,
         better_connected_route_id=best_route.route_id,

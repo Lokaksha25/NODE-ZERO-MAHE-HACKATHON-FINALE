@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import maplibregl, { Map } from "maplibre-gl";
+import * as turf from "@turf/turf";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { useEffect, useMemo } from "react";
+import { CircleMarker, MapContainer, Marker, Pane, Polyline, TileLayer, Tooltip, useMap } from "react-leaflet";
 
 import { Route } from "@/types/api";
 
@@ -11,189 +14,212 @@ const ROUTE_COLORS: Record<string, string> = {
   strong: "#2d965d",
 };
 
-type SegmentClass = "weak" | "moderate" | "strong";
-
 interface MapViewProps {
   routes: Route[];
   selectedRouteId: string;
   playbackSegmentIndex: number;
+  startLabel: string;
+  endLabel: string;
+  theme: "light" | "dark";
 }
 
-function scoreToColor(classification: SegmentClass): string {
+function classifyColor(classification: "weak" | "moderate" | "strong") {
   return ROUTE_COLORS[classification] ?? "#7d8aa6";
 }
 
-function toLineFeatures(route: Route) {
-  return route.segments.map((segment) => ({
-    type: "Feature",
-    properties: {
-      routeId: route.route_id,
-      segmentIndex: segment.index,
-      classification: segment.classification,
-      color: scoreToColor(segment.classification),
-      highlighted: route.route_id,
-    },
-    geometry: {
-      type: "LineString",
-      coordinates: [
-        [segment.start.lon, segment.start.lat],
-        [segment.end.lon, segment.end.lat],
-      ],
-    },
-  }));
+function NavigationArrowIcon(heading: number) {
+  // Google Maps-style navigation arrow (blue teardrop pointing in direction of travel)
+  return L.divIcon({
+    className: "",
+    html: `<div style="
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      transform: rotate(${heading}deg);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    ">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="18" cy="18" r="16" fill="#4285F4" fill-opacity="0.15" stroke="#4285F4" stroke-width="1.5" stroke-opacity="0.3"/>
+        <path d="M18 6 L26 26 L18 21 L10 26 Z" fill="#4285F4" stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round"/>
+      </svg>
+    </div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 18],
+  });
+}
+
+function computeHeading(startLon: number, startLat: number, endLon: number, endLat: number): number {
+  const dLon = ((endLon - startLon) * Math.PI) / 180;
+  const lat1 = (startLat * Math.PI) / 180;
+  const lat2 = (endLat * Math.PI) / 180;
+  const y = Math.sin(dLon) * Math.cos(lat2);
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+  const bearing = (Math.atan2(y, x) * 180) / Math.PI;
+  return (bearing + 360) % 360;
+}
+
+function MapViewport({ selectedRoute }: { selectedRoute: Route | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!selectedRoute || selectedRoute.geometry.length < 2) {
+      return;
+    }
+
+    const bounds = L.latLngBounds(
+      selectedRoute.geometry.map((coord) => [coord.lat, coord.lon] as [number, number]),
+    );
+    map.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
+  }, [map, selectedRoute]);
+
+  return null;
 }
 
 export function MapView({
   routes,
   selectedRouteId,
   playbackSegmentIndex,
+  startLabel,
+  endLabel,
+  theme,
 }: MapViewProps) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const mapRef = useRef<Map | null>(null);
+  const selectedRoute = useMemo(
+    () => routes.find((route) => route.route_id === selectedRouteId) ?? routes[0] ?? null,
+    [routes, selectedRouteId],
+  );
 
-  useEffect(() => {
-    if (!containerRef.current || mapRef.current) {
-      return;
+  const activeSegment = useMemo(() => {
+    if (!selectedRoute) {
+      return null;
+    }
+    return selectedRoute.segments.find((segment) => segment.index === playbackSegmentIndex) ?? null;
+  }, [selectedRoute, playbackSegmentIndex]);
+
+  const distanceFromOriginKm = useMemo(() => {
+    if (!selectedRoute || !activeSegment) {
+      return null;
     }
 
-    const map = new maplibregl.Map({
-      container: containerRef.current,
-      style: {
-        version: 8,
-        sources: {
-          osm: {
-            type: "raster",
-            tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
-            tileSize: 256,
-            attribution: "© OpenStreetMap contributors",
-          },
-        },
-        layers: [
-          {
-            id: "osm",
-            type: "raster",
-            source: "osm",
-          },
-        ],
-      },
-      center: [77.2, 12.7],
-      zoom: 8,
-    });
+    const origin = selectedRoute.geometry[0];
+    const current = { lon: activeSegment.end.lon, lat: activeSegment.end.lat };
 
-    map.addControl(new maplibregl.NavigationControl({ visualizePitch: true }), "top-right");
+    return turf.distance(
+      turf.point([origin.lon, origin.lat]),
+      turf.point([current.lon, current.lat]),
+      { units: "kilometers" },
+    );
+  }, [selectedRoute, activeSegment]);
 
-    map.on("load", () => {
-      map.addSource("routes", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [],
-        },
-      });
+  const heading = useMemo(() => {
+    if (!activeSegment) return 0;
+    return computeHeading(
+      activeSegment.start.lon, activeSegment.start.lat,
+      activeSegment.end.lon, activeSegment.end.lat,
+    );
+  }, [activeSegment]);
 
-      map.addLayer({
-        id: "route-lines",
-        type: "line",
-        source: "routes",
-        paint: {
-          "line-color": ["get", "color"],
-          "line-width": [
-            "case",
-            ["==", ["get", "routeId"], selectedRouteId],
-            6,
-            4,
-          ],
-          "line-opacity": [
-            "case",
-            ["==", ["get", "routeId"], selectedRouteId],
-            0.95,
-            0.35,
-          ],
-        },
-      });
+  const playbackIcon = useMemo(() => NavigationArrowIcon(heading), [heading]);
 
-      map.addSource("playback", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [],
-        },
-      });
 
-      map.addLayer({
-        id: "playback-point",
-        type: "circle",
-        source: "playback",
-        paint: {
-          "circle-radius": 8,
-          "circle-color": "#ff8a3d",
-          "circle-stroke-color": "#ffffff",
-          "circle-stroke-width": 2,
-        },
-      });
-    });
+  return (
+    <div className="absolute inset-0 z-0 overflow-hidden">
+      <MapContainer
+        center={[12.7, 77.2]}
+        zoom={8}
+        scrollWheelZoom={false}
+        className="h-full w-full"
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url={
+            theme === "light"
+              ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+              : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          }
+        />
 
-    mapRef.current = map;
+        <Pane name="routes" style={{ zIndex: 400 }}>
+          {/* Non-selected routes first (behind) */}
+          {routes
+            .filter((route) => route.route_id !== selectedRouteId)
+            .map((route) =>
+              route.segments.map((segment) => (
+                <Polyline
+                  key={`${route.route_id}-${segment.index}`}
+                  positions={[
+                    [segment.start.lat, segment.start.lon],
+                    [segment.end.lat, segment.end.lon],
+                  ]}
+                  pathOptions={{
+                    color: "#9ca3af",
+                    weight: 3,
+                    opacity: 0.35,
+                    lineCap: "round",
+                    dashArray: "6 4",
+                  }}
+                />
+              )),
+            )}
+          {/* Selected route on top */}
+          {routes
+            .filter((route) => route.route_id === selectedRouteId)
+            .map((route) =>
+              route.segments.map((segment) => (
+                <Polyline
+                  key={`${route.route_id}-${segment.index}`}
+                  positions={[
+                    [segment.start.lat, segment.start.lon],
+                    [segment.end.lat, segment.end.lon],
+                  ]}
+                  pathOptions={{
+                    color: classifyColor(segment.classification),
+                    weight: 6,
+                    opacity: 0.96,
+                    lineCap: "round",
+                  }}
+                />
+              )),
+            )}
+        </Pane>
 
-    return () => {
-      map.remove();
-      mapRef.current = null;
-    };
-  }, [selectedRouteId]);
+        <Pane name="endpoints" style={{ zIndex: 500 }}>
+          {selectedRoute && selectedRoute.geometry.length > 1 ? (
+            <>
+              <CircleMarker
+                center={[selectedRoute.geometry[0].lat, selectedRoute.geometry[0].lon]}
+                radius={8}
+                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#6ba6d8", fillOpacity: 1 }}
+              >
+                <Tooltip direction="top" offset={[0, -6]} permanent>
+                  {startLabel}
+                </Tooltip>
+              </CircleMarker>
+              <CircleMarker
+                center={[
+                  selectedRoute.geometry[selectedRoute.geometry.length - 1].lat,
+                  selectedRoute.geometry[selectedRoute.geometry.length - 1].lon,
+                ]}
+                radius={8}
+                pathOptions={{ color: "#ffffff", weight: 2, fillColor: "#111111", fillOpacity: 1 }}
+              >
+                <Tooltip direction="top" offset={[0, -6]} permanent>
+                  {endLabel}
+                </Tooltip>
+              </CircleMarker>
+            </>
+          ) : null}
 
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !map.getSource("routes")) {
-      return;
-    }
+          {activeSegment ? (
+            <Marker position={[activeSegment.end.lat, activeSegment.end.lon]} icon={playbackIcon}>
+              <Tooltip direction="top" offset={[0, -8]}>
+                Segment {activeSegment.index}
+                {distanceFromOriginKm ? ` • ${distanceFromOriginKm.toFixed(1)} km from start` : ""}
+              </Tooltip>
+            </Marker>
+          ) : null}
+        </Pane>
 
-    const features = routes.flatMap(toLineFeatures);
-    const source = map.getSource("routes") as maplibregl.GeoJSONSource;
-    source.setData({
-      type: "FeatureCollection",
-      features,
-    });
-
-    const selectedRoute = routes.find((route) => route.route_id === selectedRouteId) ?? routes[0];
-    if (selectedRoute) {
-      const bounds = new maplibregl.LngLatBounds();
-      selectedRoute.geometry.forEach((point) => bounds.extend([point.lon, point.lat]));
-      if (!bounds.isEmpty()) {
-        map.fitBounds(bounds, { padding: 60, duration: 500, maxZoom: 11.5 });
-      }
-    }
-  }, [routes, selectedRouteId]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map || !map.getSource("playback")) {
-      return;
-    }
-
-    const selectedRoute = routes.find((route) => route.route_id === selectedRouteId);
-    const activeSegment = selectedRoute?.segments.find((segment) => segment.index === playbackSegmentIndex);
-
-    if (!activeSegment) {
-      const source = map.getSource("playback") as maplibregl.GeoJSONSource;
-      source.setData({ type: "FeatureCollection", features: [] });
-      return;
-    }
-
-    const source = map.getSource("playback") as maplibregl.GeoJSONSource;
-    source.setData({
-      type: "FeatureCollection",
-      features: [
-        {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [activeSegment.end.lon, activeSegment.end.lat],
-          },
-          properties: {},
-        },
-      ],
-    });
-  }, [playbackSegmentIndex, routes, selectedRouteId]);
-
-  return <div ref={containerRef} className="h-[56vh] min-h-[420px] w-full rounded-2xl border border-dusk-400/35 shadow-glass" />;
+        <MapViewport selectedRoute={selectedRoute} />
+      </MapContainer>
+    </div>
+  );
 }

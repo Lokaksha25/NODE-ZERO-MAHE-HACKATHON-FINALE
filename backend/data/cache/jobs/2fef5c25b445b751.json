@@ -1,0 +1,14 @@
+{
+  "job_id": "2fef5c25b445b751",
+  "corridor_id": "8dd0044e2b329157",
+  "source_city": "Whitefield",
+  "destination_city": "Koramangala",
+  "status": "ready",
+  "stage": "Cache hit",
+  "progress_pct": 100,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": null,
+  "created_at": 1776563293,
+  "completed_at": 1776563293
+}

@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: node-zero-backend
+    environment:
+      OPENCELLID_API_KEY: ${OPENCELLID_API_KEY}
+      COVERAGE_MAP: ${COVERAGE_MAP}
+      COVERAGE_PROVIDER: ${COVERAGE_PROVIDER:-auto}
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: node-zero-frontend
+    environment:
+      NEXT_PUBLIC_API_BASE: http://localhost:8000/api
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped

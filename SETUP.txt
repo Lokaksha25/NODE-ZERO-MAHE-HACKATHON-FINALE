@@ -1,0 +1,31 @@
+NODE ZERO HACKATHON PROTOTYPE - QUICK START
+
+1) Run with Docker Compose
+   - Command: docker compose up --build
+   - Frontend: http://localhost:3000
+   - Backend API docs: http://localhost:8000/docs
+
+2) Run backend locally (without Docker)
+   - cd backend
+   - python -m venv .venv
+   - source .venv/bin/activate
+   - pip install -r requirements.txt
+   - uvicorn app.main:app --host 0.0.0.0 --port 8000
+
+3) Run frontend locally (without Docker)
+   - cd frontend
+   - npm install
+   - NEXT_PUBLIC_API_BASE=http://localhost:8000/api npm run dev
+
+4) Demo flow
+   - Select operator (Jio/Airtel)
+   - Pick mode (Fastest/Most Connected)
+   - Adjust ETA vs connectivity slider
+   - Toggle Safety Mode
+   - Start playback with:
+     a) Play: Continue
+     b) Play: Switch Route
+
+5) Data files
+   - Sample normalized towers: data/demo/corridor_towers.sample.json
+   - Deterministic route templates: backend/app/data/demo_routes.py

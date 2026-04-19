@@ -1,4 +1,6 @@
 import {
+  CorridorJobResponse,
+  DataSourceStatus,
   PlaybackResponse,
   RankingMode,
   RoutesResponse,
@@ -25,11 +27,44 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+export async function fetchDataSourceStatus(): Promise<DataSourceStatus> {
+  return request<DataSourceStatus>("/data-source", {
+    method: "GET",
+  });
+}
+
+export async function fetchDataSourceStatusByCorridor(
+  corridorId: string,
+): Promise<DataSourceStatus> {
+  const query = new URLSearchParams({ corridor_id: corridorId });
+  return request<DataSourceStatus>(`/data-source?${query.toString()}`, {
+    method: "GET",
+  });
+}
+
+export async function createCorridorJob(payload: {
+  source_city: string;
+  destination_city: string;
+  force_refresh?: boolean;
+}): Promise<CorridorJobResponse> {
+  return request<CorridorJobResponse>("/corridor-jobs", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function fetchCorridorJob(jobId: string): Promise<CorridorJobResponse> {
+  return request<CorridorJobResponse>(`/corridor-jobs/${jobId}`, {
+    method: "GET",
+  });
+}
+
 export async function fetchRoutes(payload: {
   operator: Operator;
   mode: RankingMode;
   eta_connectivity_blend: number;
   safety_mode: boolean;
+  corridor_id?: string;
 }): Promise<RoutesResponse> {
   return request<RoutesResponse>("/routes", {
     method: "POST",
@@ -44,6 +79,7 @@ export async function fetchPlayback(payload: {
   eta_connectivity_blend: number;
   safety_mode: boolean;
   decision_at_warning: "continue" | "switch";
+  corridor_id?: string;
 }): Promise<PlaybackResponse> {
   return request<PlaybackResponse>("/playback", {
     method: "POST",

@@ -1,0 +1,24 @@
+
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+.pytest_cache/
+
+# Node / Next
+node_modules/
+.next/
+
+# Local environment and logs
+.env
+.env.*
+*.log
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.zip
