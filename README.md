@@ -15,6 +15,26 @@
 
 ---
 
+## 🎬 Demo
+
+https://github.com/user-attachments/assets/demo.mp4
+
+> **Note**: If the video doesn't load above, download `demo.mp4` from the repository root or watch it locally.
+
+<details>
+<summary>Can't see the video? Click here</summary>
+
+The demo showcases:
+1. Landing page with interactive 3D globe
+2. Corridor building (Koramangala → Whitefield)
+3. Ranking mode toggle (Fastest ↔ Most Connected)
+4. ETA vs Connectivity slider
+5. Playback simulation with zone-aware notifications
+6. Safety mode with mid-route auto-switch
+</details>
+
+---
+
 ## 📋 What Is Reachbl?
 
 Reachbl is a prototype system that makes mobile routing **connectivity-aware**. Instead of just finding the fastest path between two cities, it evaluates **cellular network coverage** along every candidate route — per operator (Jio, Airtel) — and uses that data to:

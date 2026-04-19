@@ -8,7 +8,7 @@ services:
       COVERAGE_MAP: ${COVERAGE_MAP}
       COVERAGE_PROVIDER: ${COVERAGE_PROVIDER:-auto}
     volumes:
-      - ./data:/app/data
+      - ./data/cache/corridor_csv:/app/data/cache/corridor_csv
     ports:
       - "8000:8000"
     restart: unless-stopped

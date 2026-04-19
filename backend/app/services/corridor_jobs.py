@@ -23,8 +23,14 @@ DATA_DIR = ROOT / "data"
 CACHE_DIR = DATA_DIR / "cache"
 CORRIDOR_CACHE_DIR = CACHE_DIR / "corridors"
 CORRIDOR_CACHE_DIR.mkdir(parents=True, exist_ok=True)
-# CSV tower data lives at project root level, not backend level
-CORRIDOR_CSV_DIR = PROJECT_ROOT / "data" / "cache" / "corridor_csv"
+# CSV tower data: try backend/data first (Docker), then project root (local dev)
+_csv_candidate_backend = DATA_DIR / "cache" / "corridor_csv"
+_csv_candidate_project = PROJECT_ROOT / "data" / "cache" / "corridor_csv"
+CORRIDOR_CSV_DIR = (
+    _csv_candidate_backend
+    if _csv_candidate_backend.is_dir()
+    else _csv_candidate_project
+)
 
 JOB_DIR = CACHE_DIR / "jobs"
 JOB_DIR.mkdir(parents=True, exist_ok=True)
