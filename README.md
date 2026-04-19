@@ -17,8 +17,9 @@
 
 ## 🎬 Demo
 
-https://drive.google.com/file/d/1ybCmcBCp3pWoaBOzGMpjnkDLkhe9MZXt/view?usp=drivesdk
-> **Note**: If the video doesn't load above, download `demo.mp4` from the repository root or watch it locally.
+[![Watch Demo](https://img.shields.io/badge/▶_Watch_Demo-Google_Drive-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1ybCmcBCp3pWoaBOzGMpjnkDLkhe9MZXt/view?usp=drivesdk)
+
+> Click the badge above to watch the full demo video on Google Drive.
 
 <details>
 <summary>Can't see the video? Click here</summary>
@@ -31,6 +32,14 @@ The demo showcases:
 5. Playback simulation with zone-aware notifications
 6. Safety mode with mid-route auto-switch
 </details>
+
+### Screenshots
+
+| Fastest Mode (Route A recommended) | Most Connected Mode (Route B recommended) |
+|:---:|:---:|
+| ![Fastest Mode](assets/fastest-mode.png) | ![Most Connected Mode](assets/most-connected-mode.png) |
+
+> **Left**: "Fastest" prioritizes ETA — Route A wins at 25 min despite a 20.7 km weak zone. **Right**: "Most Connected" prioritizes coverage — Route B wins with a connectivity score of 71.78 and only 4.2 km longest weak stretch.
 
 ---
 
