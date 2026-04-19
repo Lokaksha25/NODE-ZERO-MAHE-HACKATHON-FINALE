@@ -269,22 +269,13 @@ Full interactive docs available at `/docs` (Swagger UI) when the backend is runn
 
 ---
 
-## 🛡️ Honest Framing
 
-This system uses **estimated coverage** from cell tower infrastructure data, not live signal measurements. We use the following language intentionally:
-
-- ✅ "carrier-specific coverage estimation"
-- ✅ "predicted connectivity continuity"
-- ✅ "estimated high-coverage segments"
-- ❌ ~~"live signal map"~~
-- ❌ ~~"real-time network quality"~~
-- ❌ ~~"guaranteed network availability"~~
 
 ---
 
 ## 👥 Team
 
-**Reachbl (Node Zero)** — Built for the MAHE Hackathon Finale 2026
+**Node Zero - MMCAI28** — Built for the MAHE Hackathon Finale 2026
 
 ---
 
