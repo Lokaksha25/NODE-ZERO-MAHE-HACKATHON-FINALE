@@ -1,418 +1,508 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useRef, useState } from "react";
 
-import { ControlPanel } from "@/components/control-panel";
-import { Timeline } from "@/components/timeline";
-import {
-  createCorridorJob,
-  fetchCorridorJob,
-  fetchDataSourceStatus,
-  fetchDataSourceStatusByCorridor,
-  fetchPlayback,
-  fetchRoutes,
-} from "@/lib/api";
-import {
-  CorridorJobResponse,
-  DataSourceStatus,
-  Operator,
-  PlaybackResponse,
-  RankingMode,
-  Route,
-  RoutesResponse,
-} from "@/types/api";
+const Globe = dynamic(() => import("@/components/globe").then((m) => m.Globe), {
+  ssr: false,
+  loading: () => <div className="aspect-square w-full animate-pulse rounded-full bg-[var(--border)]" />,
+});
 
-const MapView = dynamic(
-  () => import("@/components/map-view").then((mod) => mod.MapView),
-  { ssr: false },
-);
-
-function formatCorridorName(corridor: string | undefined) {
-  if (!corridor) return "Unknown corridor";
-  return corridor
-    .split("-")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
-export default function Home() {
-  const [sourceCity, setSourceCity] = useState<string>("");
-  const [destinationCity, setDestinationCity] = useState<string>("");
-  const [sourceTouched, setSourceTouched] = useState<boolean>(false);
-  const [destinationTouched, setDestinationTouched] = useState<boolean>(false);
-  const [activeCorridorId, setActiveCorridorId] = useState<string | null>(null);
-  const [job, setJob] = useState<CorridorJobResponse | null>(null);
-  const [buildingCorridor, setBuildingCorridor] = useState<boolean>(false);
-
-  const [operator, setOperator] = useState<Operator>("jio");
-  const [mode, setMode] = useState<RankingMode>("fastest");
-  const [blend, setBlend] = useState<number>(0.15);
-  function handleModeChange(newMode: RankingMode) {
-    setMode(newMode);
-    setBlend(newMode === "fastest" ? 0.15 : 0.85);
-  }
-  const [safetyMode, setSafetyMode] = useState<boolean>(false);
-  const [playbackDecision, setPlaybackDecision] = useState<"continue" | "switch">("continue");
+export default function LandingPage() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  const [routesResponse, setRoutesResponse] = useState<RoutesResponse | null>(null);
-  const [dataSource, setDataSource] = useState<DataSourceStatus | null>(null);
-  const [selectedRouteId, setSelectedRouteId] = useState<string>("");
-  const [loadingRoutes, setLoadingRoutes] = useState<boolean>(false);
-
-  const [playback, setPlayback] = useState<PlaybackResponse | null>(null);
-  const [playbackIndex, setPlaybackIndex] = useState<number>(-1);
-  const [loadingPlayback, setLoadingPlayback] = useState<boolean>(false);
-
-  const [error, setError] = useState<string>("");
-  const lastRankingKeyRef = useRef<string>("");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const stored = window.localStorage.getItem("corridor-theme");
-    if (stored === "light" || stored === "dark") setTheme(stored);
+    setMounted(true);
+    const saved = localStorage.getItem("theme") as "light" | "dark" | null;
+    if (saved) {
+      setTheme(saved);
+      document.documentElement.setAttribute("data-theme", saved);
+    }
   }, []);
 
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    window.localStorage.setItem("corridor-theme", theme);
-  }, [theme]);
-
-  useEffect(() => {
-    if (!activeCorridorId) return;
-    let isMounted = true;
-    const load = fetchDataSourceStatusByCorridor(activeCorridorId);
-
-    load
-      .then((status) => { if (isMounted) setDataSource(status); })
-      .catch(() => { if (isMounted) setDataSource(null); });
-
-    return () => { isMounted = false; };
-  }, [activeCorridorId]);
-
-  useEffect(() => {
-    if (!dataSource?.corridor || sourceTouched || destinationTouched) return;
-    const parts = dataSource.corridor.split("-").map((p) => p.trim()).filter(Boolean);
-    if (parts.length >= 2) {
-      setSourceCity(parts[0].charAt(0).toUpperCase() + parts[0].slice(1));
-      setDestinationCity(parts[parts.length - 1].charAt(0).toUpperCase() + parts[parts.length - 1].slice(1));
-    }
-  }, [dataSource?.corridor, sourceTouched, destinationTouched]);
-
-  useEffect(() => {
-    if (!activeCorridorId) return;
-    let isMounted = true;
-    const rankingKey = `${operator}:${mode}:${blend}:${safetyMode}`;
-    setLoadingRoutes(true);
-    setError("");
-
-    fetchRoutes({ operator, mode, eta_connectivity_blend: blend, safety_mode: safetyMode, corridor_id: activeCorridorId })
-      .then((data) => {
-        if (!isMounted) return;
-        setRoutesResponse(data);
-        const fallback = data.recommended_route_id;
-        const rankingChanged = lastRankingKeyRef.current !== rankingKey;
-        lastRankingKeyRef.current = rankingKey;
-        setSelectedRouteId((current) => {
-          const exists = data.routes.some((r) => r.route_id === current);
-          if (!exists || rankingChanged) return fallback;
-          return current;
-        });
-      })
-      .catch((err) => { if (isMounted) setError(String(err)); })
-      .finally(() => { if (isMounted) setLoadingRoutes(false); });
-
-    return () => { isMounted = false; };
-  }, [operator, mode, blend, safetyMode, activeCorridorId]);
-
-  useEffect(() => {
-    if (!playback || playback.steps.length === 0) return;
-    setPlaybackIndex(0);
-    const timer = window.setInterval(() => {
-      setPlaybackIndex((current) => {
-        if (current >= playback.steps.length - 1) { window.clearInterval(timer); return current; }
-        return current + 1;
-      });
-    }, 300);
-    return () => window.clearInterval(timer);
-  }, [playback]);
-
-  const routes = routesResponse?.routes ?? [];
-  const corridorName = formatCorridorName(dataSource?.corridor);
-  const operatorLabels = dataSource?.operator_labels ?? { jio: "Jio", airtel: "Airtel" };
-  const operatorNote = dataSource?.operator_note ?? undefined;
-
-  const selectedRoute = useMemo<Route | null>(() => {
-    if (!routes.length) return null;
-    return routes.find((r) => r.route_id === selectedRouteId) ?? routes[0];
-  }, [routes, selectedRouteId]);
-
-  const activeStep =
-    playback && playbackIndex >= 0 && playbackIndex < playback.steps.length
-      ? playback.steps[playbackIndex]
-      : null;
-
-  const mapActiveRouteId = activeStep?.route_id ?? selectedRouteId;
-  const playbackSegmentIndex = activeStep?.segment_index ?? -1;
-
-  async function runPlayback(decision: "continue" | "switch") {
-    if (!selectedRoute) return;
-    setLoadingPlayback(true);
-    setError("");
-    try {
-      const response = await fetchPlayback({
-        operator, route_id: selectedRoute.route_id, mode,
-        eta_connectivity_blend: blend, safety_mode: safetyMode,
-        decision_at_warning: decision, corridor_id: activeCorridorId ?? undefined,
-      });
-      setPlayback(response);
-      setPlaybackIndex(-1);
-      if (response.switched_route) setSelectedRouteId(response.final_route_id);
-    } catch (err) {
-      setError(String(err));
-    } finally {
-      setLoadingPlayback(false);
-    }
+  function toggleTheme() {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
   }
 
-  async function pollCorridor(jobId: string) {
-    const timer = window.setInterval(async () => {
-      try {
-        const latest = await fetchCorridorJob(jobId);
-        setJob(latest);
-        if (latest.status === "failed") {
-          window.clearInterval(timer);
-          setBuildingCorridor(false);
-          setError(latest.error ?? "Corridor task failed.");
-          return;
-        }
-        if (latest.status === "ready" || latest.status === "ready_degraded") {
-          window.clearInterval(timer);
-          setBuildingCorridor(false);
-          setActiveCorridorId(latest.corridor_id);
-        }
-      } catch (pollError) {
-        window.clearInterval(timer);
-        setBuildingCorridor(false);
-        setError(String(pollError));
-      }
-    }, 2000);
-  }
-
-  async function onBuildCorridor(forceRefresh: boolean) {
-    if (!sourceCity.trim() || !destinationCity.trim()) {
-      setError("Please enter both source and destination cities.");
-      return;
-    }
-    setError("");
-    setBuildingCorridor(true);
-    try {
-      const created = await createCorridorJob({
-        source_city: sourceCity.trim(),
-        destination_city: destinationCity.trim(),
-        force_refresh: forceRefresh,
-      });
-      setJob(created);
-      if (created.status === "ready" || created.status === "ready_degraded") {
-        setActiveCorridorId(created.corridor_id);
-        setBuildingCorridor(false);
-        return;
-      }
-      await pollCorridor(created.job_id);
-    } catch (buildError) {
-      setBuildingCorridor(false);
-      setError(String(buildError));
-    }
-  }
-
-  const sourceLabel = job?.source_label ?? sourceCity;
-  const destinationLabel = job?.destination_label ?? destinationCity;
+  const isDark = theme === "dark";
 
   return (
-    <div className="flex h-[100dvh] w-screen flex-col overflow-hidden bg-[var(--surface)] text-[var(--text-primary)]">
-
-      {/* ── Top Bar ─────────────────────────────────────── */}
-      <header className="pointer-events-auto z-20 flex shrink-0 items-center gap-3 border-b border-[var(--border)] bg-[var(--card)] px-4 py-2.5 shadow-sm backdrop-blur-md">
-
-        {/* Origin → Destination */}
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          <div className="flex min-w-0 flex-1 flex-col">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">Origin</span>
-            <input
-              value={sourceCity}
-              onChange={(e) => { setSourceTouched(true); setSourceCity(e.target.value); }}
-              className="w-full truncate bg-transparent text-lg font-extrabold leading-tight tracking-tight outline-none"
-              placeholder="Source city"
-            />
+    <div className="landing-root" data-theme={theme}>
+      {/* ─── Nav ─── */}
+      <nav className="landing-nav">
+        <div className="landing-nav-inner">
+          <div className="landing-logo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <circle cx="14" cy="14" r="13" stroke={isDark ? "#fff" : "#111"} strokeWidth="2" />
+              <circle cx="14" cy="14" r="4" fill={isDark ? "#fff" : "#111"} />
+              <path d="M14 1v26M1 14h26" stroke={isDark ? "#fff" : "#111"} strokeWidth="1" opacity="0.3" />
+              <ellipse cx="14" cy="14" rx="8" ry="13" stroke={isDark ? "#fff" : "#111"} strokeWidth="1" opacity="0.3" />
+            </svg>
+            <span className="landing-logo-text">Reachbl</span>
           </div>
 
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card-elevated)] text-sm font-bold text-[var(--text-muted)]">
-            →
+          <div className="landing-nav-links">
+            <a href="#features" className="landing-link">Features</a>
+            <a href="#how-it-works" className="landing-link">How it works</a>
+
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              className={`theme-toggle ${isDark ? "is-dark" : ""}`}
+              aria-label="Toggle theme"
+            >
+              <div className="theme-toggle-knob" />
+            </button>
           </div>
-
-          <div className="flex min-w-0 flex-1 flex-col">
-            <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)]">Destination</span>
-            <input
-              value={destinationCity}
-              onChange={(e) => { setDestinationTouched(true); setDestinationCity(e.target.value); }}
-              className="w-full truncate bg-transparent text-lg font-extrabold leading-tight tracking-tight outline-none"
-              placeholder="Destination city"
-            />
-          </div>
         </div>
+      </nav>
 
-        {/* Corridor actions */}
-        <div className="flex shrink-0 items-center gap-2">
-          <button
-            type="button"
-            disabled={buildingCorridor}
-            onClick={() => onBuildCorridor(false)}
-            className="rounded-lg border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-1.5 text-xs font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {buildingCorridor ? "Building…" : "Build Corridor"}
-          </button>
-          <button
-            type="button"
-            disabled={buildingCorridor}
-            onClick={() => onBuildCorridor(true)}
-            className="rounded-lg border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-1.5 text-xs font-semibold shadow-sm transition hover:border-[var(--text-muted)] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {buildingCorridor ? "Refreshing…" : "Refresh Data"}
-          </button>
-          {dataSource ? (
-            <span className="hidden rounded-lg border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-1.5 text-[11px] text-[var(--text-muted)] xl:inline-flex">
-              {corridorName} · {dataSource.source_mode === "cached" ? "Cached OSRM+OpenCellID" : "Fallback Synthetic"}
-            </span>
-          ) : null}
-        </div>
-
-        {/* Theme toggle */}
-        <div className="flex shrink-0 items-center gap-2">
-          <span className="text-xs font-medium text-[var(--text-muted)]">{theme === "light" ? "Light" : "Dark"}</span>
-          <button
-            type="button"
-            onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-            className={`theme-toggle ${theme === "dark" ? "is-dark" : ""}`}
-            aria-label="Toggle theme"
-            aria-pressed={theme === "dark"}
-          >
-            <span className="theme-toggle-knob" />
-          </button>
-        </div>
-
-        {/* Analyze */}
-        <button
-          type="button"
-          disabled={loadingRoutes || loadingPlayback || !selectedRoute}
-          onClick={() => runPlayback(playbackDecision)}
-          className="shrink-0 rounded-lg bg-black px-4 py-2 text-xs font-extrabold uppercase tracking-widest text-white shadow transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-white dark:text-black"
-        >
-          {loadingPlayback ? "…" : "Analyze"}
-        </button>
-      </header>
-
-      {/* ── Status toasts ────────────────────────────────── */}
-      {(job || error) ? (
-        <div className="pointer-events-auto z-20 flex shrink-0 items-center gap-2 border-b border-[var(--border)] bg-[var(--card)] px-4 py-1.5">
-          {job ? (
-            <span className="text-[11px] text-[var(--text-muted)]">
-              Job {job.job_id} · {job.stage} · {job.progress_pct}% · {job.status}
-              {job.degraded && job.degraded_reason ? ` · ${job.degraded_reason}` : ""}
-            </span>
-          ) : null}
-          {error ? (
-            <span className="rounded-md border border-red-500/60 bg-red-500/10 px-2 py-0.5 text-[11px] text-red-600 dark:text-red-300">
-              {error}
-            </span>
-          ) : null}
-        </div>
-      ) : null}
-
-      {/* ── Main body: map + panels ──────────────────────── */}
-      <div className="relative flex min-h-0 flex-1">
-
-        {/* Full-bleed map layer */}
-        <div className="absolute inset-0 z-0">
-          <MapView
-            routes={routes}
-            selectedRouteId={mapActiveRouteId}
-            playbackSegmentIndex={playbackSegmentIndex}
-            startLabel={sourceLabel}
-            endLabel={destinationLabel}
-            theme={theme}
-          />
-        </div>
-
-        {/* Left sidebar */}
-        <div className="pointer-events-auto relative z-10 flex shrink-0 flex-col gap-3 overflow-y-auto p-3" style={{ width: 296 }}>
-          <ControlPanel
-            operator={operator}
-            operatorLabels={operatorLabels}
-            operatorNote={operatorNote}
-            mode={mode}
-            blend={blend}
-            safetyMode={safetyMode}
-            playbackDecision={playbackDecision}
-            routes={routes}
-            selectedRouteId={selectedRouteId}
-            loading={loadingRoutes || loadingPlayback}
-            onOperatorChange={setOperator}
-            onModeChange={handleModeChange}
-            onBlendChange={setBlend}
-            onSafetyModeChange={setSafetyMode}
-            onPlaybackDecisionChange={setPlaybackDecision}
-            onSelectRoute={setSelectedRouteId}
-            theme={theme}
-          />
-        </div>
-
-        {/* Right info column */}
-        <div className="pointer-events-none relative z-10 ml-auto flex w-[320px] shrink-0 flex-col gap-3 p-3">
-
-          {/* Route Insight card */}
-          <div className="pointer-events-auto floating-card rounded-2xl p-4">
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">Selected Route Insight</p>
-            {selectedRoute ? (
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { label: "ETA", value: `${selectedRoute.eta_minutes} min` },
-                  { label: "Distance", value: `${selectedRoute.distance_km} km` },
-                  { label: "Connectivity", value: String(selectedRoute.connectivity_score) },
-                  { label: "Longest Weak", value: `${selectedRoute.longest_weak_stretch_m} m` },
-                ].map(({ label, value }) => (
-                  <div key={label} className="rounded-xl border border-[var(--border)] bg-[var(--card-elevated)] px-3 py-2">
-                    <p className="text-[10px] uppercase tracking-wide text-[var(--text-muted)]">{label}</p>
-                    <p className="text-xl font-bold leading-tight">{value}</p>
-                  </div>
-                ))}
-              </div>
-            ) : activeCorridorId && !loadingRoutes ? (
-              <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-3 py-3 text-center">
-                <p className="text-sm font-semibold text-red-600 dark:text-red-300">No route data found</p>
-                <p className="mt-1 text-[11px] text-[var(--text-muted)]">
-                  No connectivity data is available for this corridor. Try a different origin or destination.
-                </p>
-              </div>
-            ) : activeCorridorId && loadingRoutes ? (
-              <p className="text-xs text-[var(--text-muted)]">Loading route intelligence…</p>
-            ) : (
-              <p className="text-xs text-[var(--text-muted)]">Enter origin and destination, then click Build Corridor.</p>
-            )}
-          </div>
-
-          {/* Timeline (always visible — shows prompt before playback, results after) */}
-          {(routes.length > 0 || playback) ? (
-            <div className="pointer-events-auto max-h-[min(38vh,340px)] overflow-auto rounded-2xl">
-              <Timeline playback={playback} activeStep={activeStep} />
+      {/* ─── Hero ─── */}
+      <section className="landing-hero">
+        <div className="landing-hero-content">
+          <div className="landing-hero-left animate-rise">
+            <div className="landing-badge">
+              <span className="landing-badge-dot" />
+              Connectivity-Aware Routing
             </div>
-          ) : null}
+
+            <h1 className="landing-title">
+              Reachbl
+            </h1>
+
+            <p className="landing-subtitle">
+              Routes that understand your signal. We predict connectivity dead zones before
+              you reach them — and intelligently defer notifications so you stay focused on
+              the road.
+            </p>
+
+            <div className="landing-cta-row">
+              <Link href="/dashboard" className="landing-btn-primary">
+                Get Started
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ marginLeft: 8 }}>
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+              <a href="#how-it-works" className="landing-btn-secondary">
+                Learn More
+              </a>
+            </div>
+
+            <div className="landing-stats">
+              <div className="landing-stat">
+                <span className="landing-stat-value">100m</span>
+                <span className="landing-stat-label">Segment Resolution</span>
+              </div>
+              <div className="landing-stat-divider" />
+              <div className="landing-stat">
+                <span className="landing-stat-value">2</span>
+                <span className="landing-stat-label">Operators Supported</span>
+              </div>
+              <div className="landing-stat-divider" />
+              <div className="landing-stat">
+                <span className="landing-stat-value">3</span>
+                <span className="landing-stat-label">Zone Classifications</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="landing-hero-right">
+            {mounted && <Globe className="landing-globe" dark={isDark} />}
+          </div>
         </div>
-      </div>
+      </section>
+
+      {/* ─── Features ─── */}
+      <section id="features" className="landing-section">
+        <h2 className="landing-section-title">Built for the road ahead</h2>
+        <div className="landing-features-grid">
+          {[
+            {
+              icon: "📡",
+              title: "Operator-Specific Scoring",
+              desc: "Per-carrier connectivity analysis using real cell tower infrastructure data from OpenCellID.",
+            },
+            {
+              icon: "🛡️",
+              title: "Safety Mode",
+              desc: "Amplifies weak-zone penalties and enforces conservative notification timing to keep drivers focused.",
+            },
+            {
+              icon: "🔔",
+              title: "Geo-Deferred Notifications",
+              desc: "Non-urgent alerts are held until strong coverage — then released in a controlled, staggered cascade.",
+            },
+            {
+              icon: "⚡",
+              title: "Real-Time Zone Classification",
+              desc: "Every 100m segment is classified as Green, Yellow, or Red based on predicted connectivity.",
+            },
+            {
+              icon: "🔄",
+              title: "Mid-Route Auto-Switch",
+              desc: "Automatically re-routes to a better-connected alternative when a dead zone is detected ahead.",
+            },
+            {
+              icon: "📊",
+              title: "ETA vs Coverage Tradeoff",
+              desc: "A continuous slider lets users balance speed against signal quality for their specific needs.",
+            },
+          ].map((f) => (
+            <div key={f.title} className="landing-feature-card">
+              <span className="landing-feature-icon">{f.icon}</span>
+              <h3 className="landing-feature-title">{f.title}</h3>
+              <p className="landing-feature-desc">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── How It Works ─── */}
+      <section id="how-it-works" className="landing-section">
+        <h2 className="landing-section-title">How it works</h2>
+        <div className="landing-steps">
+          {[
+            { step: "01", title: "Build a Corridor", desc: "Enter origin and destination. We fetch real road routes and overlay cell tower data." },
+            { step: "02", title: "Score Every Segment", desc: "Each 100m stretch is scored by tower density, radio technology, and signal samples." },
+            { step: "03", title: "Rank & Recommend", desc: "Routes are ranked by a blend of ETA and connectivity — with weak-zone penalties applied." },
+            { step: "04", title: "Drive with Intelligence", desc: "During playback, notifications are filtered by zone and released in controlled cascades." },
+          ].map((s) => (
+            <div key={s.step} className="landing-step">
+              <span className="landing-step-num">{s.step}</span>
+              <div>
+                <h3 className="landing-step-title">{s.title}</h3>
+                <p className="landing-step-desc">{s.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── CTA ─── */}
+      <section className="landing-cta-section">
+        <h2 className="landing-cta-title">Ready to explore?</h2>
+        <p className="landing-cta-subtitle">See connectivity-aware routing in action with our interactive demo.</p>
+        <Link href="/dashboard" className="landing-btn-primary" style={{ fontSize: "1rem", padding: "14px 36px" }}>
+          Launch Dashboard
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ marginLeft: 8 }}>
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
+      </section>
+
+      {/* ─── Footer ─── */}
+      <footer className="landing-footer">
+        <span>Node Zero — MAHE Hackathon Finale 2026</span>
+      </footer>
+
+      <style>{`
+        .landing-root {
+          min-height: 100vh;
+          background: var(--surface);
+          color: var(--text-primary);
+          overflow-x: hidden;
+        }
+
+        /* ─── Nav ─── */
+        .landing-nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 50;
+          background: var(--card);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-bottom: 1px solid var(--border);
+        }
+        .landing-nav-inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 32px;
+          height: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .landing-logo {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .landing-logo-text {
+          font-family: "Sora", sans-serif;
+          font-size: 1.25rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+        }
+        .landing-nav-links {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+        }
+        .landing-link {
+          font-size: 0.85rem;
+          font-weight: 500;
+          color: var(--text-muted);
+          text-decoration: none;
+          transition: color 200ms;
+        }
+        .landing-link:hover { color: var(--text-primary); }
+
+        /* ─── Hero ─── */
+        .landing-hero {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 120px 32px 80px;
+        }
+        .landing-hero-content {
+          display: flex;
+          align-items: center;
+          gap: 48px;
+        }
+        .landing-hero-left {
+          flex: 1;
+          min-width: 0;
+        }
+        .landing-hero-right {
+          flex: 0 0 480px;
+          max-width: 480px;
+        }
+        .landing-globe {
+          width: 100%;
+          filter: drop-shadow(0 20px 60px rgba(0, 0, 0, 0.15));
+        }
+
+        .landing-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-bottom: 20px;
+        }
+        .landing-badge-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #2d965d;
+          animation: pulse-soft 2.4s ease infinite;
+        }
+
+        .landing-title {
+          font-family: "Sora", sans-serif;
+          font-size: clamp(3rem, 6vw, 5.5rem);
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          line-height: 1.05;
+          margin: 0 0 24px;
+        }
+        .landing-subtitle {
+          font-size: 1.15rem;
+          line-height: 1.7;
+          color: var(--text-muted);
+          max-width: 520px;
+          margin: 0 0 36px;
+        }
+
+        .landing-cta-row {
+          display: flex;
+          gap: 14px;
+          margin-bottom: 48px;
+        }
+        .landing-btn-primary {
+          display: inline-flex;
+          align-items: center;
+          padding: 12px 28px;
+          background: var(--text-primary);
+          color: var(--surface);
+          font-size: 0.9rem;
+          font-weight: 600;
+          border-radius: 12px;
+          text-decoration: none;
+          transition: transform 150ms, box-shadow 150ms;
+          border: none;
+          cursor: pointer;
+        }
+        .landing-btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .landing-btn-secondary {
+          display: inline-flex;
+          align-items: center;
+          padding: 12px 28px;
+          background: transparent;
+          color: var(--text-primary);
+          font-size: 0.9rem;
+          font-weight: 600;
+          border-radius: 12px;
+          text-decoration: none;
+          border: 1px solid var(--border);
+          transition: border-color 200ms, background 200ms;
+          cursor: pointer;
+        }
+        .landing-btn-secondary:hover {
+          border-color: var(--text-muted);
+          background: var(--card);
+        }
+
+        .landing-stats {
+          display: flex;
+          align-items: center;
+          gap: 28px;
+        }
+        .landing-stat { text-align: center; }
+        .landing-stat-value {
+          display: block;
+          font-family: "Sora", sans-serif;
+          font-size: 1.6rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+        }
+        .landing-stat-label {
+          display: block;
+          font-size: 0.7rem;
+          font-weight: 500;
+          color: var(--text-muted);
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          margin-top: 2px;
+        }
+        .landing-stat-divider {
+          width: 1px;
+          height: 36px;
+          background: var(--border);
+        }
+
+        /* ─── Sections ─── */
+        .landing-section {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 80px 32px;
+        }
+        .landing-section-title {
+          font-family: "Sora", sans-serif;
+          font-size: 2rem;
+          font-weight: 700;
+          letter-spacing: -0.03em;
+          text-align: center;
+          margin: 0 0 48px;
+        }
+
+        /* ─── Features Grid ─── */
+        .landing-features-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        .landing-feature-card {
+          padding: 28px;
+          border-radius: 16px;
+          border: 1px solid var(--border);
+          background: var(--card);
+          transition: transform 200ms, box-shadow 200ms;
+        }
+        .landing-feature-card:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-soft);
+        }
+        .landing-feature-icon {
+          font-size: 1.5rem;
+          display: block;
+          margin-bottom: 12px;
+        }
+        .landing-feature-title {
+          font-family: "Sora", sans-serif;
+          font-size: 1rem;
+          font-weight: 600;
+          margin: 0 0 8px;
+        }
+        .landing-feature-desc {
+          font-size: 0.85rem;
+          line-height: 1.6;
+          color: var(--text-muted);
+          margin: 0;
+        }
+
+        /* ─── Steps ─── */
+        .landing-steps {
+          max-width: 640px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+        }
+        .landing-step {
+          display: flex;
+          gap: 20px;
+          align-items: flex-start;
+        }
+        .landing-step-num {
+          font-family: "Sora", sans-serif;
+          font-size: 2rem;
+          font-weight: 800;
+          color: var(--border);
+          line-height: 1;
+          min-width: 48px;
+        }
+        .landing-step-title {
+          font-family: "Sora", sans-serif;
+          font-size: 1.05rem;
+          font-weight: 600;
+          margin: 0 0 6px;
+        }
+        .landing-step-desc {
+          font-size: 0.85rem;
+          line-height: 1.6;
+          color: var(--text-muted);
+          margin: 0;
+        }
+
+        /* ─── CTA ─── */
+        .landing-cta-section {
+          text-align: center;
+          padding: 80px 32px;
+        }
+        .landing-cta-title {
+          font-family: "Sora", sans-serif;
+          font-size: 2.2rem;
+          font-weight: 700;
+          letter-spacing: -0.03em;
+          margin: 0 0 12px;
+        }
+        .landing-cta-subtitle {
+          font-size: 1.05rem;
+          color: var(--text-muted);
+          margin: 0 0 32px;
+        }
+
+        /* ─── Footer ─── */
+        .landing-footer {
+          text-align: center;
+          padding: 32px;
+          font-size: 0.75rem;
+          color: var(--text-muted);
+          border-top: 1px solid var(--border);
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 900px) {
+          .landing-hero-content { flex-direction: column-reverse; gap: 32px; }
+          .landing-hero-right { flex: none; max-width: 320px; width: 100%; }
+          .landing-features-grid { grid-template-columns: 1fr; }
+          .landing-stats { flex-wrap: wrap; justify-content: center; }
+          .landing-nav-links .landing-link { display: none; }
+        }
+      `}</style>
     </div>
   );
 }
