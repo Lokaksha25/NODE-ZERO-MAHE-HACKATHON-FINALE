@@ -1,4 +1,4 @@
-# 🛰️ Node Zero — Connectivity-Aware Routing & Geo-Deferred Notifications
+# 🛰️ Reachbl — Connectivity-Aware Routing & Geo-Deferred Notifications
 
 <div align="center">
 
@@ -15,9 +15,9 @@
 
 ---
 
-## 📋 What Is Node Zero?
+## 📋 What Is Reachbl?
 
-Node Zero is a prototype system that makes mobile routing **connectivity-aware**. Instead of just finding the fastest path between two cities, it evaluates **cellular network coverage** along every candidate route — per operator (Jio, Airtel) — and uses that data to:
+Reachbl is a prototype system that makes mobile routing **connectivity-aware**. Instead of just finding the fastest path between two cities, it evaluates **cellular network coverage** along every candidate route — per operator (Jio, Airtel) — and uses that data to:
 
 1. **Rank routes** by a blend of ETA and predicted connectivity quality
 2. **Identify weak coverage stretches** (dead zones) before the driver reaches them
@@ -105,6 +105,8 @@ There's no system today that **predicts** where connectivity will be weak and **
 | **Mid-Route Auto-Switch** | Automatically re-routes to a better-connected alternative when a dead zone is detected |
 | **Navigation Arrow** | Google Maps-style directional arrow that rotates based on heading |
 | **Color-Coded Segments** | Map polylines are green/yellow/red per segment score |
+| **Interactive Globe Landing** | 3D rotating globe (cobe) with Indian corridor markers and dark/light mode |
+| **Dark / Light Mode** | Full theme toggle across both the landing page and dashboard |
 
 ---
 
@@ -120,7 +122,7 @@ There's no system today that **predicts** where connectivity will be weak and **
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/NODE-ZERO-MAHE-HACKATHON-FINALE.git
+git clone https://github.com/Lokaksha25/NODE-ZERO-MAHE-HACKATHON-FINALE.git
 cd NODE-ZERO-MAHE-HACKATHON-FINALE
 
 # Create .env file in the project root
@@ -132,7 +134,8 @@ docker compose up --build
 
 | Service  | URL |
 |----------|-----|
-| Frontend | http://localhost:3001 |
+| Landing Page | http://localhost:3000 |
+| Dashboard | http://localhost:3000/dashboard |
 | Backend API | http://localhost:8000 |
 | API Docs (Swagger) | http://localhost:8000/docs |
 
@@ -180,7 +183,8 @@ npm run dev
 
 | Service  | URL |
 |----------|-----|
-| Frontend | http://localhost:3000 |
+| Landing Page | http://localhost:3000 |
+| Dashboard | http://localhost:3000/dashboard |
 | Backend API | http://localhost:8000 |
 | API Docs (Swagger) | http://localhost:8000/docs |
 
@@ -207,9 +211,12 @@ NODE-ZERO-MAHE-HACKATHON-FINALE/
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── app/page.tsx             # Main application page & playback loop
+│   │   ├── app/
+│   │   │   ├── page.tsx             # Landing page with interactive globe
+│   │   │   └── dashboard/page.tsx   # Main routing dashboard & playback loop
 │   │   ├── components/
 │   │   │   ├── control-panel.tsx    # Demo controls (operator, mode, slider, safety)
+│   │   │   ├── globe.tsx            # Interactive 3D globe (cobe)
 │   │   │   ├── map-view.tsx         # Leaflet map with colored segments & nav arrow
 │   │   │   └── timeline.tsx         # Notification timeline with zone indicator
 │   │   ├── lib/api.ts               # API client functions
@@ -225,14 +232,15 @@ NODE-ZERO-MAHE-HACKATHON-FINALE/
 
 ## 🎮 Demo Flow
 
-1. **Enter corridor**: Type origin (e.g., "Koramangala") and destination (e.g., "Whitefield")
-2. **Build Corridor**: Click to fetch routes and tower data
-3. **Compare routes**: Route A (faster, has weak zone) vs Route B (slower, better coverage)
-4. **Toggle modes**: Switch between Fastest ↔ Most Connected to see BEST badge move
-5. **Adjust slider**: Drag ETA vs Connectivity to fine-tune the tradeoff
-6. **Start playback**: Click Analyze to simulate driving the selected route
-7. **Watch notifications**: Observe zone-aware filtering (green → yellow → red → green)
-8. **Enable Safety Mode**: Re-run playback to see conservative notification behavior
+1. **Landing page**: Visit http://localhost:3000 — see the interactive globe and click **Get Started**
+2. **Enter corridor**: Type origin (e.g., "Koramangala") and destination (e.g., "Whitefield")
+3. **Build Corridor**: Click to fetch routes and tower data
+4. **Compare routes**: Route A (faster, has weak zone) vs Route B (slower, better coverage)
+5. **Toggle modes**: Switch between Fastest ↔ Most Connected to see BEST badge move
+6. **Adjust slider**: Drag ETA vs Connectivity to fine-tune the tradeoff
+7. **Start playback**: Click Analyze to simulate driving the selected route
+8. **Watch notifications**: Observe zone-aware filtering (green → yellow → red → green)
+9. **Enable Safety Mode**: Re-run playback to see conservative notification behavior
 
 ---
 
@@ -243,7 +251,7 @@ NODE-ZERO-MAHE-HACKATHON-FINALE/
 | `OPENCELLID_API_KEY` | Yes | — | API key from [OpenCellID](https://opencellid.org) |
 | `COVERAGE_MAP` | No | `""` | Optional static coverage map path |
 | `COVERAGE_PROVIDER` | No | `auto` | Coverage data source |
-| `FRONTEND_PORT` | No | `3001` | Frontend port in Docker mode |
+| `FRONTEND_PORT` | No | `3000` | Frontend port in Docker mode |
 
 ---
 
@@ -276,7 +284,7 @@ This system uses **estimated coverage** from cell tower infrastructure data, not
 
 ## 👥 Team
 
-**Node Zero** — Built for the MAHE Hackathon Finale 2026
+**Reachbl (Node Zero)** — Built for the MAHE Hackathon Finale 2026
 
 ---
 

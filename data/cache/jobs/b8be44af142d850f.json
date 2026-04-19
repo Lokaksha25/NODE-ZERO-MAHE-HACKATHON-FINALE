@@ -1,0 +1,16 @@
+{
+  "job_id": "b8be44af142d850f",
+  "corridor_id": "c258ffdd11b594c6",
+  "source_city": "Kormangala",
+  "destination_city": "Whitefield",
+  "status": "scoring",
+  "stage": "Scoring routes",
+  "progress_pct": 85,
+  "degraded": false,
+  "degraded_reason": null,
+  "error": null,
+  "tower_count": 0,
+  "route_count": 0,
+  "created_at": 1776566153,
+  "completed_at": null
+}
